@@ -90,7 +90,7 @@ int count_repetition(char *line, char c, int itr);
 int modify_line(char **line);
 int print_error(char *error, int exit_code);
 void print_lst(t_token *tokens);
-void	ft_lstadd_token_back(t_token **lst, t_token *new);
+void	ft_lstadd_token_back(t_token **lst, t_token *new_arg);
 int check_for_echo(t_token *tokens);
 int initial_parsing(char *line);
 t_token	*ft_lstnew_token(void *content);
@@ -105,7 +105,7 @@ void	reverse_rotate(t_token **s);
 void	rotate(t_token **s);
 
 // AST UTILS
-void	ft_argsadd_back(t_argument **lst, t_argument *new);
+void	ft_argsadd_back(t_argument **lst, t_argument *new_arg);
 t_argument	*ft_argsnew(void *content);
 // t_ast_node *alloc_ast_node(t_node_type type, t_argument *args);
 int redirection_found(t_token *tokens);
