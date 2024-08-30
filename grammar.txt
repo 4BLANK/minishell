@@ -1,0 +1,60 @@
+GRAMMAR ==================================================
+
+<command_line> ::= <command_line_or>
+
+<command_line_or> ::= <command_line_and> '||' <command_line_or>
+                    | <command_line_and>
+
+<command_line_and> ::= <grouped_command> '&&' <command_line_and>
+                    | <grouped_command>
+
+<grouped_command> ::= '(' <command_line> ')'
+                    | <pipe_line>
+
+<pipeline> ::= <command> '|' <pipeline>
+             | <command>
+
+<command> ::= <simple_command> <redirection>
+            | <simple_command>
+
+<simple_command> ::= <pathname> <arguments>
+
+<arguments> ::= <argument> <arguments>
+              | (EMPTY)
+
+<redirection> ::= '>' <filename>
+                | '<' <filename>
+                | '>>' <filename>
+                | (EMPTY)
+
+FUNCTIONS ===============================================
+
+t_ast_node *cmd();
+t_ast_node *cmd_1();
+t_ast_node *cmd_2();
+t_ast_node *cmd_3();
+t_ast_node *cmd_4();
+
+command_line()
+    command_line_1();
+    command_line_2();
+    command_line_3();
+
+pipeline()
+    pipeline_1()
+    pipeline_2()
+
+command()
+
+
+GROUPING ================================================
+
+<cmd> ::= <command_group> && <command_group>
+        | <command_group> || <command_group>
+        | <command_group> | <command_group>
+        | <command_group>
+
+<command_group> ::= '(' <or_command> ')'
+                | <or_command>
+
+=========================================================
