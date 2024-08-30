@@ -1,0 +1,34 @@
+COMMAND : 
+    ls -al | grep .. | wc -l > file && cat file
+
+AST :
+=> AND
+    => PIPELINE
+        => PIPELINE
+            => COMMAND
+                => ARGUMENTS (ls -al)
+            => COMMAND
+                => ARGUMENTS (grep ..)
+        => COMMAND
+            => ARGUMENTS (wc -l)
+            =>  REDIRECTION 
+                => ARGUMENTS (> file)
+    => COMMAND
+        => ARGUMENTS (cat file)
+            
+
+AST NODES TYPE:
+    => PIPELINE (should point to node with a type of) ->
+        -> COMMAND
+        -> PIPELINE
+
+    => COMMAND (should point to node with a type of) ->
+        -> ARGUMENTS
+        -> REDIRECTION
+
+    => REDIRECTION (should point to node with a type of) ->
+        -> REDIRECTION
+        -> ARGUMENTS 
+
+    => ARGUMENTS containe a list of argument for a command or a redirection
+        -> NULL
