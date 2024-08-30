@@ -12,62 +12,26 @@ char check_quotes(char *s)
     return (0);
 }
 
-size_t rm_quotelen(char *str)
+char *remove_quote(char *holder, char quote_type)
 {
-    size_t len;
-    int flag;
-    int quote;
-    int i;
-
-    i = 0;
-    flag = 0;
-    len = ft_strlen(str);
-    while (str[i])
-    {
-        if (flag == 0 && (str[i] == QUOTE || str[i] == DQUOTE))
-        {
-            flag = 1;
-            quote = str[i];
-            len -= 2;
-        }
-        else if (flag == 1 && str[i] == quote)
-            flag = 0;
-        i++;
-    }
-    return (len);
-}
-
-//TODO: fix this bug
-char *remove_quote(char *str)
-{
-    char *unqoute_str;
-    char quote;
-    int flag;
+    char *new;
     int i;
     int j;
 
     i = 0;
     j = 0;
-    flag = 0;
-    unqoute_str = malloc (sizeof(char) * (rm_quotelen(str) + 1));
-    if (unqoute_str == NULL)
-        return (NULL);
-    while (str[i])
+    if (holder == NULL)
+        return NULL;
+    new = malloc(sizeof(char) * ft_strlen(holder));
+    while (holder[i])
     {
-        if (flag == 0 && (str[i] == QUOTE || str[i] == DQUOTE))
-        {
-            flag = 1;
-            quote = str[i];
-        }
-        else if (flag == 1 && str[i] == quote)
-            flag = 0;
-        else 
-            unqoute_str[j++] = str[i];
-        i++;
+        if(holder[i] == quote_type)
+            i++;
+        new[j++] = holder[i++];
     }
-    free(str);
-    unqoute_str[j] = '\0';
-    return (unqoute_str);
+    new[j] = '\0';
+    free(holder);
+    return (new);
 }
 
 int check_for_echo(t_token *tokens)
@@ -79,7 +43,9 @@ int check_for_echo(t_token *tokens)
     holder = ft_strdup(ft_lstlast_token(tokens)->content);
     while (holder[i] && (holder[i] != DQUOTE && holder[i] != QUOTE))
         i++;
-    holder = remove_quote(holder);
+    holder = remove_quote(holder, holder[i]);
+    // dont remove spaces
+    //holder = ft_strtrim(holder, " \t\v\n\r\f");
     if (!ft_strncmp("echo", holder, 4) && ft_strlen(holder) == 4)
     {
         free(holder);
@@ -107,7 +73,7 @@ int count_repetition(char *line, char c, int itr)
     return count;
 }
 
-int count_special_chars(char *line, int *s_count)
+int count_special_chars(char *line)
 {
     int count;
     int flag;
@@ -128,9 +94,9 @@ int count_special_chars(char *line, int *s_count)
             if (line[i] == GREATER)
             {
                 if (count_repetition(line, line[i], i) > 2)
-                    return (print_error("parse error\n", 2));
+                    print_error("parse error\n", 1);
                 else if (line[i + 1] && line[i + 1] == LESS)
-                    return (print_error("parse error\n", 2));
+                    print_error("parse error\n", 1);
                 else if (count_repetition(line, line[i], i) == 2)
                     count++;
                 else if (line[i - 1] != GREATER)
@@ -139,9 +105,9 @@ int count_special_chars(char *line, int *s_count)
             else if (line[i] == LESS)
             {
                 if (count_repetition(line, line[i], i) > 2)
-                   return (print_error("parse error\n", 2));
+                    print_error("parse error\n", 1);
                 else if (line[i + 1] && line[i + 1] == GREATER)
-                    return (print_error("parse error\n", 2));
+                    print_error("parse error\n", 1);
                 else if (count_repetition(line, line[i], i) == 2)
                     count ++;
                 else if (line[i - 1] != LESS)
@@ -150,7 +116,7 @@ int count_special_chars(char *line, int *s_count)
             else if (line[i] == CPIPE)
             {
                 if (count_repetition(line, line[i], i) > 2)
-                   return (print_error("parse error\n", 2));
+                    print_error("parse error\n", 1);
                 else if (count_repetition(line, line[i], i) == 2)
                     count ++;
                 else if (line[i - 1] != CPIPE)
@@ -159,16 +125,16 @@ int count_special_chars(char *line, int *s_count)
             else if (line[i] == AMPERSAND)
             {
                 if (count_repetition(line, line[i], i) > 2)
-                    return (print_error("parse error\n", 2));
+                    print_error("parse error\n", 1);
                 else if (count_repetition(line, line[i], i) == 2)
                     count++;
             }
         }
         i++;
     }
-    *s_count = count;
-    return (EXIT_SUCCESS);
+    return count;
 }
+
 
 bool	ft_strcmp(char *s1, char *s2)
 {
@@ -183,48 +149,44 @@ bool	ft_strcmp(char *s1, char *s2)
        return (false);
 }
 
-int modify_line(char **line)
+char *modify_line(char *line)
 {
     int i;
     int j;
     int flag;
-    char *tmpline;
-    int schr_count;
+    char *new_line;
 
     i = 0;
     j = 0;
     flag = 0;
-    if (count_special_chars(*line, &schr_count))
-        return (EXIT_FAILURE);
-    tmpline = malloc(sizeof(char) * (ft_strlen(*line) + schr_count * 2 + 1));
-    if (tmpline == NULL)
-        return (EXIT_FAILURE);
-    while ((*line)[i])
+    new_line = malloc(sizeof(char) * (ft_strlen(line) + count_special_chars(line) * 2 + 1));
+    if (new_line == NULL)
+        return NULL;
+    while (line[i])
     {
-        if (flag == 0 && ((*line)[i] == DQUOTE ||  (*line)[i] == QUOTE))
+        if (flag == 0 && (line[i] == DQUOTE ||  line[i] == QUOTE))
             flag = 1;
-        else if (flag == 1 && ((*line)[i] == DQUOTE ||  (*line)[i] == QUOTE))
+        else if (flag == 1 && (line[i] == DQUOTE ||  line[i] == QUOTE))
             flag = 0;
-        if (flag == 0 && ((*line)[i] == CPIPE || (*line)[i] == GREATER || (*line)[i] == LESS 
-            || ((*line)[i] == AMPERSAND && (*line)[i + 1] && (*line)[i + 1] == AMPERSAND)))
+        if (flag == 0 && (line[i] == CPIPE || line[i] == GREATER || line[i] == LESS 
+            || (line[i] == AMPERSAND && line[i + 1] && line[i + 1] == AMPERSAND)))
         {
-            tmpline[j++] = ' ';
-            if ((*line)[i + 1] && (*line)[i + 1] != (*line)[i] && (*line)[i - 1] != (*line)[i])
-                tmpline[j++] = (*line)[i];
+            new_line[j++] = ' ';
+            if (line[i + 1] && line[i + 1] != line[i] && line[i - 1] != line[i])
+                new_line[j++] = line[i];
             else
             {
-                tmpline[j++] = (*line)[i++];
-                tmpline[j++] = (*line)[i];
+                new_line[j++] = line[i++];
+                new_line[j++] = line[i];
             }
-            tmpline[j] = ' ';
+            new_line[j] = ' ';
         }
         else 
-            tmpline[j] = (*line)[i];
+            new_line[j] = line[i];
         i++;
         j++;
     }
-    tmpline[j] = '\0';
-    free(*line);
-    *line = tmpline;
-    return (EXIT_SUCCESS);
+    new_line[j] = '\0';
+    free(line);
+    return new_line;
 }

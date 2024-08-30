@@ -218,6 +218,7 @@ t_ast_node *pipe_line_1()
     return head_node;
 }
 
+
 t_ast_node *pipe_line_2()
 {
     return (command());
@@ -228,24 +229,13 @@ t_ast_node *command()
     t_ast_node *cmd;
     t_argument *args;
 
-    cmd = NULL;
-    args = NULL;
     if (current_token->lexem != CMD)
-    {
-        cmd = ast_create_node(COMMAND, NULL);
-        if (cmd == NULL)
-            return (NULL);
-        cmd->data.childs.left = ast_create_node(ARGUMENTS, NULL);
-        cmd->data.childs.left->data.arg_list = NULL;
-    }
-    else
-    {
-        cmd = ast_create_node(COMMAND, NULL);
-        if (cmd == NULL)
-            return NULL;
-        args = args_table(&current_token, ARGUMENTS);
-        cmd->data.childs.left = ast_create_node(ARGUMENTS, args);
-    } 
+        return NULL;
+    cmd = ast_create_node(COMMAND, NULL);
+    if (cmd == NULL)
+        return NULL;
+    args = args_table(&current_token, ARGUMENTS);
+    cmd->data.childs.left = ast_create_node(ARGUMENTS, args);
     if (redirection_found(current_token))
     {
         while(current_token != NULL && is_schar(current_token->lexem) == 0)
@@ -256,12 +246,6 @@ t_ast_node *command()
         cmd->data.childs.right = NULL;        
     return cmd;
 }
-
-// int isschar(t_token current_token)
-// {
-//     if (current_token == NULL || current_token->lexem == PIPE || current_token->lexem == AND 
-//         || current_token->lexem == OR || current_token->lexem == OPEN_P || current_token->lexem == CLOSE_P)
-// }
 
 t_ast_node *get_redirection_tree(t_node_type type)
 {
@@ -278,16 +262,12 @@ t_ast_node *get_redirection_tree(t_node_type type)
         return NULL;
     args = args_table(&current_token, ARGUMENTS);
     root->data.childs.left = ast_create_node(ARGUMENTS, args);
-    // if (current_token != NULL && current_token->lexem != PIPE && current_token->lexem != AND 
-    //     && current_token->lexem != OR && current_token->lexem != CLOSE_P && current_token->lexem != OPEN_P)
-    //     current_token = current_token->next;
-    // while(current_token != NULL && is_schar(current_token->lexem) == 0)
-    //     current_token = current_token->next;
-    if (current_token != NULL && current_token->lexem == PIPE && current_token->lexem == AND 
-        && current_token->lexem == OR && current_token->lexem == CLOSE_P && current_token->lexem == OPEN_P)
-        root->data.childs.right = NULL;
-    else 
-        root->data.childs.right = get_redirection_tree(type);
+    if (current_token != NULL && current_token->lexem != PIPE && current_token->lexem != AND 
+        && current_token->lexem != OR && current_token->lexem != CLOSE_P && current_token->lexem != OPEN_P)
+        current_token = current_token->next;
+    while(current_token != NULL && is_schar(current_token->lexem) == 0)
+        current_token = current_token->next;
+    root->data.childs.right = get_redirection_tree(type);
     return root;
 }
 

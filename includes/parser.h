@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include "../lib/libft/libft.h"
 
 # define QUOTE 39
@@ -14,7 +16,7 @@
 # define GREATER 62
 # define LESS 60
 # define AMPERSAND 38
-# define DOLLAR_SIGN 36
+# define DOLLAR_SIGN 63
 
 extern char *lexs_type[];
 extern char *ast_node_types[];
@@ -82,27 +84,22 @@ typedef struct s_ast_node
 } t_ast_node;
 
 // TOKENIZER UTILS
-char *remove_quote(char *str);
-int rm_token_quotes(t_token *tokenlst);
+char *remove_quote(char *holder, char quote_type);
 char check_quotes(char *s);
 void lexer(t_token *tokens);
 int count_repetition(char *line, char c, int itr);
-int modify_line(char **line);
-int print_error(char *error, int exit_code);
+char *modify_line(char *line);
+void print_error(char *error, int exit_code);
 void print_lst(t_token *tokens);
 void	ft_lstadd_token_back(t_token **lst, t_token *new);
 int check_for_echo(t_token *tokens);
-int initial_parsing(char *line);
+void initial_parsing(char *line);
 t_token	*ft_lstnew_token(void *content);
-int count_special_chars(char *line, int *s_count);
-int tokenizer(char *line, t_token **tokenlst);
+int count_special_chars(char *line);
+t_token *tokenizer(char *line);
 t_token	*ft_lstlast_token(t_token *lst);
 bool	ft_strcmp(char *s1, char *s2);
-void	tokens_lstclear(t_token **lst);
-t_token *modify_redlst(t_token **tokens_list);
 
-void	reverse_rotate(t_token **s);
-void	rotate(t_token **s);
 
 // AST UTILS
 void	ft_argsadd_back(t_argument **lst, t_argument *new);
@@ -124,11 +121,5 @@ void ast_delete(t_ast_node *node);
 t_ast_node *ast_create_node(t_node_type type, t_argument *args);
 
 t_ast_node *build_ast(t_token *tokens);
-
-
-// EXPANDER
-int expander(t_token **tokens, char **env);
-t_token *expand_noquotes(t_token **tokens, char **env);
-
 
 #endif

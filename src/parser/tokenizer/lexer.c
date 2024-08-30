@@ -28,11 +28,10 @@ void schar_lexer(t_token *tokens)
     }
 }
 
-void red_lexer(t_token *tokens, int red_nbr)
+void heredoc_lexer(t_token *tokens, int heredoc_nbr)
 {
     int command_flag;
     int itr;
-    t_lexeme lex;
 
     itr = 0;
     command_flag = 0;
@@ -44,16 +43,12 @@ void red_lexer(t_token *tokens, int red_nbr)
             || tokens->lexem == AND || tokens->lexem == OR
             || tokens->lexem == OPEN_P || tokens->lexem == CLOSE_P))
             command_flag = 0;
-        if (is_schar(tokens->lexem) == 1 && ++itr == red_nbr)
+        if (tokens->lexem == HEREDOC && ++itr == heredoc_nbr)
         {
-            lex = tokens->lexem;
             tokens = tokens->next;
             if (tokens != NULL)
-            {   
-                if (lex == HEREDOC)
-                    tokens->lexem = DELIMITER;
-                else 
-                    tokens->lexem = O_FILE;
+            {  
+                tokens->lexem = DELIMITER;
                 tokens = tokens->next;
             }
             while (tokens != NULL && is_schar(tokens->lexem) == 0)
@@ -104,18 +99,18 @@ void lexer(t_token *tokens)
 {
     t_token *prev_token;
     t_token *tmp;
-    int red;
+    int heredoc;
 
     prev_token = NULL;
     tmp = tokens;
-    red = 0;
+    heredoc = 0;
     schar_lexer(tokens);
     while (tokens != NULL)
     {
-        if (is_schar(tokens->lexem) == 1)
+        if (tokens->lexem == HEREDOC)
         {
-            red++;
-           red_lexer(tmp, red);
+            heredoc++;
+            heredoc_lexer(tmp, heredoc);
         }
         if (prev_token != NULL && tokens->lexem == STRING)
             set_lexeme(tokens, prev_token->lexem);

@@ -32,6 +32,8 @@ t_argument	*ft_argsnew(void *content)
 	return (node);
 }
 
+// ============================================================================ //
+
 t_ast_node *alloc_ast_node(t_node_type type, t_argument *args)
 {
     t_ast_node *new_node;
@@ -45,6 +47,7 @@ t_ast_node *alloc_ast_node(t_node_type type, t_argument *args)
     return new_node;
 }
 
+
 int is_schar (t_lexeme lexem)
 {
     if (lexem == O_REDIRECTION || lexem == I_REDIRECTION 
@@ -55,6 +58,8 @@ int is_schar (t_lexeme lexem)
         return 2;
     return 0;
 }
+
+
 
 int pipe_exist(t_token *tokens)
 {
@@ -147,10 +152,10 @@ void print_args(t_argument *args)
 {
     while (args != NULL)
     {
-        printf(" %s ->", args->content);
+        printf("[ %s ] -> ", args->content);
         args = args->next;
     }
-    printf(" null");
+    printf("[ null ]");
 }
 
 
@@ -168,12 +173,9 @@ void print_ast_tree(t_ast_node *ast_tree, int space)
     if (ast_tree == NULL)
         return ;
     print_space(space);
-    printf(" > %s ", ast_node_types[ast_tree->type]);
+    printf("--> %s ", ast_node_types[ast_tree->type]);
     if (ast_tree->type == ARGUMENTS)
-    {
-        printf("|");
         print_args(ast_tree->data.arg_list);
-    }
     printf("\n");
     if (ast_tree->type == COMMAND || ast_tree->type == PIPELINE || ast_tree->type == REDIRECTION
     || ast_tree->type == AND_NODE || ast_tree->type == OR_NODE)
