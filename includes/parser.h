@@ -100,7 +100,7 @@ t_token	*ft_lstlast_token(t_token *lst);
 bool	ft_strcmp(char *s1, char *s2);
 void	tokens_lstclear(t_token **lst);
 t_token *modify_redlst(t_token **tokens_list);
-
+char *ft_getenv(char *env_name, char **env);
 void	reverse_rotate(t_token **s);
 void	rotate(t_token **s);
 
