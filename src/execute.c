@@ -33,7 +33,7 @@ char **lst_tostrarray(t_argument *head) {
     i = 0;
     if (!(count = lstsize(head)))
         return NULL;
-    strarray = (char **)malloc(sizeof(char *) * (count + 1));
+    strarray = (char **)ft_calloc(sizeof(char *), (count + 1));
     if (strarray == NULL)
         return NULL;
 

@@ -1,4 +1,5 @@
 #include "../includes/minishell.h"
+#include <stdio.h>
 
 //TODO: ADD HISTORY
 //TODO: FIX REDIRECTION AST
@@ -21,5 +22,7 @@ int main (int ac, char **av, char **env)
         if (execute_cmd(ast, env))
             printf("execute error\n");
     }   
+    if (execute_cmd(ast, env))
+      printf("execute error\n");
     return (0);
 }
