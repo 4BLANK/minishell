@@ -1,9 +1,8 @@
 #include "../includes/minishell.h"
 
-// count the number of nodes in the linked list
 size_t lstsize(t_argument *lst)
 {
-    int count;
+    size_t count;
     t_argument *current;
     
     count = 0;
@@ -13,6 +12,16 @@ size_t lstsize(t_argument *lst)
         current = current->next;
     }
     return (count);
+}
+
+void free_strarray(char **str)
+{
+    int i;
+
+    i = -1;
+    while (str[++i])
+        free(str[i]);
+    free(str);
 }
 
 char **lst_tostrarray(t_argument *head) {
@@ -40,19 +49,76 @@ char **lst_tostrarray(t_argument *head) {
     return strarray;
 }
 
-int execute_cmd(t_ast_node *cmd)
+void print_strarray(char **str)
+{
+    int i = -1;
+    while (str[++i])
+        printf("%s\n", str[i]);
+}
+
+int get_commandpath(char **cmd_path, char *cmd, char **env)
+{
+    char *path;
+    char **paths;
+    char *tmp;
+    int i;
+
+    i = -1;
+    path = ft_getenv("PATH", env);
+    if (path == NULL)
+    {
+        *cmd_path = NULL;
+        return (EXIT_FAILURE);
+    }
+    paths = ft_split(path, ':');
+    if (paths == NULL)
+        return EXIT_FAILURE;
+    tmp = ft_strjoin("/", cmd);
+    while (paths[++i] != NULL)
+    {
+        *cmd_path = ft_strjoin(paths[i], tmp);
+        if (!access(*cmd_path, X_OK))
+        {
+            free(path);
+            free(tmp);
+            free_strarray(paths);
+            return (EXIT_SUCCESS);
+        }
+        free(*cmd_path);
+    }
+    free(path);
+    free(tmp);
+    free_strarray(paths);
+    return (EXIT_FAILURE);
+}   
+
+int execute_cmd(t_ast_node *cmd, char **env)
 {
     pid_t pid;
+    int status;
+    char **args;
+    char *cmd_path;
 
+    status = 0;
+    if (cmd->type != COMMAND)
+        return (EXIT_FAILURE);
+    args = lst_tostrarray(cmd->data.childs.left->data.arg_list);
+    if (get_commandpath(&cmd_path, args[0], env))
+        return (EXIT_FAILURE);
     if ((pid = fork()) < 0)
         return (EXIT_FAILURE);
     else if (pid == 0)
     {
-        // child
+        if (execve(cmd_path, args, NULL) < 0)
+            print_error("execv error\n", 2);
     }
     else 
     {
-        // parent
+        waitpid(pid, &status, 0);
+        if (WEXITSTATUS(status))
+            return (EXIT_FAILURE);
+        else 
+            return EXIT_SUCCESS;
     }
     return (EXIT_FAILURE);
 }

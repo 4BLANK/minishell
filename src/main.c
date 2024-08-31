@@ -19,6 +19,8 @@ int main (int ac, char **av, char **env)
         add_history(line);
         parser(&ast, line, env);
         print_ast_tree(ast, 0);
+        if (execute_cmd(ast, env))
+            printf("execute error\n");
     }   
     if (execute_cmd(ast, env))
       printf("execute error\n");
