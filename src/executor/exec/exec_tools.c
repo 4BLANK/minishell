@@ -1,6 +1,5 @@
-#include "../includes/minishell.h"
+#include "../../../includes/minishell.h"
 
-// count the number of nodes in the linked list
 size_t lstsize(t_argument *lst)
 {
     int count;
@@ -38,21 +37,4 @@ char **lst_tostrarray(t_argument *head) {
     }
     strarray[i] = NULL;
     return strarray;
-}
-
-int execute_cmd(t_ast_node *cmd)
-{
-    pid_t pid;
-
-    if ((pid = fork()) < 0)
-        return (EXIT_FAILURE);
-    else if (pid == 0)
-    {
-        // child
-    }
-    else 
-    {
-        // parent
-    }
-    return (EXIT_FAILURE);
 }

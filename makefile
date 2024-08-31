@@ -2,8 +2,9 @@ NAME = minishell
 CC = cc
 LIBFT_DIR = ./lib/libft
 LIBFT = $(LIBFT_DIR)/libft.a
-FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
 SRC =	./src/main.c\
+		./src/execute.c\
 		./src/parser/parser.c\
 		./src/parser/tokenizer/string_utils.c\
 		./src/parser/tokenizer/tokenizer_utils.c\
