@@ -328,9 +328,7 @@ t_token *modify_redlst(t_token **tokenlst)
 {
   t_token *new_token;
   t_token *tmp;
-  int cmd_flag;
 
-  cmd_flag = 0;
   tmp = *tokenlst;
   new_token = NULL;
   while (tmp != NULL)

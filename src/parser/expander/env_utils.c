@@ -92,14 +92,10 @@ void distroy_envlst(t_envlist **envlst)
 char *ft_getenv(char *name)
 {
     t_envlist *lst;
-    int env_len;
-    int i;
 
-    i = 0;
     lst = sh->envlst;
     if (name == NULL || name [0] == '\0')
         return NULL;
-    env_len = ft_strlen(name);
     while (lst != NULL)
     {
         if (ft_strcmp(name, lst->name))

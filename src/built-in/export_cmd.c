@@ -1,18 +1,5 @@
 #include "../../includes/minishell.h"
 
-void free_strarray(char **str)
-{
-    size_t i;
-
-    i = 0;
-    while (str[i])
-    {
-        free(str[i]);
-        i++;
-    }
-    free(str);
-}
-
 bool env_exist(char *name, char **env)
 {
     size_t i;
@@ -54,11 +41,9 @@ char **set_newenv(char *arg, char **env, int unset)
     size_t i;
     size_t j;
     size_t size;
-    char *tmp;
 
     i = 0;
     j = 0;
-    tmp = NULL;
     size = str_arraysize(env);
     if (unset == 0)
         size += 2;
@@ -153,10 +138,8 @@ int ft_setenv(char *arg, char ***env, int exportflag)
 {
     char **new_envlst;
     char *name;
-    char *newvalue;
 
     new_envlst = NULL;
-    newvalue = NULL;
     if (!(name = getenv_name1(arg)))
         return (EXIT_SUCCESS);
     if (env_exist(name, *env) && env_exist(name, *env))
