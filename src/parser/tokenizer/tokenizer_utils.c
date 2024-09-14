@@ -273,9 +273,7 @@ void	ft_lstadd_token_front(t_token **lst, t_token *new)
 t_token *getlst(t_token *tokenlst)
 {
   t_token *newlst;
-  int flag;
 
-  flag = 0;
   newlst = NULL;
   while (tokenlst != NULL && is_schar(tokenlst->lexem) != 2)
   {
@@ -305,9 +303,7 @@ t_token *getlst(t_token *tokenlst)
 t_token *modify_redlst(t_token **tokenlst)
 {
   t_token *new_token;
-  int cmd_flag;
 
-  cmd_flag = 0;
   new_token = NULL;
   while (*tokenlst != NULL)
   {
