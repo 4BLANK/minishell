@@ -271,12 +271,10 @@ t_token *expand_noquotes(t_token **head)
     t_token *tokens_list;
     t_token *tmp;
     t_token *tokens;
-    int flag;
     char *str;
 
     tokens_list = NULL;
     tmp = NULL;
-    flag = 0;
     tokens = *head;
     while (tokens != NULL)
     {
