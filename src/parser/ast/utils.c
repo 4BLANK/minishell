@@ -42,7 +42,7 @@ int redirection_found(t_token *tokens)
     return 0;
 }
 
-t_ast_node *ast_create_node(t_node_type type, t_argument *args)
+t_ast_node *ast_create_node(t_node_type type, t_argument *args, t_file *files)
 {
     t_ast_node *new_node;
 
@@ -54,22 +54,160 @@ t_ast_node *ast_create_node(t_node_type type, t_argument *args)
     new_node->data.childs.left = NULL;
     if (args != NULL)
         new_node->data.arg_list = args;
+    else if (files != NULL)
+        new_node->data.files = files;
     return new_node;
 }
 
-void ast_delete(t_ast_node *node)
+void	clear_argslst(t_argument **lst)
 {
-    if (node == NULL)
-        return ;
-    if (node->type == ARGUMENTS)
+	t_argument	*node;
+	t_argument	*next;
+
+	if (lst && *lst)
+	{
+		node = *lst;
+		while (node != NULL)
+		{
+			next = node->next;
+		    free(node->content);
+		    free(node);
+			node = next;
+		}
+		*lst = NULL;
+	}
+}
+
+void	clear_fileslst(t_file **lst)
+{
+	t_file	*node;
+	t_file	*next;
+
+	if (lst && *lst)
+	{
+		node = *lst;
+		while (node != NULL)
+		{
+			next = node->next;
+		    free(node->name);
+		    free(node);
+			node = next;
+		}
+		*lst = NULL;
+	}
+}
+
+void destroy_ast_core(t_ast_node *node)
+{
+    if (!node)
+        return;
+    if (node->type != REDIRECTION && node->type != ARGUMENTS)
     {
-        free(node->data.arg_list);
-        free(node);
-        return ;
+        if (node->data.childs.left)
+        {
+            destroy_ast_core(node->data.childs.left);
+            //free(node->data.childs.left);
+        }
+        if (node->data.childs.right)
+        {
+            destroy_ast_core(node->data.childs.right);
+            //free(node->data.childs.right);
+        }
     }
-    if (node->data.childs.right == NULL 
-        && node->data.childs.left == NULL)
-        free(node);
-    ast_delete(node->data.childs.left);
-    ast_delete(node->data.childs.right);
+    else
+    {
+        if (node->type == REDIRECTION)
+        {
+            clear_fileslst(&node->data.files);
+        }
+        else if (node->type == ARGUMENTS)
+        {
+            clear_argslst(&node->data.arg_list); 
+        }
+    }
+    free(node);
+}
+
+void ast_distroy(t_ast_node **node)
+{
+    if (*node)
+    {
+        destroy_ast_core(*node);
+        *node = NULL;
+    }
+}
+
+void	addfile_back(t_file **lst, t_file *new)
+{
+	t_file	*node;
+
+	if (new != NULL)
+	{
+		if (*lst == NULL)
+			*lst = new;
+		else
+		{
+			node = *lst;
+			while (node->next != NULL)
+			{
+				node = node->next;
+			}
+			node->next = new;
+		}
+	}
+}
+
+t_file	*new_file(void *file_name, t_lexeme filetype)
+{
+	t_file	*file;
+
+	file = (t_file *)malloc(sizeof(t_file));
+	if (file == NULL)
+		return (NULL);
+	file->name = file_name;
+    file->type = filetype;
+	file->next = NULL;
+	return (file);
+}
+
+t_ast_node *form_command(t_token **tokenlst)
+{
+    void *tmp;
+    t_file *files;
+    t_argument *args;
+    t_ast_node *command;
+    int lex_tmp;
+
+    args = NULL;
+    files = NULL;
+    command  = NULL;
+    while (*tokenlst != NULL && is_schar((*tokenlst)->lexem) != 2)
+    {
+        if (is_schar((*tokenlst)->lexem) == 1)
+        {
+            lex_tmp = (*tokenlst)->lexem;
+            *tokenlst = (*tokenlst)->next;
+            tmp = (t_file *)new_file(ft_strdup((*tokenlst)->content), lex_tmp);
+            if (tmp == NULL)
+                return (NULL);
+            addfile_back(&files, tmp);
+        }
+        else if (is_schar((*tokenlst)->lexem) == 0)
+        {
+            tmp = (t_argument *)ft_argsnew(ft_strdup((*tokenlst)->content));
+            if (tmp == NULL)
+                return (NULL);
+            ft_argsadd_back(&args, tmp);
+        }
+        tmp = NULL;
+        *tokenlst = (*tokenlst)->next;
+    }
+    if (args == NULL && files == NULL)
+        return (NULL);
+    command = ast_create_node(COMMAND, NULL, NULL);
+    if (command == NULL)
+        return NULL;
+    command->data.childs.left = ast_create_node(ARGUMENTS, args, NULL);
+    command->data.childs.right = ast_create_node(REDIRECTION, NULL, files);
+    return (command);
 }

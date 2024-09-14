@@ -1,0 +1,12 @@
+exitstatus $?
+signals
+''
+export 3=3 -> not valid
+
+ls | ls -al && ls => invalid read 
+check this error !!!!!!
+only && and || 
+| no !
+check why !!!!!
+
+

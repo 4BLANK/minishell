@@ -29,10 +29,10 @@ char *ast_node_types[] =
     "ARGUMENTS"
 };
 
-int print_error(char *error, int fd)
+int print_error(char *error, int exit_code)
 {
-  ft_putstr_fd(error, fd);
-  return (EXIT_FAILURE);
+  ft_putstr_fd(error, 2);
+  return (exit_code);
 } 
 
 t_token	*ft_lstnew_token(void *content)
@@ -91,6 +91,27 @@ void	ft_lstadd_token_back(t_token **lst, t_token *new)
 		}
 	}
 }
+
+int is_all_quotes(char *str)
+{
+  size_t i;
+  size_t quote_count;
+
+  i = 0;
+  quote_count = 0;
+  if (str == NULL)
+    return 0;
+  while (str[i])
+  {
+    if (str[i] == QUOTE || str[i] == DQUOTE)
+      quote_count++;
+    i++;
+  }
+  if (quote_count == ft_strlen(str))
+    return 1;
+  return 0;
+}
+
 //TODO: handel echo command
 int tokenizer(char *line, t_token **tokenlst)
 {
@@ -170,8 +191,8 @@ int tokenizer(char *line, t_token **tokenlst)
       }
       if (i != j)
       {
-        holder = ft_substr(line, i, j - i);
-        if (holder != NULL)
+        holder = ft_substr(line, i, j - i);        
+        if (holder != NULL /*&& !is_all_quotes(holder)*/)
           ft_lstadd_token_back(tokenlst, ft_lstnew_token(holder));
       }
       i = j;
@@ -188,18 +209,20 @@ int initial_parsing(char *line)
   int i;
 
   i = 0;
-    while (line[i] && is_space(line[i]))
-        i++;
-    if(line[i] && line[i] == CPIPE)
-        return (print_error("parse error\n", 2));
-    while(line[i++]);
-    i -= 2;
-    while (i >= 0 && is_space(line[i]))
-        i--;
-    if (line[i] == CPIPE || line[i] == GREATER || line[i] == LESS 
-        || (line[i] == AMPERSAND && line[i - 1] == AMPERSAND))
-        return (print_error("parse error\n", 2));
+  if (line == NULL)
     return (EXIT_SUCCESS);
+  while (line[i] && is_space(line[i]))
+      i++;
+  if(line[i] && line[i] == CPIPE)
+      return (print_error("parse error\n", 2));
+  while(line[i++]);
+  i -= 2;
+  while (i >= 0 && is_space(line[i]))
+      i--;
+  if (line[i] == CPIPE || line[i] == GREATER || line[i] == LESS 
+      || (line[i] == AMPERSAND && line[i - 1] == AMPERSAND))
+      return (print_error("parse error\n", 2));
+  return (EXIT_SUCCESS);
 }
 
 t_token	*new_token(void *content, t_lexeme lex)
@@ -250,7 +273,8 @@ t_token *tokendup(t_token *token)
 {
   t_token *dup;
 
-  dup = NULL;
+  if (token == NULL)
+    return NULL;
   dup = ft_lstnew_token(ft_strdup(token->content));
   if (dup == NULL)
     return NULL;
@@ -303,22 +327,61 @@ t_token *getlst(t_token *tokenlst)
 t_token *modify_redlst(t_token **tokenlst)
 {
   t_token *new_token;
+  t_token *tmp;
+  int cmd_flag;
 
+  cmd_flag = 0;
+  tmp = *tokenlst;
   new_token = NULL;
-  while (*tokenlst != NULL)
+  while (tmp != NULL)
   {
-    if (redirection_found(*tokenlst))
+    if (redirection_found(tmp))
     {
-      ft_lstadd_token_back(&new_token, getlst(*tokenlst));
-      while (*tokenlst != NULL && is_schar((*tokenlst)->lexem) != 2)
-        *tokenlst = (*tokenlst)->next;        
+      ft_lstadd_token_back(&new_token, getlst(tmp));
+      while (tmp != NULL && is_schar(tmp->lexem) != 2)
+        tmp = tmp->next;        
     }
     else 
     {
-      ft_lstadd_token_back(&new_token, tokendup(*tokenlst));      
-      *tokenlst = (*tokenlst)->next;
+      ft_lstadd_token_back(&new_token, tokendup(tmp));      
+      tmp = tmp->next;
     }
   }
   tokens_lstclear(tokenlst);
   return (new_token);
+}
+
+int delete_tokensnode(t_token **tokenlst, size_t position)
+{
+  size_t i;
+  t_token *tmp;
+  t_token *node;
+
+  i = 0;
+  if (*tokenlst == NULL)
+    return EXIT_FAILURE;
+  tmp = *tokenlst;
+
+  if (position == 0)
+  {
+    *tokenlst = tmp->next;
+    free(tmp);
+    tmp = NULL;
+    return (EXIT_SUCCESS);
+  }
+  else
+  {
+    while (tmp != NULL && i < position - 1)
+    {
+      tmp = tmp->next;
+      i++;
+    }
+    if (tmp == NULL || tmp->next == NULL)
+      return EXIT_FAILURE;
+    node = tmp->next->next;
+    free(tmp->next);
+    tmp->next = node;
+    tmp = NULL;
+  }
+  return EXIT_SUCCESS;
 }

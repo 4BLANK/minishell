@@ -1,25 +1,30 @@
 #include "../../includes/minishell.h"
 
 
-int parser (t_ast_node **ast, char *line, char **env)
+int parser (t_ast_node **ast, char *line)
 {
     t_token *tokenlst;
 
     tokenlst = NULL;
     if (initial_parsing(line))
-        return (EXIT_FAILURE);
+        return (PARSE_ERROR);
     if (modify_line(&line))
-        return (EXIT_FAILURE);
+        return (free(line), PARSE_ERROR);
     if (tokenizer(line, &tokenlst))
-        return (EXIT_FAILURE);
+    {
+        tokens_lstclear(&tokenlst);
+        return (free(line), PARSE_ERROR);
+    }
+    free(line);
     lexer(tokenlst);
+    printf(GREEN "== TOKENS LIST =========>\n" RESET);
     print_lst(tokenlst);
-    // exit(1);
-    tokenlst = modify_redlst(&tokenlst); 
-    tokenlst = expand_noquotes(&tokenlst, env);
-    
-    if (expander(&tokenlst, env))
-        return (EXIT_FAILURE);
+    tokenlst = expand_noquotes(&tokenlst);
+    if (expander(&tokenlst))
+        return (PARSE_ERROR);
+    printf(GREEN "\n== EXPANDER OUT =======>\n" RESET);
+    print_lst(tokenlst);
     *ast = build_ast(tokenlst);
+    tokens_lstclear(&tokenlst);
     return (EXIT_SUCCESS);
 }

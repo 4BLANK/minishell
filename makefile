@@ -2,7 +2,7 @@ NAME = minishell
 CC = cc
 LIBFT_DIR = ./lib/libft
 LIBFT = $(LIBFT_DIR)/libft.a
-FLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
+FLAGS = -Wall -Wextra -Werror -ggdb
 SRC =	./src/main.c\
 		./src/executor/exec/exec.c\
 		./src/executor/exec/exec_tools.c\
@@ -15,6 +15,13 @@ SRC =	./src/main.c\
 		./src/parser/ast/utils.c\
 		./src/parser/ast/ast.c\
 		./src/parser/expander/expander.c\
+		./src/shell/utils.c\
+		./src/built-in/pwd_cmd.c\
+		./src/built-in/cd_cmd.c\
+		./src/built-in/unset_cmd.c\
+		./src/built-in/env_cmd.c\
+		./src/parser/expander/env_utils.c\
+		./src/built-in/export_cmd.c\
 		
 OBJ = $(SRC:.c=.o)
 

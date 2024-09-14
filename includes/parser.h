@@ -8,6 +8,16 @@
 #include <stdbool.h>
 #include "../lib/libft/libft.h"
 
+# define PARSE_ERROR 2
+
+#define RESET "\x1b[0m"
+#define RED "\x1b[31m"
+#define GREEN "\x1b[32m"
+#define YELLOW "\x1b[33m"
+#define BLUE "\x1b[34m"
+#define MAGENTA "\x1b[35m"
+#define CYAN "\x1b[36m"
+
 # define QUOTE 39
 # define DQUOTE 34
 # define CPIPE 124
@@ -15,6 +25,8 @@
 # define LESS 60
 # define AMPERSAND 38
 # define DOLLAR_SIGN 36
+# define QUESTION_MARK 63
+# define TILDE 126
 
 extern char *lexs_type[];
 extern char *ast_node_types[];
@@ -51,6 +63,14 @@ typedef enum
     ARGUMENTS
 } t_node_type;
 
+// ENV LIST
+typedef struct s_envlist
+{
+    char *name;
+    char *value;
+    struct s_envlist *next;
+} t_envlist;
+
 // TOKENS STRUCT
 typedef struct s_token
 {
@@ -66,6 +86,14 @@ typedef struct s_argument
     struct s_argument *next;
 } t_argument;
 
+// AST : FILES STRUCT
+typedef struct s_file
+{
+    char *name;
+    t_lexeme type;
+    struct s_file *next;
+} t_file;
+
 // AST STRUCT
 typedef struct s_ast_node
 {
@@ -73,6 +101,7 @@ typedef struct s_ast_node
     union 
     {
         t_argument *arg_list;
+        t_file *files;
         struct 
         {
             struct s_ast_node *left;
@@ -89,6 +118,7 @@ void lexer(t_token *tokens);
 int count_repetition(char *line, char c, int itr);
 int modify_line(char **line);
 int print_error(char *error, int exit_code);
+
 void print_lst(t_token *tokens);
 void	ft_lstadd_token_back(t_token **lst, t_token *new_arg);
 int check_for_echo(t_token *tokens);
@@ -100,7 +130,7 @@ t_token	*ft_lstlast_token(t_token *lst);
 bool	ft_strcmp(char *s1, char *s2);
 void	tokens_lstclear(t_token **lst);
 t_token *modify_redlst(t_token **tokens_list);
-char *ft_getenv(char *env_name, char **env);
+char *ft_getenv(char *env_name);
 void	reverse_rotate(t_token **s);
 void	rotate(t_token **s);
 
@@ -113,22 +143,50 @@ int is_schar (t_lexeme lexem);
 t_argument *args_table(t_token **tokens, t_node_type type);
 int pipe_exist(t_token *tokens);
 t_ast_node *get_redirection_tree(t_node_type type);
-// t_ast_node *new_ast_node(t_node_type type, t_token *tokens);
-// t_ast_node *generate_ast_tree(t_token *tokens);
 void print_args(t_argument *args);
 void print_space(int space);
 void print_ast_tree(t_ast_node *ast_tree, int space);
 
 // AST UTILS
-void ast_delete(t_ast_node *node);
-t_ast_node *ast_create_node(t_node_type type, t_argument *args);
+// void ast_delete(t_ast_node *node);
+t_ast_node *ast_create_node(t_node_type type, t_argument *args, t_file *files);
 
 t_ast_node *build_ast(t_token *tokens);
 
 
 // EXPANDER
-int expander(t_token **tokens, char **env);
-t_token *expand_noquotes(t_token **tokens, char **env);
+int expander(t_token **tokens);
+t_token *expand_noquotes(t_token **tokens);
 
+// export
+size_t str_arraysize(char **str);
+
+// builtin
+int export_cmd(char **args, char ***env, int exportflag);
+int env_cmd(char **env, int exp_flag);
+int pwd_cmd(char **args);
+int cd_cmd(char **args, char **env);
+int unset_cmd(char **args, char ***env);
+
+int overwrite_env(char *arg, char **env, char *name);
+
+void free_strarray(char **str);
+char **dupenv(char **env);
+
+int delete_tokensnode(t_token **tokenlst, size_t index);
+
+char **lst_tostrarray(t_argument *head);
+
+char **set_newenv(char *arg, char **env, int unset);
+
+bool env_exist(char *name, char **env);
+
+t_ast_node *form_command(t_token **tokenlst);
+
+t_envlist *init_envlist(char **env);
+void print_env(t_envlist *envlst);
+void distroy_envlst(t_envlist **envlst);
+
+void ast_distroy(t_ast_node **node);
 
 #endif

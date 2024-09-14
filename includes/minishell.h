@@ -8,17 +8,22 @@
 
 #include <sys/types.h>
 #include <sys/wait.h>
-
+#include <dirent.h>
 
 typedef struct s_shell
 {
     // shell data
-    int l_exitstatus;
-    char **env;
+    int ex_status;
+    char *home;
+    t_envlist *envlst;
 } t_shell;
 
-int parser (t_ast_node **ast, char *line, char **env);
-int execute_cmd(t_ast_node *cmd, char **env);
 char **lst_tostrarray(t_argument *head);
 int kickoff(t_ast_node *node);
+
+extern t_shell *sh;
+
+t_shell *setshell(char **env);
+int parser (t_ast_node **ast, char *line);
+
 #endif
