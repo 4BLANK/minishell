@@ -133,7 +133,7 @@ int count_special_chars(char *line, int *s_count)
                     return (print_error("parse error\n", 2));
                 else if (count_repetition(line, line[i], i) == 2)
                     count++;
-                else if (line[i - 1] != GREATER)
+                else if (i == 0 || line[i - 1] != GREATER)
                     count++;
             }
             else if (line[i] == LESS)
@@ -144,8 +144,11 @@ int count_special_chars(char *line, int *s_count)
                     return (print_error("parse error\n", 2));
                 else if (count_repetition(line, line[i], i) == 2)
                     count ++;
-                else if (line[i - 1] != LESS)
+                else if (i == 0 || line[i - 1] != LESS)
+                {
+                    //printf("1\n");
                     count++;
+                }
             }
             else if (line[i] == CPIPE)
             {
@@ -153,10 +156,10 @@ int count_special_chars(char *line, int *s_count)
                    return (print_error("parse error\n", 2));
                 else if (count_repetition(line, line[i], i) == 2)
                     count ++;
-                else if (line[i - 1] != CPIPE)
+                else if (i == 0 || line[i - 1] != CPIPE)
                     count++;
             }
-            else if (line[i] == AMPERSAND)
+            else if (i == 0 || line[i] == AMPERSAND)
             {
                 if (count_repetition(line, line[i], i) > 2)
                     return (print_error("parse error\n", 2));
@@ -209,7 +212,7 @@ int modify_line(char **line)
             || ((*line)[i] == AMPERSAND && (*line)[i + 1] && (*line)[i + 1] == AMPERSAND)))
         {
             tmpline[j++] = ' ';
-            if ((*line)[i + 1] && (*line)[i + 1] != (*line)[i] && (*line)[i - 1] != (*line)[i])
+            if ((*line)[i + 1] && (*line)[i + 1] != (*line)[i] && (i == 0 || (*line)[i - 1] != (*line)[i]))
                 tmpline[j++] = (*line)[i];
             else
             {

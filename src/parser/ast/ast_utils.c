@@ -153,6 +153,15 @@ void print_args(t_argument *args)
     printf(" null");
 }
 
+void print_files(t_file *files)
+{
+    while (files != NULL)
+    {
+        printf(" %s(%s) ->", files->name, lexs_type[files->type]);
+        files = files->next;
+    }
+    printf(" null");
+}
 
 void print_space(int space)
 {
@@ -174,8 +183,13 @@ void print_ast_tree(t_ast_node *ast_tree, int space)
         printf("|");
         print_args(ast_tree->data.arg_list);
     }
+    else if (ast_tree->type == REDIRECTION)
+    {
+        printf("|");
+        print_files(ast_tree->data.files);
+    }
     printf("\n");
-    if (ast_tree->type == COMMAND || ast_tree->type == PIPELINE || ast_tree->type == REDIRECTION
+    if (ast_tree->type == COMMAND || ast_tree->type == PIPELINE /*|| ast_tree->type == REDIRECTION*/
     || ast_tree->type == AND_NODE || ast_tree->type == OR_NODE)
     {
         if (ast_tree->data.childs.left != NULL)
