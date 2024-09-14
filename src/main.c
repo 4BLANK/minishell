@@ -4,9 +4,9 @@ t_shell *sh;
 
 int main (void)
 {
-    char *line;
-    t_ast_node *ast;
-
+  char *line;
+  t_ast_node *ast;
+  
     ast = NULL;
     sh = setshell(__environ);
     while (1)
@@ -19,7 +19,7 @@ int main (void)
             printf(GREEN "\n== AST =================>\n" RESET);
             print_ast_tree(ast, 0);
             // EXECTUTE AST
-
+            kickoff(ast);
             // DISTROY AST
             ast_distroy(&ast);
         }

@@ -50,10 +50,8 @@ char	*concat(char *dest, char *src, int flag)
 {
 	char *new_dest;
     char *holder;
-    int i;
     int len;
 
-    i = 0;
     new_dest = NULL;
     holder = NULL;
     if (flag == 1)
