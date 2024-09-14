@@ -1,4 +1,4 @@
-#include "../../../includes/executor.h"
+#include "../../../includes/minishell.h"
 
 // to redo later
 void here_doc(const char *delimiter)

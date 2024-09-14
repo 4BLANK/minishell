@@ -64,7 +64,8 @@ int get_commandpath(char **cmd_path, char *cmd, char **env)
   }
   free(tmp);
   free_strarray(paths);
-  return (EXIT_FAILURE);
+  *cmd_path = ft_strdup(cmd);
+  return (EXIT_SUCCESS);
 }
 
 char **lst_tostrarray(t_argument *head) 

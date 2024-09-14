@@ -1,13 +1,17 @@
-#include "../../../includes/executor.h"
-#include <fcntl.h>
+#include "../../../includes/minishell.h"
+#include <stdio.h>
 
-void redirect_output(const char *filename)
+int redirect_output(const char *filename)
 {
   int fd;
 
-  fd = open(filename, O_CREAT | O_WRONLY);
+  fd = open(filename, O_CREAT | O_RDWR, 0644);
   if (fd < 0)
-    return ;
+  {
+    perror("chnghl omnghl:");
+    return (EXIT_FAILURE);
+  }
   dup2(fd, 1);
   close(fd);
+  return (EXIT_SUCCESS);
 }

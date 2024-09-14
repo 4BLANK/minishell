@@ -4,6 +4,10 @@ LIBFT_DIR = ./lib/libft
 LIBFT = $(LIBFT_DIR)/libft.a
 FLAGS = -Wall -Wextra -Werror -ggdb
 SRC =	./src/main.c\
+		./src/executor/redirections/redirect.c\
+		./src/executor/redirections/redirect_input.c\
+		./src/executor/redirections/redirect_output.c\
+		./src/executor/redirections/append_redirect_output.c\
 		./src/executor/exec/exec.c\
 		./src/executor/exec/exec_tools.c\
 		./src/parser/parser.c\
