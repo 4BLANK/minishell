@@ -1,13 +1,16 @@
-#include "../../../includes/executor.h"
+#include "../../../includes/minishell.h"
 
-void redirect_input(const char *filename)
+int redirect_input(const char *filename)
 {
   int fd;
-  char *str;
 
-  fd = open(filename, O_RDONLY);
+  fd = open(filename, O_RDONLY, 0644);
   if (fd < 0)
-    return ;
+  {
+    perror("chnghl omnghl:");
+    return (EXIT_FAILURE);
+  }
   dup2(fd, 0);
   close(fd);
+  return (EXIT_SUCCESS);
 }

@@ -3,6 +3,7 @@
 
 #include "parser.h"
 #include "executor.h"
+#include <fcntl.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -24,6 +25,7 @@ int kickoff(t_ast_node *node);
 extern t_shell *sh;
 
 t_shell *setshell(char **env);
+int redirect(t_ast_node *cmd, int *left, int *right);
 int parser (t_ast_node **ast, char *line);
 
 #endif

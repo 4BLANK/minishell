@@ -9,26 +9,31 @@ int execute_command(t_ast_node *node, int left, int right, int pipefd[2])
   args = lst_tostrarray(node->data.childs.left->data.arg_list);
   status = 0;
   if (get_commandpath(&cmd_path, args[0], __environ))
-  {
-    perror("Command not found");
-    return (127);
-  }
+    return (EXIT_FAILURE);
   if (fork() > 0)
   {
     wait(&status);
     if (WIFEXITED(status))
       status = WEXITSTATUS(status);
+    if (status == 127)
+    {
+      ft_putstr_fd("chnghl o mnghl: ", 2);
+      ft_putstr_fd(cmd_path, 2);
+      ft_putstr_fd(": command not found\n", 2);
+    }
     return (status);
   }
   else
   {
+    if (redirect(node, &left, &right))
+      exit(EXIT_FAILURE);
     if (right)
       dup2(pipefd[1], STDOUT_FILENO);
     if (left)
       dup2(pipefd[0], STDIN_FILENO);
     if (execv(cmd_path, args) < 0)
-      return (EXIT_FAILURE);
-    return (EXIT_SUCCESS);
+      exit(EXIT_FAILURE);
+    exit(EXIT_SUCCESS);
   }
 }
 
