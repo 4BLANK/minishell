@@ -166,6 +166,8 @@ int count_special_chars(char *line, int *s_count)
                 else if (count_repetition(line, line[i], i) == 2)
                     count++;
             }
+            else if (line[i] == '(' || line[i] == ')')
+                count++;
         }
         i++;
     }
@@ -209,7 +211,8 @@ int modify_line(char **line)
         else if (flag == 1 && ((*line)[i] == DQUOTE ||  (*line)[i] == QUOTE))
             flag = 0;
         if (flag == 0 && ((*line)[i] == CPIPE || (*line)[i] == GREATER || (*line)[i] == LESS 
-            || ((*line)[i] == AMPERSAND && (*line)[i + 1] && (*line)[i + 1] == AMPERSAND)))
+            || ((*line)[i] == AMPERSAND && (*line)[i + 1] && (*line)[i + 1] == AMPERSAND) 
+            || (*line)[i] == '(' || (*line)[i] == ')'))
         {
             tmpline[j++] = ' ';
             if ((*line)[i + 1] && (*line)[i + 1] != (*line)[i] && (i == 0 || (*line)[i - 1] != (*line)[i]))

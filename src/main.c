@@ -19,8 +19,8 @@ int main (void)
             printf(GREEN "\n== AST =================>\n" RESET);
             print_ast_tree(ast, 0);
             // EXECTUTE AST
-            kickoff(ast);
-            // DISTROY AST
+            //kickoff(ast);
+            // DISTROY AST`
             ast_distroy(&ast);
         }
     }   
