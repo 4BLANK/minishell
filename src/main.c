@@ -21,7 +21,7 @@ int main (void)
             // EXECTUTE AST
             //kickoff(ast);
             // DISTROY AST`
-            ast_distroy(&ast);
+            // ast_distroy(&ast);
         }
     }   
     return (EXIT_SUCCESS);

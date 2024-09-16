@@ -188,49 +188,158 @@ bool	ft_strcmp(char *s1, char *s2)
        return (false);
 }
 
-int modify_line(char **line)
+// int modify_line(char **line)
+// {
+//     int i;
+//     int j;
+//     int flag;
+//     char *tmpline;
+//     int schr_count;
+
+//     i = 0;
+//     j = 0;
+//     flag = 0;
+//     if (count_special_chars(*line, &schr_count))
+//         return (EXIT_FAILURE);
+//     tmpline = malloc(sizeof(char) * (ft_strlen(*line) + schr_count * 2 + 1));
+//     if (tmpline == NULL)
+//         return (EXIT_FAILURE);
+//     while ((*line)[i])
+//     {
+//         if (flag == 0 && ((*line)[i] == DQUOTE ||  (*line)[i] == QUOTE))
+//             flag = 1;
+//         else if (flag == 1 && ((*line)[i] == DQUOTE ||  (*line)[i] == QUOTE))
+//             flag = 0;
+//         if (flag == 0 && ((*line)[i] == CPIPE || (*line)[i] == GREATER || (*line)[i] == LESS 
+//             || ((*line)[i] == AMPERSAND && (*line)[i + 1] && (*line)[i + 1] == AMPERSAND) 
+//             || (*line)[i] == '(' || (*line)[i] == ')'))
+//         {
+//             tmpline[j++] = ' ';
+//             if ((*line)[i + 1] && (*line)[i + 1] != (*line)[i] && (i == 0 || (*line)[i - 1] != (*line)[i]))
+//                 tmpline[j++] = (*line)[i];
+//             else
+//             {
+//                 tmpline[j++] = (*line)[i++];
+//                 tmpline[j++] = (*line)[i];
+//             }
+//             tmpline[j] = ' ';
+//         }
+//         else 
+//             tmpline[j] = (*line)[i];
+//         i++;
+//         j++;
+//     }
+//     tmpline[j] = '\0';
+//     free(*line);
+//     *line = tmpline;
+//     return (EXIT_SUCCESS);
+// }
+
+int schar_detected(char c)
 {
-    int i;
-    int j;
+    if (c == CPIPE || c == GREATER 
+        || c == LESS || c == AMPERSAND 
+        || c == OPAREN || c == CPAREN)
+        return (1);
+    return (0);
+}
+
+size_t count_schar(char *line)
+{
+    ssize_t i;
     int flag;
-    char *tmpline;
-    int schr_count;
+    size_t count;
+
+    i = -1;
+    flag = 0;
+    count = 0;
+    while (line[++i])
+    {
+        if (flag == 0 && (line[i] == DQUOTE ||  line[i] == QUOTE))
+            flag = 1;
+        else if (flag == 1 && (line[i] == DQUOTE ||  line[i] == QUOTE))
+            flag = 0;
+        if (flag == 0 && schar_detected(line[i]))
+        {
+            if (line[i] == OPAREN || line[i] == CPAREN)
+            {
+                printf("1\n");
+                count++;
+            }
+            else if (line[i] == GREATER && (!i || line[i - 1] != GREATER))
+                    count++;
+            else if (line[i] == LESS && (!i || line[i - 1] != LESS))
+                count++;
+            else if (line[i] == CPIPE && (!i || line[i - 1] != CPIPE))
+                count++;
+            else if (line[i] == AMPERSAND && (!i || line[i - 1] != AMPERSAND))
+            {
+                if (line[i + 1] &&  line[i + 1] == AMPERSAND)
+                    count++;
+            }
+        }
+    }
+    return (count);
+}
+
+char *expand_line(char *line, size_t len)
+{
+    char *newline;
+    size_t i;
+    size_t j;
+    int flag;
 
     i = 0;
     j = 0;
     flag = 0;
-    if (count_special_chars(*line, &schr_count))
-        return (EXIT_FAILURE);
-    tmpline = malloc(sizeof(char) * (ft_strlen(*line) + schr_count * 2 + 1));
-    if (tmpline == NULL)
-        return (EXIT_FAILURE);
-    while ((*line)[i])
+    newline = (char *)malloc (sizeof(char) * len);
+    while (line[i])
     {
-        if (flag == 0 && ((*line)[i] == DQUOTE ||  (*line)[i] == QUOTE))
+        if (flag == 0 && (line[i] == DQUOTE ||  line[i] == QUOTE))
             flag = 1;
-        else if (flag == 1 && ((*line)[i] == DQUOTE ||  (*line)[i] == QUOTE))
+        else if (flag == 1 && (line[i] == DQUOTE ||  line[i] == QUOTE))
             flag = 0;
-        if (flag == 0 && ((*line)[i] == CPIPE || (*line)[i] == GREATER || (*line)[i] == LESS 
-            || ((*line)[i] == AMPERSAND && (*line)[i + 1] && (*line)[i + 1] == AMPERSAND) 
-            || (*line)[i] == '(' || (*line)[i] == ')'))
+        if (flag == 0 && schar_detected(line[i]))
         {
-            tmpline[j++] = ' ';
-            if ((*line)[i + 1] && (*line)[i + 1] != (*line)[i] && (i == 0 || (*line)[i - 1] != (*line)[i]))
-                tmpline[j++] = (*line)[i];
-            else
+            if (line[i] == AMPERSAND)
             {
-                tmpline[j++] = (*line)[i++];
-                tmpline[j++] = (*line)[i];
+                if (i != 0 && line[i - 1] != line[i] && line[i + 1] && line[i + 1] == line[i])
+                    newline[j++] = ' ';
+                newline[j] = line[i];
+                if (line[i + 1] && line[i + 1] != line[i] && (i != 0 && line[i - 1] == line[i]))
+                    newline[++j] = ' ';
             }
-            tmpline[j] = ' ';
+            else 
+            {
+                if ((i != 0 && line[i - 1] != line[i]))
+                    newline[j++] = ' ';
+                newline[j] = line[i];
+                if (line[i + 1] && line[i + 1] != line[i])
+                    newline[++j] = ' ';
+            }
         }
         else 
-            tmpline[j] = (*line)[i];
+            newline[j] = line[i];
         i++;
         j++;
     }
-    tmpline[j] = '\0';
+    newline[j] = '\0';
+    return (newline);
+}
+
+int modify_line(char **line)
+{
+    char *newline;
+    size_t len;
+
+    len = 0;
+    if (*line == NULL)
+        return (EXIT_FAILURE);
+    len = ft_strlen(*line) + (count_schar(*line) * 2) + 1;
+    newline = expand_line(*line, len);
+    if (newline == NULL)
+        return (EXIT_FAILURE);
     free(*line);
-    *line = tmpline;
+    *line = newline;
     return (EXIT_SUCCESS);
 }
