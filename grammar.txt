@@ -1,17 +1,23 @@
 GRAMMAR ==================================================
 
-<command_line> ::= <command_line_or>
+
+<command_line> ::= <group> '|' <command_line>
+                 | <group> '&&' <command_line>
+                 | <group> '||' <command_line>
+                 | <group>
+
+<group> ::= '(' <command_line_or> ')' <redirection>
+          | '(' <command_line_or> ')'
+          | <command_line_or>
 
 <command_line_or> ::= <command_line_and> '||' <command_line_or>
                     | <command_line_and>
 
-<command_line_and> ::= <grouped_command> '&&' <command_line_and>
-                    | <grouped_command>
-
-<grouped_command> ::= '(' <command_line> ')'
+<command_line_and> ::= <pipe_line> '&&' <command_line_and>
                     | <pipe_line>
 
-<pipeline> ::= <command> '|' <pipeline>
+<pipeline> ::= <grouped_command> | <pipe_line>
+             | <command> '|' <pipeline>
              | <command>
 
 <command> ::= <simple_command> <redirection>

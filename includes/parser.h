@@ -27,6 +27,8 @@
 # define DOLLAR_SIGN 36
 # define QUESTION_MARK 63
 # define TILDE 126
+# define OPAREN 40
+# define CPAREN 41
 
 extern char *lexs_type[];
 extern char *ast_node_types[];
@@ -188,5 +190,33 @@ void print_env(t_envlist *envlst);
 void distroy_envlst(t_envlist **envlst);
 
 void ast_distroy(t_ast_node **node);
+void print_files(t_file *files);
 
+t_ast_node *command_line(t_token **cur_token);
+
+t_ast_node *command_line_or(t_token **cur_token);
+t_ast_node *command_line_or_1(t_token **cur_token);
+t_ast_node *command_line_or_2(t_token **cur_token);
+
+t_ast_node *command_line_and(t_token **cur_token);
+t_ast_node *command_line_and_1(t_token **cur_token);
+t_ast_node *command_line_and_2(t_token **cur_token);
+
+t_ast_node *grouped_command(t_token **cur_token);
+t_ast_node *grouped_command_0(t_token **cur_token);
+t_ast_node *grouped_command_1(t_token **cur_token);
+t_ast_node *grouped_command_2(t_token **cur_token);
+
+t_ast_node *pipe_line(t_token **cur_token);
+t_ast_node *pipe_line_1(t_token **cur_token);
+t_ast_node *pipe_line_2(t_token **cur_token);
+
+t_ast_node *command_line_1(t_token **cur_token);
+t_ast_node *command_line_2(t_token **cur_token);
+t_ast_node *command_line_3(t_token **cur_token);
+t_ast_node *command_line_4(t_token **cur_token);
+
+
+t_file	*new_file(void *file_name, t_lexeme filetype);
+void	addfile_back(t_file **lst, t_file *new);
 #endif
