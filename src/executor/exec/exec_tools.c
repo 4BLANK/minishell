@@ -130,8 +130,11 @@ int check_error_type(char *cmd_path)
 
 int specify_error(int status, char *cmd_path)
 {
-  ft_putstr_fd("chnghl o mnghl: ", 2);
-  ft_putstr_fd(cmd_path, 2);
+  if (status == 126 || status == 127)
+  {
+    ft_putstr_fd("chnghl o mnghl: ", 2);
+    ft_putstr_fd(cmd_path, 2);
+  }
   if (status == 126)
   {
     if (is_dir(cmd_path))
