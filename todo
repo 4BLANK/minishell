@@ -10,3 +10,9 @@ only && and ||
 check why !!!!!
 
 
+==> fix () :done
+==> fix read error : ...
+==> herdoc : ...
+==> export : ...
+==> wildcard : ..
+==> HANDLE REDIRECTION AFTER A GROUPED COMMAND

@@ -190,7 +190,8 @@ void print_ast_tree(t_ast_node *ast_tree, int space)
     }
     printf("\n");
     if (ast_tree->type == COMMAND || ast_tree->type == PIPELINE /*|| ast_tree->type == REDIRECTION*/
-    || ast_tree->type == AND_NODE || ast_tree->type == OR_NODE)
+    || ast_tree->type == AND_NODE || ast_tree->type == OR_NODE 
+    || ast_tree->type == GROUP_NODE)
     {
         if (ast_tree->data.childs.left != NULL)
         {

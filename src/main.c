@@ -29,6 +29,6 @@ int main (void)
       // DISTROY AST
       ast_distroy(&ast);
     }
-  }   
+  }  
   return (EXIT_SUCCESS);
 }
