@@ -15,16 +15,14 @@ int execute_command(t_ast_node *node, int left, int right, int pipefd[2])
     wait(&status);
     if (WIFEXITED(status))
       status = WEXITSTATUS(status);
-    if (status == 127)
-    {
-      ft_putstr_fd("chnghl o mnghl: ", 2);
-      ft_putstr_fd(cmd_path, 2);
-      ft_putstr_fd(": command not found\n", 2);
-    }
+    else
+      printf("\n");
+    specify_error(status, cmd_path);
     return (status);
   }
   else
   {
+    handle_signals(CHILD);
     if (redirect(node, &left, &right))
       exit(EXIT_FAILURE);
     if (right)
@@ -32,7 +30,7 @@ int execute_command(t_ast_node *node, int left, int right, int pipefd[2])
     if (left)
       dup2(pipefd[0], STDIN_FILENO);
     if (execv(cmd_path, args) < 0)
-      exit(EXIT_FAILURE);
+      exit(check_error_type(cmd_path));
     exit(EXIT_SUCCESS);
   }
 }
