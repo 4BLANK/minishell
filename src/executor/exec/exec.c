@@ -37,41 +37,52 @@ int execute_command(t_ast_node *node, int left, int right, int pipefd[2])
 
 int execute_pipeline(t_ast_node *node)
 {
-  int pipefd[2];
   int status;
   int clonefds[2];
 
-  if (pipe(pipefd) == -1)
+  if (pipe(sh->pipefd) == -1)
     return (EXIT_FAILURE);
-  clonefds[0] = pipefd[0];
-  clonefds[1] = pipefd[1];
-  if (node)
-  {
+  clonefds[0] = sh->pipefd[0];
+  clonefds[1] = sh->pipefd[1];
+  if (node->data.childs.left->type == COMMAND)
     status = execute_command(node->data.childs.left, 0, 1, (int[2]){0, clonefds[1]});
-    node = node->data.childs.right;
-  }
+  if (node->data.childs.left->type == GROUP_NODE)
+    status = execute_group(node->data.childs.left, 0, 1, (int[2]){0, clonefds[1]});
+  node = node->data.childs.right;
   while (node != NULL && node->type == PIPELINE)
   {
     close(clonefds[1]);
-    pipe(pipefd);
-    clonefds[1] = pipefd[1];
-    status = execute_command(node->data.childs.left, 1, 1, clonefds);
+    pipe(sh->pipefd);
+    clonefds[1] = sh->pipefd[1];
+    if (node->data.childs.left->type == COMMAND)
+      status = execute_command(node->data.childs.left, 1, 1, (int[2]){0, clonefds[1]});
+    if (node->data.childs.left->type == GROUP_NODE)
+      status = execute_group(node->data.childs.left, 1, 1, (int[2]){0, clonefds[1]});
     close(clonefds[0]);
-    clonefds[0] = pipefd[0];
+    clonefds[0] = sh->pipefd[0];
     node = node->data.childs.right;
   }
-  clonefds[0] = pipefd[0];
+  clonefds[0] = sh->pipefd[0];
   close(clonefds[1]);
-  status = execute_command(node, 1, 0, (int[2]){clonefds[0], 0});
+  if (node->type == COMMAND)
+    status = execute_command(node, 1, 0, (int[2]){clonefds[0], 0});
+  if (node->type == GROUP_NODE)
+    status = execute_group(node, 1, 0, (int[2]){clonefds[0], 0});
   close(clonefds[0]);
   return (status);
 }
 
 int kickoff(t_ast_node *node)
 {
+  if (node->type == AND_NODE)
+    return execute_and(node);
   if (node->type == PIPELINE)
     return execute_pipeline(node);
   if (node->type == COMMAND)
     return execute_command(node, 0, 0, NULL);
+  if (node->type == OR_NODE)
+    return execute_or(node);
+  if (node->type == GROUP_NODE)
+    return execute_group(node, 0, 0, NULL);
   return (EXIT_FAILURE);
 }

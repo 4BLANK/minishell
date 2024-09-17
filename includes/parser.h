@@ -218,5 +218,5 @@ t_ast_node *command_line_4(t_token **cur_token);
 
 
 t_file	*new_file(void *file_name, t_lexeme filetype);
-void	addfile_back(t_file **lst, t_file *new);
+void	addfile_back(t_file **lst, t_file *new_file);
 #endif
