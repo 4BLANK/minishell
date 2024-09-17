@@ -1,6 +1,4 @@
 #include "../../../includes/minishell.h"
-#include <stdio.h>
-#include <unistd.h>
 
 size_t lstsize(t_argument *lst)
 {

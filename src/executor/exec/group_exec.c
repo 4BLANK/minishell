@@ -1,6 +1,6 @@
 #include "../../../includes/minishell.h"
 
-int execute_group(t_ast_node *node, int left, int right)
+int execute_group(t_ast_node *node, int left, int right, int clonefds[2])
 {
   int status;
   pid_t pid;
@@ -9,7 +9,7 @@ int execute_group(t_ast_node *node, int left, int right)
   pid = fork();
   if (pid > 0)
   {
-    waitpid(1,&status, 0);
+    waitpid(pid, &status, 0);
     if (WIFEXITED(status))
       status = WEXITSTATUS(status);
     else
@@ -18,10 +18,12 @@ int execute_group(t_ast_node *node, int left, int right)
   }
   else
   {
+    if (redirect(node, &left, &right))
+      exit(EXIT_FAILURE);
     if (right)
-      dup2(sh->pipefd[1], STDOUT_FILENO);
+      dup2(clonefds[1], STDOUT_FILENO);
     if (left)
-      dup2(sh->pipefd[0], STDIN_FILENO);
+      dup2(clonefds[0], STDIN_FILENO);
     exit(kickoff(node->data.childs.left));
   }
   return (status);

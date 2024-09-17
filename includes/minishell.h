@@ -33,6 +33,6 @@ int execute_pipeline(t_ast_node *node);
 int execute_command(t_ast_node *node, int left, int right, int pipefd[2]);
 int execute_or(t_ast_node *node);
 int execute_and(t_ast_node *node);
-int execute_group(t_ast_node *node, int left, int right);
+int execute_group(t_ast_node *node, int left, int right, int clonefds[2]);
 
 #endif
