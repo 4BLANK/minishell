@@ -8,9 +8,9 @@ int parser (t_ast_node **ast, char *line)
     tokenlst = NULL;
     // if (initial_parsing(line))
     //     return (PARSE_ERROR);
-    if (modify_line(&line))
+    if (modify_line(&line) > 0)
         return (free(line), PARSE_ERROR);
-    if (tokenizer(line, &tokenlst))
+    if (tokenizer(line, &tokenlst)  || syntax_err_check(tokenlst))
     {
         tokens_lstclear(&tokenlst);
         return (free(line), PARSE_ERROR);

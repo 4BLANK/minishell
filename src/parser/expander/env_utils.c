@@ -56,7 +56,10 @@ char *getenv_value(char *variable)
         return NULL;
     while (variable[start] && variable[start] != '=')
         start++;
+    if (start == ft_strlen(variable))
+        return (NULL);
     value = ft_substr(variable, start + 1, ft_strlen(variable) - start);
+    value = remove_quote(value);
     return (value);
 }
 
@@ -64,7 +67,10 @@ void print_env(t_envlist *envlst)
 {
     while (envlst != NULL)
     {
-        printf("declare -x %s=\"%s\"\n", envlst->name, envlst->value);
+        if (envlst->value == NULL)
+            printf("declare -x %s\n", envlst->name);
+        else     
+            printf("declare -x %s=\"%s\"\n", envlst->name, envlst->value);
         envlst = envlst->next;
     }
 }

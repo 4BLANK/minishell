@@ -11,8 +11,13 @@ check why !!!!!
 
 
 ==> fix () :done
-==> fix read error : ...
-==> herdoc : ...
+==> fix read error : done
+==> herdoc : ..
 ==> export : ...
-==> wildcard : ..
-==> HANDLE REDIRECTION AFTER A GROUPED COMMAND
+==> wildcard : ...
+==> HANDLE REDIRECTION AFTER A GROUPED COMMAND : done
+
+
+(ls && (ls || (ls && ls && (ls | ls))))
+
+((ls && ls)> file || (ls || (ls | ls > file)))

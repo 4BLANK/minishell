@@ -14,14 +14,19 @@ int main (void)
         line = readline("-> ");
         add_history(line);
         sh->ex_status = parser(&ast, line);
-        if (ast != NULL)
+        if (!sh->ex_status)
         {
             printf(GREEN "\n== AST =================>\n" RESET);
             print_ast_tree(ast, 0);
             // EXECTUTE AST
             //kickoff(ast);
             // DISTROY AST`
-            // ast_distroy(&ast);
+            //ast_distroy(&ast);
+            if (ft_strcmp("export", ast->data.childs.left->data.arg_list->content))
+            {
+                printf("1\n");
+                export_cmd(ast->data.childs.left->data.arg_list);
+            }
         }
     }   
     return (EXIT_SUCCESS);

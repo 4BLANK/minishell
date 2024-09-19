@@ -259,11 +259,22 @@ void	tokens_lstclear(t_token **lst)
 
 int rm_token_quotes(t_token *tokenlst)
 {
+  int flag;
+
+  flag = 0;
   while (tokenlst != NULL)
   {
-    tokenlst->content = remove_quote(tokenlst->content);
-    if (tokenlst->content == NULL)
-      return (print_error("malloc_error", 2));
+    if (flag == 0 && tokenlst->lexem == CMD 
+      && ft_strcmp(tokenlst->content, "export"))
+      flag = 1;
+    else if (flag == 1 && is_schar(tokenlst->lexem) == 2)
+      flag = 0;
+    if (flag == 0)
+    {
+      tokenlst->content = remove_quote(tokenlst->content);
+      if (tokenlst->content == NULL)
+        return (print_error("malloc_error", 2));
+    }
     tokenlst = tokenlst->next;
   }
   return (EXIT_SUCCESS);
