@@ -18,7 +18,14 @@ typedef struct s_shell
   char *home;
   t_envlist *envlst;
   int pipefd[2];
+  char **args;
 } t_shell;
+
+typedef struct s_pair
+{
+  int left;
+  int right;
+} t_pair;
 
 char **lst_tostrarray(t_argument *head);
 int kickoff(t_ast_node *node);
