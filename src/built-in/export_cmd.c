@@ -1,227 +1,185 @@
 #include "../../includes/minishell.h"
 
-bool env_exist(char *name, char **env)
+//TODO: kemal had l9wada
+char *export_expander(char *str)
 {
     size_t i;
+    char *newstr;
+    char *envname;
+    int flag;
+    char *tmp;
 
     i = 0;
-    while (env[i])
+    flag = 0;
+    newstr = NULL;
+    tmp = NULL;
+    envname = NULL;
+    while (str[i])
     {
-        if (!ft_strncmp(env[i], name, ft_strlen(name)))
-            return (true);
+        if (flag == 0 && str[i] == QUOTE)
+            flag = 1;
+        else if (flag == 1 && str[i] == QUOTE)
+            flag = 0;
+        if (flag == 0 && str[i] == DOLLAR_SIGN && str[i + 1]) 
+        {
+            tmp = expand_pid_or_exit(newstr, str[i], str[i + 1]);
+            if (tmp != NULL)
+            {
+                newstr = tmp;
+                i++;
+            }
+            else 
+            {
+                envname = get_name(str, i + 1);
+                tmp = ft_strdup(ft_getenv(envname));
+                newstr = concat(newstr, tmp, 0);
+                i = i + ft_strlen(envname);
+                free(tmp);
+                free(envname);
+            }
+        }
+        else
+            newstr = concat(newstr, str + i, 1);
         i++;
+    }
+    return (newstr);
+}
+
+bool env_exist(char *name)
+{
+    size_t i;
+    t_envlist *lst;
+
+    i = 0;
+    lst = sh->envlst;
+    while (lst != NULL)
+    {
+        if (!ft_strncmp(lst->name, name, ft_strlen(name)))
+            return (true);
+        lst = lst->next;
     }
     return (false);
 }
 
-char *getenv_name1(char *str)
+int ft_error(char *cmd, char *arg, char *error)
 {
-    char *tmp;
-    int i;
-
-    i = 1;
-    while (str[i] && !is_space(str[i]) && str[i] != '=')
-        i++;
-    tmp = (char *)ft_calloc(i + 1, sizeof(char));
-    if (tmp == NULL)
-        return NULL;
-    i = 0;
-    while (str[i] && !is_space(str[i]) && str[i] != '=')
-    {
-        tmp[i] = str[i];
-        i++;
-    }
-    tmp[i] = '\0';
-    return (tmp);
+    ft_putstr_fd("changal: ", 2);
+    ft_putstr_fd(cmd, 2);
+    ft_putstr_fd(": ", 2);
+    ft_putstr_fd(arg, 2);
+    ft_putstr_fd(": ", 2);
+    ft_putstr_fd(error, 2);
+    return (EXIT_FAILURE);
 }
 
-char **set_newenv(char *arg, char **env, int unset)
-{
-    char **envlst;
-    size_t i;
-    size_t j;
-    size_t size;
-
-    i = 0;
-    j = 0;
-    size = str_arraysize(env);
-    if (unset == 0)
-        size += 2;
-    envlst = (char **)ft_calloc(sizeof(char *), size);
-    if (envlst == NULL)
-        return (NULL);
-    while (env[i])
-    {
-        if (!ft_strncmp(arg, env[i], ft_strlen(arg)))
-        {
-            if (unset == 0)
-            {
-                envlst[j] = ft_strdup(env[i]);
-                j++;
-            }
-        }
-        else 
-        {
-            envlst[j] = ft_strdup(env[i]);
-            j++;
-        }
-        i++;
-    }
-    if (unset == 0 && !(envlst[j++] = ft_strdup(arg)))
-        return (NULL);
-    envlst[j] = NULL;
-    return (envlst);
-}
-
-int overwrite_env(char *arg, char **env, char *name)
-{
-    size_t i;
-    char *tmp;
-
-    i = 0;
-    tmp = NULL;
-    while (env[i] != NULL)
-    {
-        if (!ft_strncmp(env[i], name, ft_strlen(name)))
-        {
-            tmp = env[i];
-            env[i] = ft_strdup(arg);
-            if (env[i] == NULL)
-                return (free(tmp), EXIT_FAILURE);
-            break;
-        }
-        i++;
-    }
-    return (free(tmp), EXIT_SUCCESS);
-}
-
-char **regenerate_env(char *arg, char **env)
-{
-    char **new_envlst;
-
-    new_envlst = set_newenv(arg, env, 0);
-    if (new_envlst == NULL)
-        return (NULL);
-    free_strarray(env);
-    return (new_envlst);
-}
-
-int setenv_fromlocal(char *name, char ***env)
-{
-    char *newvalue;
-    char *arg;
-    char *tmp;
-
-    newvalue = NULL;
-    tmp = NULL;
-    arg = NULL;
-    newvalue = ft_getenv(name);
-    if (newvalue == NULL)
-        return EXIT_FAILURE;
-    tmp = ft_strjoin(name, "=");
-    if (tmp == NULL)
-        return (free(newvalue), EXIT_FAILURE);
-    arg = ft_strjoin(tmp, newvalue);
-    if (arg == NULL)
-    {
-        free(tmp);
-        return (free(newvalue), EXIT_FAILURE);
-    }
-    free(tmp);
-    free(newvalue);
-    if ((*env = regenerate_env(arg, *env)) == NULL)
-            return (EXIT_FAILURE);
-    return EXIT_SUCCESS;
-}
-
-int ft_setenv(char *arg, char ***env, int exportflag)
-{
-    char **new_envlst;
-    char *name;
-
-    new_envlst = NULL;
-    if (!(name = getenv_name1(arg)))
-        return (EXIT_SUCCESS);
-    if (env_exist(name, *env) && env_exist(name, *env))
-    {
-        //printf("%s exist in both\n", name);
-        /*
-         * the variable that we want to export exist 
-         * in both the original env and the local one
-         * we change its value in both envs
-        */
-        if (overwrite_env(arg, *env, name))
-            return (EXIT_FAILURE);
-        if (overwrite_env(arg, *env, name))
-            return (EXIT_FAILURE);
-        //printf("1\n");
-        //print_lst(*env);
-    }
-    else if (env_exist(name, *env))
-    {
-        /*
-         * the variable already exist in the local env 
-         * but not in the original one
-         * the varibale sould be added to the original env 
-         * with the same value as the local one only if the
-         * value is not specified (export DATA if the equale
-            * signe does not exit
-        */
-        // if (value == NULL)
-        if (!ft_strchr(arg, '='))
-        {
-            if(setenv_fromlocal(name, env))
-            {
-                //printf("1\n");
-                return (free(name), EXIT_FAILURE);
-            }
-        }
-        else 
-        {
-            if (overwrite_env(arg, *env, name))
-                return (EXIT_FAILURE);
-            if (exportflag == 1)
-            {
-                if ((new_envlst = regenerate_env(arg, *env)) == NULL)
-                    return (EXIT_FAILURE);
-                *env = new_envlst;
-            }
-        }
-    }
-    else 
-    {
-        /*
-         * if the variable does note exist in both
-         * envs we add the variable is env and envlocal
-         * only is export command was specified
-        */
-        if (exportflag == 1)
-        {
-            if ((new_envlst = regenerate_env(arg, *env)) == NULL)
-                return (EXIT_FAILURE);
-            *env = new_envlst;
-        }
-        if ((new_envlst = regenerate_env(arg, *env)) == NULL)
-            return (EXIT_FAILURE);
-        *env = new_envlst;
-    }
-    return(EXIT_SUCCESS);
-}
-
-int export_cmd(char **args, char ***env, int exportflag)
+int invalid_arg(char *arg)
 {
     size_t i;
 
-    i = exportflag;
-    if (args == NULL)
-        return EXIT_FAILURE;
-    if (str_arraysize(args) == 1 && exportflag)
-        return(env_cmd(*env, 1));
-    while (args[i])
-    {
-        if (ft_setenv(args[i], env, exportflag))
-            return (EXIT_FAILURE);
+    i = 0;
+    if(arg == NULL)
+        return (EXIT_FAILURE);
+    if (!ft_isalpha(arg[0]) && arg[0] != '_')
+        return (ft_error("export", arg, "not a valid identifier\n"));
+    while (arg[i] && arg[i] != '=')
+    {   
+        if (arg[i] != '_' && !ft_isalpha(arg[i]) 
+            && !ft_isalnum(arg[i]))
+            return (ft_error("export", arg, "not a valid identifier\n"));
         i++;
     }
     return (EXIT_SUCCESS);
+}
+
+int overwrite_env(char *name, char *value)
+{
+    t_envlist *env;
+    char *tmp;
+
+    tmp = NULL;
+    env = sh->envlst;
+    if (!name || !value)
+        return (EXIT_FAILURE);
+    while (env != NULL)
+    {
+        if (ft_strcmp(env->name, name))
+        {
+            tmp = env->value;
+            env->value = value;
+        }
+        env = env->next;
+    }
+    free(tmp);
+    free(name);
+    return (EXIT_SUCCESS);
+}
+
+void ft_setenv(char *name, char *value)
+{
+    t_envlist *var;
+
+    var = NULL;
+    if (name == NULL)
+        return ;
+    value = remove_quote(value);
+    if (env_exist(name) && value != NULL)
+    {
+        printf("kain\n");
+        if (overwrite_env(name, value))
+            return ;
+    }
+    else if (env_exist(name) && value == NULL)
+    {
+        printf("kain walakin value null\n");
+        return ;
+    }
+    else
+    {
+        var = lstnew_env(name, value);
+        if (var == NULL)
+            return ;
+        lstadd_env_back(&sh->envlst, var);
+        // print_env(sh->envlst);
+    }
+}
+
+int export_var(char *arg)
+{
+    char *new_arg;
+    char *name;
+    char *value;
+
+    name = NULL;
+    value = NULL;
+    new_arg = export_expander(arg);
+    // printf(RED"\n--------------------------\n");
+    // printf("old = %s\n", arg);
+    // printf("new = %s\n", new_arg);
+    // printf("\n--------------------------\n"RESET);
+    if (invalid_arg(new_arg))
+        return (EXIT_FAILURE);
+    name = getenv_name(new_arg);
+    value = getenv_value(new_arg);
+    ft_setenv(name, value);
+    free(new_arg);
+    // free(name);
+    // free(value);
+    return (EXIT_SUCCESS);
+}
+
+int export_cmd(t_argument *arguments)
+{
+    t_argument *args;
+    int status;
+    
+    status = 0;
+    args = arguments->next;
+    if (!args)
+        print_env(sh->envlst);    
+    while (args != NULL)
+    {
+        status = export_var(args->content);
+        args = args->next;
+    }
+    return (status);
 }

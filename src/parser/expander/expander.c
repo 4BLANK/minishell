@@ -164,7 +164,7 @@ char *expand_string(char *str)
     s1 = NULL;
     // if (ft_strcmp("~", str))
     //     return (ft_strdup(getenv("HOME")));
-    //printf("expand string\n");
+    // printf("expand string\n");
     while (str[i])
     {
         if (quote_flag == 0 && (str[i] == QUOTE || str[i] == DQUOTE))
@@ -272,20 +272,23 @@ t_token *expand_noquotes(t_token **head)
     t_token *tmp;
     t_token *tokens;
     char *str;
+    int flag;
 
+    flag = 0;
     tokens_list = NULL;
     tmp = NULL;
     tokens = *head;
     while (tokens != NULL)
     {
         // removes schars
-        // if (flag == 0 && tokens->lexem == CMD 
-        //     && ft_strcmp(tokens->content, "export"))
-        //     flag = 1;
-        // else if (flag == 1 && is_schar(tokens->lexem) == 2)
-        //     flag = 0;
-        // if (!(flag == 1 && tokens->lexem == ARG))
-        // {    
+        if (flag == 0 && tokens->lexem == CMD 
+            && ft_strcmp(tokens->content, "export"))
+            flag = 1;
+        else if (flag == 1 && is_schar(tokens->lexem) != 0)
+            flag = 0;
+        if (flag == 0 && (is_schar(tokens->lexem) == 0 
+            || tokens->lexem == O_FILE))
+        {    
             if (tokens->lexem == STRING || tokens->lexem == CMD 
                 || tokens->lexem == O_FILE || tokens->lexem == ARG)
             {
@@ -298,7 +301,7 @@ t_token *expand_noquotes(t_token **head)
                     ft_lstadd_token_back(&tokens_list, tmp);
                 }
             }
-        // }
+        }
         else 
         {
             tmp = ft_lstnew_token(ft_strdup(tokens->content));
@@ -310,9 +313,9 @@ t_token *expand_noquotes(t_token **head)
     }
     tokens_lstclear(head);
 
-    // printf("\n-------------------------\n");
+    // printf(RED"\n-------------------------\n");
     // print_lst(tokens_list);
-    // printf("\n-------------------------\n");
+    // printf("\n-------------------------\n"RESET);
 
     return (tokens_list);
 }
@@ -377,7 +380,7 @@ int expander(t_token **tokens)
         if (flag == 0 && (*tokens)->lexem == CMD 
             && ft_strcmp((*tokens)->content, "export"))
             flag = 1;
-        else if (flag == 1 && is_schar((*tokens)->lexem) == 2)
+        else if (flag == 1 && is_schar((*tokens)->lexem) != 0)
             flag = 0;
         if (!(flag == 1 && (*tokens)->lexem == ARG))
         {

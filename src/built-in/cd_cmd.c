@@ -68,8 +68,8 @@ int cd_cmd(char **args, char **env)
     if (is_dir(pwd) != 1 || !chdir(pwd))
         return (EXIT_FAILURE);
     set_variables(&old_pwd, &new_pwd, pwd, env);
-    if (overwrite_env(old_pwd, env, "OLDPWD") 
-        || overwrite_env(new_pwd, env, "PWD"))
+    if (overwrite_env("OLDPWD", old_pwd) 
+        || overwrite_env("PWD", new_pwd))
         return (free(home), EXIT_FAILURE);
     free(home);
     return (EXIT_SUCCESS);

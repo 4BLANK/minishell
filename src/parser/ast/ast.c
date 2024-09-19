@@ -154,7 +154,6 @@ t_file *get_files(t_token **tokenlst)
             lex_tmp = (*tokenlst)->lexem;
             *tokenlst = (*tokenlst)->next;
             str = ft_strdup((*tokenlst)->content);
-            // printf("%s\n", str);
             tmp = new_file(ft_strdup((*tokenlst)->content), lex_tmp);
             free(str);
             if (tmp == NULL)
@@ -178,7 +177,7 @@ t_ast_node *grouped_command_0(t_token **cur_token)
     files = NULL;
     if (!check_token(OPEN_P, cur_token))
         return (NULL);
-    if ((cmd = command_line_or(cur_token)) == NULL)
+    if ((cmd = command_line(cur_token)) == NULL)
         return (NULL);
     if (!check_token(CLOSE_P, cur_token))
     {
@@ -218,7 +217,7 @@ t_ast_node *grouped_command_1(t_token **cur_token)
     cmd = NULL;
     if (!check_token(OPEN_P, cur_token))
         return (NULL);
-    if ((cmd = command_line_or(cur_token)) == NULL)
+    if ((cmd = command_line(cur_token)) == NULL)
         return (NULL);
     if (!check_token(CLOSE_P, cur_token))
     {
@@ -270,7 +269,10 @@ t_ast_node *command_line_or_1(t_token **cur_token)
         return NULL;
     }
     if ((cmd_and_2 = command_line_or(cur_token)) == NULL)
+    {
+        ast_distroy(&cmd_and_1);
         return NULL;
+    }
     head_node = ast_create_node(OR_NODE, NULL, NULL);
     if (head_node == NULL)
         return NULL;
@@ -390,6 +392,7 @@ t_ast_node *build_ast(t_token *tokens)
     ast = command_line(&cur_token);
     if (cur_token != NULL)
     {
+        printf("%s\n", cur_token->content);
         print_error("ast error!\n", 2);
         return (NULL);
     }

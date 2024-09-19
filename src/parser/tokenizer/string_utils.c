@@ -49,6 +49,8 @@ char *remove_quote(char *str)
     i = 0;
     j = 0;
     flag = 0;
+    if (str == NULL)
+        return (NULL);
     unqoute_str = malloc (sizeof(char) * (rm_quotelen(str) + 1));
     if (unqoute_str == NULL)
         return (NULL);
@@ -262,10 +264,7 @@ size_t count_schar(char *line)
         if (flag == 0 && schar_detected(line[i]))
         {
             if (line[i] == OPAREN || line[i] == CPAREN)
-            {
-                printf("1\n");
                 count++;
-            }
             else if (line[i] == GREATER && (!i || line[i - 1] != GREATER))
                     count++;
             else if (line[i] == LESS && (!i || line[i - 1] != LESS))
@@ -289,11 +288,11 @@ char *expand_line(char *line, size_t len)
     size_t j;
     int flag;
 
-    i = 0;
+    i = -1;
     j = 0;
     flag = 0;
     newline = (char *)malloc (sizeof(char) * len);
-    while (line[i])
+    while (line[++i])
     {
         if (flag == 0 && (line[i] == DQUOTE ||  line[i] == QUOTE))
             flag = 1;
@@ -301,7 +300,13 @@ char *expand_line(char *line, size_t len)
             flag = 0;
         if (flag == 0 && schar_detected(line[i]))
         {
-            if (line[i] == AMPERSAND)
+            if (line[i] == CPAREN || line[i] == OPAREN)
+            {
+                newline[j++] = ' ';
+                newline[j] = line[i];
+                newline[++j] = ' ';
+            }
+            else if (line[i] == AMPERSAND)
             {
                 if (i != 0 && line[i - 1] != line[i] && line[i + 1] && line[i + 1] == line[i])
                     newline[j++] = ' ';
@@ -320,7 +325,6 @@ char *expand_line(char *line, size_t len)
         }
         else 
             newline[j] = line[i];
-        i++;
         j++;
     }
     newline[j] = '\0';
