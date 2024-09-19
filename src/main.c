@@ -4,7 +4,6 @@ t_shell *sh;
 
 int main (void)
 {
-  rl_change_environment = 0;
   char *line;
   // struct sigaction sa;
   t_ast_node *ast;
