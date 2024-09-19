@@ -2,9 +2,9 @@ GRAMMAR ==================================================
 
 
 <command_line> ::= <group> '|' <command_line>
-                 | <group> '&&' <command_line>
-                 | <group> '||' <command_line>
-                 | <group>
+                | <group> '&&' <command_line>
+                | <group> '||' <command_line>
+                | <group>
 
 <group> ::= '(' <command_line> ')' <redirection>
           | '(' <command_line> ')'

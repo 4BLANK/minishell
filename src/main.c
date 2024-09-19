@@ -5,29 +5,30 @@ t_shell *sh;
 int main (void)
 {
   char *line;
+  // struct sigaction sa;
   t_ast_node *ast;
-  
-    ast = NULL;
-    sh = setshell(__environ);
-    while (1)
+
+  ast = NULL;
+
+  sh = setshell(__environ);
+  while (1)
+  {
+    handle_signals(PARENT);
+    line = readline("-> ");
+    handle_signals(IGNORE);
+    if (!line)
+      exit(0);
+    add_history(line);
+    sh->ex_status = parser(&ast, line);
+    if (ast != NULL)
     {
-        line = readline("-> ");
-        add_history(line);
-        sh->ex_status = parser(&ast, line);
-        if (!sh->ex_status)
-        {
-            printf(GREEN "\n== AST =================>\n" RESET);
-            print_ast_tree(ast, 0);
-            // EXECTUTE AST
-            //kickoff(ast);
-            // DISTROY AST`
-            //ast_distroy(&ast);
-            if (ft_strcmp("export", ast->data.childs.left->data.arg_list->content))
-            {
-                printf("1\n");
-                export_cmd(ast->data.childs.left->data.arg_list);
-            }
-        }
-    }   
-    return (EXIT_SUCCESS);
+      // printf(GREEN "\n== AST =================>\n" RESET);
+      print_ast_tree(ast, 0);
+      // EXECTUTE AST
+      sh->ex_status = kickoff(ast);
+      // DISTROY AST
+      ast_distroy(&ast);
+    }
+  }  
+  return (EXIT_SUCCESS);
 }

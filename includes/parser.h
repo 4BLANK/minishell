@@ -230,5 +230,4 @@ char *expand_string(char *str);
 char *expand_pid_or_exit(char *str, char curchr, char nextchr);
 char	*concat(char *dest, char *src, int flag);
 char *get_name(char *str, int itr);
-
 #endif
