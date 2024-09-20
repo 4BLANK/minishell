@@ -1,6 +1,7 @@
 #include "../../includes/minishell.h"
 
-
+//TODO: test for bash: $data: ambiguous redirect before you expand
+//chack if the result of the expansion is more than 1 toks
 int parser (t_ast_node **ast, char *line)
 {
     t_token *tokenlst;
@@ -18,7 +19,12 @@ int parser (t_ast_node **ast, char *line)
     free(line);
     lexer(tokenlst);
     printf(GREEN "== TOKENS LIST =========>\n" RESET);
+    // print_lst(tokenlst);
+    // printf(RED "== WILDCARDS ===========>\n" RESET);
+    // test if file before you lex -> ambiguous redirec
+    // expand_wildcard(&tokenlst);
     print_lst(tokenlst);
+    // exit(1);
     tokenlst = expand_noquotes(&tokenlst);
     if (expander(&tokenlst))
         return (PARSE_ERROR);

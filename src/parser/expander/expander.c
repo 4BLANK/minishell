@@ -366,6 +366,104 @@ int is_quoted(char *str)
 //     return (EXIT_SUCCESS);
 // }
 
+// int has_wildcard(char *str)
+// {
+//     size_t i;
+//     int flag;
+//     char quote;
+
+//     i = 0;
+//     flag = 0;
+//     if (str == NULL)
+//         return (NULL);
+//     while (str[i])
+//     {
+//         if (flag == 0 && (str[i] == DQUOTE || str[i] == QUOTE))
+//         {
+//             flag = 1;
+//             quote = str[i];
+//         }
+//         else if (flag == 1 && str[i] == quote)
+//             flag = 0;
+//         if (str == *)
+//         i++;
+//     }
+//     return (0);
+// }
+
+t_token *args_to_toks(t_argument *args)
+{
+    t_token *tok;
+    t_token *tmp_tok;
+
+    tok = NULL;
+    tmp_tok = NULL;
+    while (args != NULL)
+    {
+        tmp_tok = ft_lstnew_token(ft_strdup(args->content));
+        if (tmp_tok == NULL)
+            return (NULL);
+        ft_lstadd_token_back(&tok, tmp_tok);
+        args = args->next;
+    }
+    return (tok);
+}
+
+int return_expand(t_token *old_tok, t_token **new_tok)
+{
+    t_argument *args;
+
+    args = NULL;
+    if (!ft_strchr(old_tok->content, DQUOTE) 
+        && !ft_strchr(old_tok->content, QUOTE) 
+        && ft_strchr(old_tok->content, '*'))
+    {
+        args = wildcard_core(old_tok->content);
+        if (args != NULL)
+        {
+            *new_tok = args_to_toks(args);
+            if (*new_tok == NULL)
+                return (clear_argslst(&args), EXIT_FAILURE);
+        }
+        else 
+            return (clear_argslst(&args), EXIT_FAILURE);
+    }
+    return (clear_argslst(&args), EXIT_SUCCESS);
+}
+
+int expand_wildcard(t_token **toks)
+{
+    t_token *exp_tok;
+    t_token *newtoklst;
+    t_token *toks_head;
+    t_token *tmp;
+
+    toks_head = *toks;
+    exp_tok = NULL;
+    tmp = NULL;
+    newtoklst = NULL;
+    while (toks_head != NULL)
+    {
+        if (return_expand(toks_head, &exp_tok))
+            return (EXIT_FAILURE);
+        if (!exp_tok)
+        {
+            tmp = ft_lstnew_token(ft_strdup(toks_head->content));
+            tmp->lexem = toks_head->lexem;
+            ft_lstadd_token_back(&newtoklst, tmp);
+        }
+        else
+        {
+            ft_lstadd_token_back(&newtoklst, exp_tok);
+            exp_tok = NULL;
+        }
+        toks_head = toks_head->next;
+    }
+    tokens_lstclear(toks);
+    *toks = newtoklst;
+    return (EXIT_SUCCESS);
+}
+
 int expander(t_token **tokens)
 {
     t_token *tmp;

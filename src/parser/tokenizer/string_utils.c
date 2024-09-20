@@ -331,7 +331,7 @@ char *expand_line(char *line, size_t len)
     return (newline);
 }
 
-int modify_line(char **line)
+int get_expanded_line(char **line)
 {
     char *newline;
     size_t len;
@@ -345,5 +345,12 @@ int modify_line(char **line)
         return (EXIT_FAILURE);
     free(*line);
     *line = newline;
+    return (EXIT_SUCCESS);
+}
+
+int modify_line(char **line)
+{
+    if (get_expanded_line(line))
+        return (EXIT_FAILURE);
     return (EXIT_SUCCESS);
 }

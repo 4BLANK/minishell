@@ -1,74 +1,19 @@
 #include "../../../includes/minishell.h"
 
-size_t count_matched(char *str, t_argument *e_args)
+t_argument *get_curdir_entries(void)
 {
-    size_t count;
-
-    count = 0;
-    while (e_args != NULL)
-    {   
-        if (ft_strncmp(str, e_args->content, ft_strlen(str)) == 0)
-            count++;
-        e_args = e_args->next;
-    }
-    return (count);
-}
-
-char **get_matched(char *str, t_argument *e_args)
-{
-    char **match_str;
-    size_t count;
-    
-    match_str = NULL;
-    count = count_matched(str, e_args);
-    if (count == 0)
-        return (NULL);
-    match_str = (char **)malloc(sizeof(char *) * (count + 1));
-    if (match_str == NULL)
-        return NULL;
-    count = 0;
-    while (e_args != NULL)
-    {   
-        if (ft_strncmp(str, e_args->content, ft_strlen(str)) == 0)
-        {
-            match_str[count] = ft_strdup(e_args->content);
-            count++;
-        }
-        e_args = e_args->next;
-    }
-    match_str[count] = NULL;
-    return (match_str);
-}
-
-void cmp_entries(char *str, t_argument *e_args)
-{
-    char **splited_str;
-    char **matched;
-
-    matched = NULL;
-    splited_str = ft_split(str, '*');
-    if (splited_str == NULL)
-        return ;
-    matched = get_matched_front(str, e_args);
-    if (matched = NULL)
-        return ;
-    
-}
-
-int wildcard(char *arg)
-{
-    struct dirent *de;
-    t_argument *e_args;
-    char *tmp;
-    t_argument *var;
     DIR *dir;
-
-    // arg = modify_str(arg);
+    struct dirent *de;
+    t_argument *args;
+    t_argument *var;
+    
+    args = NULL;
+    var = NULL;
     dir = opendir(".");
     if (dir == NULL)
     {
         ft_putstr_fd("open dir error", 2);
-        return (EXIT_FAILURE);
+        return (NULL);
     }
     de = readdir(dir);
     while (de != NULL)
@@ -77,16 +22,108 @@ int wildcard(char *arg)
         if (var == NULL)
         {
             closedir(dir);
-            return (EXIT_SUCCESS);
+            return (NULL);
         }
-        ft_argsadd_back(&e_args, var);
+        ft_argsadd_back(&args, var);
         de = readdir(dir);
     }
-    cmp_entries(arg, e_args);
-    // new function
-    // tmp = ft_strrchr(arg, '*');
-    // if (tmp != NULL)
-    // {
+    closedir(dir);
+    return (args); 
+}
 
-    // }
+bool is_match(const char *s, const char *p) {
+    
+    bool **dp;
+    size_t s_len;
+    size_t p_len;
+    size_t i, j;
+    bool result;
+
+    s_len = strlen(s);
+    p_len = strlen(p);
+
+    // Allocate the DP table
+    dp = (bool **)malloc((s_len + 1) * sizeof(bool *));
+    i = 0;
+    while (i <= s_len) {
+        dp[i] = (bool *)malloc((p_len + 1) * sizeof(bool));
+        i++;
+    }
+
+    // Initialize dp[0][0] to true (empty pattern matches empty string)
+    dp[0][0] = true;
+
+    // Initialize the first row (matching an empty string with the pattern)
+    j = 1;
+    while (j <= p_len) {
+        if (p[j - 1] == '*') {
+            dp[0][j] = dp[0][j - 1];  // '*' can match an empty sequence
+        } else {
+            dp[0][j] = false;  // Other characters can't match an empty string
+        }
+        j++;
+    }
+
+    // Initialize the first column (no pattern matches a non-empty string)
+    i = 1;
+    while (i <= s_len) {
+        dp[i][0] = false;
+        i++;
+    }
+
+    // Fill the DP table
+    i = 1;
+    while (i <= s_len) {
+        j = 1;
+        while (j <= p_len) {
+            if (p[j - 1] == s[i - 1]) {
+                dp[i][j] = dp[i - 1][j - 1];  // Match one character
+            } else if (p[j - 1] == '*') {
+                dp[i][j] = dp[i - 1][j] || dp[i][j - 1];  // '*' matches empty or more characters
+            } else {
+                dp[i][j] = false;  // No match
+            }
+            j++;
+        }
+        i++;
+    }
+
+    // Store the result before freeing the memory
+    result = dp[s_len][p_len];
+
+    // Free the allocated memory
+    i = 0;
+    while (i <= s_len) {
+        free(dp[i]);
+        i++;
+    }
+    free(dp);
+
+    return result;
+}
+
+t_argument *wildcard_core(char *pattern)
+{
+    t_argument *e_args;
+    t_argument *e_matched;
+    t_argument *tmp;
+    
+    tmp = NULL;
+    e_matched = NULL;
+    e_args = get_curdir_entries();
+    if (e_args == NULL)
+        return (NULL);
+    while (e_args != NULL)
+    {
+        if (is_match(e_args->content, pattern))
+        {
+            tmp =  ft_argsnew(ft_strdup(e_args->content));
+            if (tmp == NULL)
+                return (NULL);
+            ft_argsadd_back(&e_matched,tmp);
+        }
+        e_args = e_args->next;
+    }
+    clear_argslst(&e_args);
+    return (e_matched);
 }
