@@ -18,7 +18,14 @@ typedef struct s_shell
   char *home;
   t_envlist *envlst;
   int pipefd[2];
+  char **args;
 } t_shell;
+
+typedef struct s_pair
+{
+  int left;
+  int right;
+} t_pair;
 
 char **lst_tostrarray(t_argument *head);
 int kickoff(t_ast_node *node);
@@ -34,5 +41,7 @@ int execute_command(t_ast_node *node, int left, int right, int pipefd[2]);
 int execute_or(t_ast_node *node);
 int execute_and(t_ast_node *node);
 int execute_group(t_ast_node *node, int left, int right, int clonefds[2]);
+int built_ins(char **args, int *status, t_pair *pipe_location, int pipefd[2]);
+int execute(char **args, t_pair *pipe_location, int pipefd[2], int *status);
 
 #endif
