@@ -165,7 +165,7 @@ size_t str_arraysize(char **str);
 
 // builtin
 int export_cmd(t_argument *arguments);
-int env_cmd(char **env, int exp_flag);
+int env_cmd(void);
 int pwd_cmd(char **args);
 int cd_cmd(char **args, char **env);
 int unset_cmd(char **args, char ***env);
@@ -210,6 +210,10 @@ t_ast_node *grouped_command_2(t_token **cur_token);
 t_ast_node *pipe_line(t_token **cur_token);
 t_ast_node *pipe_line_1(t_token **cur_token);
 t_ast_node *pipe_line_2(t_token **cur_token);
+t_ast_node *pipe_line_3(t_token **cur_token);
+t_ast_node *pipe_line_4(t_token **cur_token);
+
+
 
 t_ast_node *command_line_1(t_token **cur_token);
 t_ast_node *command_line_2(t_token **cur_token);
@@ -230,4 +234,9 @@ char *expand_string(char *str);
 char *expand_pid_or_exit(char *str, char curchr, char nextchr);
 char	*concat(char *dest, char *src, int flag);
 char *get_name(char *str, int itr);
+
+t_argument *wildcard_core(char *pattern);
+void	clear_argslst(t_argument **lst);
+int expand_wildcard(t_token **toks);
+
 #endif

@@ -1,14 +1,13 @@
 GRAMMAR ==================================================
 
 
-<command_line> ::= <group> '|' <command_line>
-                | <group> '&&' <command_line>
+<command_line> ::= <group> '&&' <command_line>
                 | <group> '||' <command_line>
                 | <group>
+                | <command_line_or>
 
 <group> ::= '(' <command_line> ')' <redirection>
           | '(' <command_line> ')'
-          | <command_line_or>
 
 <command_line_or> ::= <command_line_and> '||' <command_line_or>
                     | <command_line_and>
@@ -18,6 +17,7 @@ GRAMMAR ==================================================
 
 <pipeline> ::= <grouped_command> | <pipe_line>
              | <command> '|' <pipeline>
+             | <grouped_command>
              | <command>
 
 <command> ::= <simple_command> <redirection>

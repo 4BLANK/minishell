@@ -7,6 +7,7 @@ int execute_command(t_ast_node *node, int left, int right, int pipefd[2])
   char *cmd_path;
   pid_t pid;
 
+  cmd_path = NULL;
   args = lst_tostrarray(node->data.childs.left->data.arg_list);
   status = 0;
   pid = fork();
