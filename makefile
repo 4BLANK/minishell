@@ -7,6 +7,9 @@ SRC =	./src/main.c\
 		./src/signals/signal_handling.c\
 		./src/executor/redirections/redirect.c\
 		./src/executor/exec/group_exec.c\
+		./src/executor/exec/built_ins_handling.c\
+		./src/executor/exec/execute_command.c\
+		./src/executor/exec/execute_pipeline.c\
 		./src/executor/exec/and_exec.c\
 		./src/executor/exec/or_exec.c\
 		./src/executor/redirections/redirect_input.c\

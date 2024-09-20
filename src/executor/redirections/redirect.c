@@ -5,6 +5,8 @@ int redirect(t_ast_node *cmd, int *left, int *right)
   t_file *tmp;
   int status;
 
+  if (!(cmd->data.childs.right))
+    return (EXIT_SUCCESS);
   tmp = cmd->data.childs.right->data.files;
   status = EXIT_SUCCESS;
   while (tmp)
