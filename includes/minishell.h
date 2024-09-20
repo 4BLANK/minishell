@@ -41,5 +41,7 @@ int execute_command(t_ast_node *node, int left, int right, int pipefd[2]);
 int execute_or(t_ast_node *node);
 int execute_and(t_ast_node *node);
 int execute_group(t_ast_node *node, int left, int right, int clonefds[2]);
+int built_ins(char **args, int *status, t_pair *pipe_location, int pipefd[2]);
+int execute(char **args, t_pair *pipe_location, int pipefd[2], int *status);
 
 #endif

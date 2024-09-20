@@ -2,13 +2,14 @@
 
 int parent_routine(pid_t pid, int *status, char *cmd_path)
 {
-    waitpid(pid, status, 0);
-    if (WIFEXITED(*status))
-      *status = WEXITSTATUS(*status);
-    else
-      printf("\n");
+  waitpid(pid, status, 0);
+  if (WIFEXITED(*status))
+    *status = WEXITSTATUS(*status);
+  else
+    printf("\n");
+  if (cmd_path)
     specify_error(*status, cmd_path);
-    return (*status);
+  return (*status);
 }
 
 int child_routine(t_ast_node *node, t_pair *pipe_location, int pipefd[2], char **cmd_path)
@@ -38,6 +39,8 @@ int execute_command(t_ast_node *node, int left, int right, int pipefd[2])
   pipe_location.right = right;
   sh->args = lst_tostrarray(node->data.childs.left->data.arg_list);
   status = 0;
+  if (built_ins(sh->args, &status, &pipe_location, pipefd))
+    return (status);
   pid = fork();
   if (pid > 0)
     return (parent_routine(pid, &status, cmd_path));
