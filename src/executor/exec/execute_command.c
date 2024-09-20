@@ -35,6 +35,7 @@ int execute_command(t_ast_node *node, int left, int right, int pipefd[2])
   pid_t pid;
   t_pair pipe_location;
 
+  cmd_path = NULL;
   pipe_location.left = left;
   pipe_location.right = right;
   sh->args = lst_tostrarray(node->data.childs.left->data.arg_list);
