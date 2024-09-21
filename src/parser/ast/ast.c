@@ -25,10 +25,10 @@ t_ast_node *command_line(t_token **cur_token)
     if ((node = command_line_2(cur_token)) != NULL)
         return (node);
     *cur_token = save_token;
-    if ((node = command_line_3(cur_token)) != NULL)
+    if ((node = command_line_4(cur_token)) != NULL)
         return (node);
     *cur_token = save_token;
-    if ((node = command_line_4(cur_token)) != NULL)
+    if ((node = command_line_3(cur_token)) != NULL)
         return (node);
     return (NULL);
 }

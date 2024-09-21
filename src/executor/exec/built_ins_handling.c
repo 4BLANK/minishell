@@ -15,6 +15,18 @@ int execute(char **args, t_pair *pipe_location, int pipefd[2], int *status)
     dup2(pipefd[0], STDIN_FILENO);
   if (!ft_strncmp(args[0], "pwd", 3))
     *status = pwd_cmd(args);
+  if (!ft_strncmp(args[0], "echo", 4))
+    *status = pwd_cmd(args);
+  if (!ft_strncmp(args[0], "env", 3))
+    *status = pwd_cmd(args);
+  if (!ft_strncmp(args[0], "exit", 4))
+    *status = pwd_cmd(args);
+  if (!ft_strncmp(args[0], "export", 6))
+    *status = pwd_cmd(args);
+  if (!ft_strncmp(args[0], "cd", 2))
+    *status = pwd_cmd(args);
+  if (!ft_strncmp(args[0], "unset", 5))
+    *status = pwd_cmd(args);
   return (1);
 }
 
