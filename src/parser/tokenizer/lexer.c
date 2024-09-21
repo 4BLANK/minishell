@@ -22,7 +22,7 @@ void schar_lexer(t_token *tokens)
             tokens->lexem = OR;
         else if (ft_strcmp(tokens->content, "&&"))
             tokens->lexem = AND;
-        else 
+        else if (tokens->lexem != AMBIGUOUS)
             tokens->lexem = STRING;
         tokens = tokens->next;
     }
@@ -50,9 +50,9 @@ void red_lexer(t_token *tokens, int red_nbr)
             tokens = tokens->next;
             if (tokens != NULL)
             {   
-                if (lex == HEREDOC)
+                if (lex == HEREDOC && tokens->lexem != AMBIGUOUS)
                     tokens->lexem = DELIMITER;
-                else 
+                else if (tokens->lexem != AMBIGUOUS)
                     tokens->lexem = O_FILE;
                 tokens = tokens->next;
             }
@@ -115,7 +115,7 @@ void lexer(t_token *tokens)
         if (is_schar(tokens->lexem) == 1)
         {
             red++;
-           red_lexer(tmp, red);
+            red_lexer(tmp, red);
         }
         if (prev_token != NULL && tokens->lexem == STRING)
             set_lexeme(tokens, prev_token->lexem);
