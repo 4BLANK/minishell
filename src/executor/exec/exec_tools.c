@@ -27,6 +27,27 @@ void free_strarray(char **str)
     free(str);
 }
 
+static int has_slash(char *str)
+{
+  size_t i;
+
+  i = 0;
+  while (i < ft_strlen(str))
+  {
+    if (str[i] == '/' || str[i] == '.')
+      return (1);
+    i++;
+  }
+  return (0);
+}
+
+int tiny_check()
+{
+  if (has_slash(sh->args[0]) && access(sh->args[0], X_OK))
+    return (127);
+  return (0);
+}
+
 int get_commandpath(char **cmd_path, char *cmd, char **env)
 {
   char *path;
@@ -100,20 +121,6 @@ static int is_dir(char *pwd)
   dir = NULL;
   if ((dir = opendir(pwd)) != NULL)
     return (1);
-  return (0);
-}
-
-static int has_slash(char *str)
-{
-  size_t i;
-
-  i = 0;
-  while (i < ft_strlen(str))
-  {
-    if (str[i] == '/')
-      return (1);
-    i++;
-  }
   return (0);
 }
 

@@ -11,3 +11,4 @@ int append_redirect_output(const char *filename);
 void here_doc(const char *delimiter);
 int check_error_type(char *cmd_path);
 int specify_error(int status, char *cmd_path);
+int tiny_check();
