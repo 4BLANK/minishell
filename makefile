@@ -20,12 +20,14 @@ SRC =	./src/main.c\
 		./src/parser/parser.c\
 		./src/parser/tokenizer/string_utils.c\
 		./src/parser/tokenizer/tokenizer_utils.c\
+		./src/parser/tokenizer/syntax_checker.c\
 		./src/parser/tokenizer/lexer.c\
 		./src/parser/tokenizer/stack_utils.c\
 		./src/parser/ast/ast_utils.c\
 		./src/parser/ast/utils.c\
 		./src/parser/ast/ast.c\
 		./src/parser/expander/expander.c\
+		./src/parser/expander/wildcards.c\
 		./src/shell/utils.c\
 		./src/built-in/pwd_cmd.c\
 		./src/built-in/cd_cmd.c\

@@ -164,13 +164,13 @@ t_token *expand_noquotes(t_token **tokens);
 size_t str_arraysize(char **str);
 
 // builtin
-int export_cmd(char **args, char ***env, int exportflag);
-int env_cmd(char **env, int exp_flag);
+int export_cmd(t_argument *arguments);
+int env_cmd(void);
 int pwd_cmd(char **args);
 int cd_cmd(char **args, char **env);
 int unset_cmd(char **args, char ***env);
 
-int overwrite_env(char *arg, char **env, char *name);
+int overwrite_env(char *name, char *value);
 
 void free_strarray(char **str);
 char **dupenv(char **env);
@@ -179,9 +179,9 @@ int delete_tokensnode(t_token **tokenlst, size_t index);
 
 char **lst_tostrarray(t_argument *head);
 
-char **set_newenv(char *arg, char **env, int unset);
+// char **set_newenv(char *arg, char **env, int unset);
 
-bool env_exist(char *name, char **env);
+bool env_exist(char *name);
 
 t_ast_node *form_command(t_token **tokenlst);
 
@@ -210,6 +210,10 @@ t_ast_node *grouped_command_2(t_token **cur_token);
 t_ast_node *pipe_line(t_token **cur_token);
 t_ast_node *pipe_line_1(t_token **cur_token);
 t_ast_node *pipe_line_2(t_token **cur_token);
+t_ast_node *pipe_line_3(t_token **cur_token);
+t_ast_node *pipe_line_4(t_token **cur_token);
+
+
 
 t_ast_node *command_line_1(t_token **cur_token);
 t_ast_node *command_line_2(t_token **cur_token);
@@ -218,5 +222,21 @@ t_ast_node *command_line_4(t_token **cur_token);
 
 
 t_file	*new_file(void *file_name, t_lexeme filetype);
-void	addfile_back(t_file **lst, t_file *new_file);
+void	addfile_back(t_file **lst, t_file *new);
+int schar_detected(char c);
+int syntax_err_check(t_token *tokenlst);
+char *getenv_name(char *variable);
+char *getenv_value(char *variable);
+t_envlist *lstnew_env(char *name, char *value);
+void    lstadd_env_back(t_envlist **lst, t_envlist *newenv);
+
+char *expand_string(char *str);
+char *expand_pid_or_exit(char *str, char curchr, char nextchr);
+char	*concat(char *dest, char *src, int flag);
+char *get_name(char *str, int itr);
+
+t_argument *wildcard_core(char *pattern);
+void	clear_argslst(t_argument **lst);
+int expand_wildcard(t_token **toks);
+
 #endif

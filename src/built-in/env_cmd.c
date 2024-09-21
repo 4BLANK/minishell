@@ -1,22 +1,19 @@
 #include "../../includes/minishell.h"
 
-int env_cmd(char **env, int exp_flag)
+int env_cmd(void)
 {
     size_t i;
+    t_envlist *lst;
 
     i = 0;
-    if (str_arraysize(env) == 0)
+    lst = sh->envlst;
+    if (lst == NULL)
         return (EXIT_SUCCESS);
-    while (env[i])
+    while (lst != NULL)
     {
-        if (exp_flag == 1)
-            printf("%s\n", env[i]);
-        else 
-        {
-            if (ft_strchr(env[i], '='))
-                printf("%s\n", env[i]);
-        }
-        i++;
+        if (lst->value != NULL)
+            printf("%s=%s\n", lst->name, lst->value);
+        lst = lst->next;
     }
     return (EXIT_SUCCESS);
 }
