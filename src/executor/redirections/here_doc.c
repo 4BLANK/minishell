@@ -23,6 +23,7 @@ void here_doc(char **delimiter)
   char *file_name;
 
   line = NULL;
+  printf("nice\n");
   file_name = create_file_name();
   fd = open(file_name, O_CREAT | O_RDWR);
   if (fd < 0)

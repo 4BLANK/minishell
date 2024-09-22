@@ -192,9 +192,11 @@ int syntax_err_check(t_token *tokenlst)
       if (is_invalid_special_char(content, tok, prev_tok))
         return (s_error(content));
     }
-    // heredoc
-    // if (ft_strcmp(content, "<<"))
-    //     return file name = exec_herdoc(); 
+    if (ft_strcmp(content, "<<"))
+    {
+        printf(RED"IN\n"RESET);
+        here_doc(&(tok->next)->content);
+    }
     // if error remove herdoc tmp files
     // change delimiter to the file name 
     prev_tok = tok;

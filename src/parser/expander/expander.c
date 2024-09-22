@@ -299,10 +299,10 @@ t_token *expand_noquotes(t_token **head)
         else if (flag == 1 && is_schar(tokens->lexem) != 0)
             flag = 0;
         if (flag == 0 && (is_schar(tokens->lexem) == 0 
-            || tokens->lexem == O_FILE))
+            || tokens->lexem == O_FILE) && tokens->lexem != DELIMITER)
         {    
             if (tokens->lexem == STRING || tokens->lexem == CMD 
-                || tokens->lexem == O_FILE || tokens->lexem == ARG)
+                || tokens->lexem == O_FILE || tokens->lexem == ARG )
             {
                 str = expand_string(tokens->content);
                 tmp = split_tokens(str);
