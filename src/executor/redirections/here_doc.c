@@ -1,26 +1,47 @@
 #include "../../../includes/minishell.h"
 
-// to redo later
-void here_doc(const char *delimiter)
+char *create_file_name()
 {
-  char *tmp;
-  int fd;
-  char *dest;
-  int flag;
-  char *del;
+  static int num = 0;
+  char *str;
+  char *res;
+  char *num_value;
 
-  flag = 0;
-  dest = NULL;
-  del = ft_calloc(ft_strlen(delimiter) + 1, 1);
-  del[1] = ' ';
-  while (flag == 0)
+  res = NULL;
+  num_value = ft_itoa(num);
+  str = "/tmp/heredoc_tmp";
+  res = ft_strjoin(str, num_value);
+  free(num_value);
+  num++;
+  return (res);
+}
+// to redo later
+void here_doc(char **delimiter)
+{
+  int fd;
+  char *line;
+  char *file_name;
+
+  line = NULL;
+  file_name = create_file_name();
+  fd = open(file_name, O_CREAT | O_RDWR);
+  if (fd < 0)
+    return ;
+  while (1)
   {
-    tmp = readline("> ");
-    if (!ft_strncmp(tmp, delimiter, ft_strlen(delimiter)))
-      flag = 1;
+    line = readline("heredoc> ");
+    if (!line)
+      return ;
+    if (!ft_strcmp(*delimiter, line))
+    {
+      ft_putstr_fd(line, fd);
+      ft_putstr_fd("\n", fd);
+    }
     else
-      dest = ft_strjoin(dest, tmp);
-    free(tmp);
+    {
+      free(*delimiter);
+      *delimiter = file_name;
+      return ;
+    }
   }
-  close(fd);
 }

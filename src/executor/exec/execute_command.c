@@ -2,19 +2,21 @@
 
 int parent_routine(pid_t pid, int *status, char *cmd_path)
 {
+  (void) cmd_path;
   waitpid(pid, status, 0);
   if (WIFEXITED(*status))
     *status = WEXITSTATUS(*status);
   else
     printf("\n");
-  if (cmd_path)
-    specify_error(*status, cmd_path);
+  specify_error(*status, sh->args[0]);
   return (*status);
 }
 
 int child_routine(t_ast_node *node, t_pair *pipe_location, int pipefd[2], char **cmd_path)
 {
     handle_signals(CHILD);
+    if (tiny_check())
+      return (127);
     if (get_commandpath(cmd_path, sh->args[0], __environ))
       return (EXIT_FAILURE);
     if (redirect(node, &(pipe_location->left), &(pipe_location->right)))
