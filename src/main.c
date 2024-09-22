@@ -9,8 +9,8 @@ int main (void)
   t_ast_node *ast;
 
   ast = NULL;
-
   sh = setshell(__environ);
+  sh->tmps = NULL;
   while (1)
   {
     handle_signals(PARENT);
@@ -25,7 +25,7 @@ int main (void)
       // printf(GREEN "\n== AST =================>\n" RESET);
       print_ast_tree(ast, 0);
       // EXECTUTE AST
-      //sh->ex_status = kickoff(ast);
+      sh->ex_status = kickoff(ast);
       // DISTROY AST
       ast_distroy(&ast);
     }

@@ -15,7 +15,31 @@ char *create_file_name()
   num++;
   return (res);
 }
-// to redo later
+
+char *create_tmp()
+{
+    t_tmps *node;
+    t_tmps *tmp;
+    char *str;
+
+    str = NULL;
+    node = NULL;
+    str = create_file_name();
+    node = ft_calloc(sizeof(t_tmps), 1);
+    if (!node)
+        return (NULL);
+    node->filename = str;
+    node->next = NULL;
+    tmp = sh->tmps;
+    if (!(sh->tmps))
+        sh->tmps = node;
+    while (sh->tmps->next)
+        sh->tmps = sh->tmps->next;
+    sh->tmps->next = node;
+    sh->tmps = tmp;
+    return (str);
+}
+
 void here_doc(char **delimiter)
 {
   int fd;
@@ -23,11 +47,10 @@ void here_doc(char **delimiter)
   char *file_name;
 
   line = NULL;
-  printf("nice\n");
-  file_name = create_file_name();
-  fd = open(file_name, O_CREAT | O_RDWR);
+  file_name = create_tmp();
+  fd = open(file_name, O_CREAT | O_RDWR, 0644);
   if (fd < 0)
-    return ;
+      return ;
   while (1)
   {
     line = readline("heredoc> ");
