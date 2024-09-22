@@ -13,6 +13,7 @@ SRC =	./src/main.c\
 		./src/executor/exec/and_exec.c\
 		./src/executor/exec/or_exec.c\
 		./src/executor/redirections/redirect_input.c\
+		./src/executor/redirections/here_doc.c\
 		./src/executor/redirections/redirect_output.c\
 		./src/executor/redirections/append_redirect_output.c\
 		./src/executor/exec/exec.c\
