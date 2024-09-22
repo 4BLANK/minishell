@@ -11,6 +11,7 @@ char *lexs_type[] =
     "O_RED",
     "HERDOC",
     "DELIMITER",
+    "AMBIGUOUS",
     "APPEND",
     "AND",
     "OR",
@@ -128,39 +129,39 @@ int tokenizer(char *line, t_token **tokenlst)
   holder = NULL;
   while (line[i])
   {
-    if (*tokenlst != NULL && check_for_echo(*tokenlst))
-    {
-      stop_flag = 0;
-      j = i;
-      while (line[i] && stop_flag == 0)
-      {
-        if (quote_flag == 0  && (line[i] == QUOTE || line[i] == DQUOTE))
-        {
-          quote_flag = 1;
-          quote_type = line[i++];
-        }
-        if (quote_flag == 1 && line[i] == quote_type)
-          quote_flag = 0;
-        if (stop_flag == 0 && (line[i] == CPIPE || line[i] == GREATER
-          || line[i] == LESS))
-        {
-          stop_flag = 1;
-          break;
-        }
-        i++;
-      }
-      if (quote_flag == 1)
-        return (print_error("unclosed quote detected!\n", 2));
-      if (stop_flag == 1)
-        i--;
-      if (i != j)
-      {
-        holder = ft_substr(line, j, i - j);
-        if (holder != NULL)
-          ft_lstadd_token_back(tokenlst, ft_lstnew_token(holder));
-      }
-    }
-    else if (line[i] && !is_space(line[i]))
+    // if (*tokenlst != NULL && check_for_echo(*tokenlst))
+    // {
+    //   stop_flag = 0;
+    //   j = i;
+    //   while (line[i] && stop_flag == 0)
+    //   {
+    //     if (quote_flag == 0  && (line[i] == QUOTE || line[i] == DQUOTE))
+    //     {
+    //       quote_flag = 1;
+    //       quote_type = line[i++];
+    //     }
+    //     if (quote_flag == 1 && line[i] == quote_type)
+    //       quote_flag = 0;
+    //     if (stop_flag == 0 && (line[i] == CPIPE || line[i] == GREATER
+    //       || line[i] == LESS))
+    //     {
+    //       stop_flag = 1;
+    //       break;
+    //     }
+    //     i++;
+    //   }
+    //   if (quote_flag == 1)
+    //     return (print_error("unclosed quote detected!\n", 2));
+    //   if (stop_flag == 1)
+    //     i--;
+    //   if (i != j)
+    //   {
+    //     holder = ft_substr(line, j, i - j);
+    //     if (holder != NULL)
+    //       ft_lstadd_token_back(tokenlst, ft_lstnew_token(holder));
+    //   }
+    // }
+    if (line[i] && !is_space(line[i]))
     {
       j = i;
       while (line[j])
@@ -204,26 +205,26 @@ int tokenizer(char *line, t_token **tokenlst)
 }
 
 
-int initial_parsing(char *line)
-{ 
-  int i;
+// int initial_parsing(char *line)
+// { 
+//   int i;
 
-  i = 0;
-  if (line == NULL)
-    return (EXIT_SUCCESS);
-  while (line[i] && is_space(line[i]))
-      i++;
-  if(line[i] && line[i] == CPIPE)
-      return (print_error("parse error\n", 2));
-  while(line[i++]);
-  i -= 2;
-  while (i >= 0 && is_space(line[i]))
-      i--;
-  if (line[i] == CPIPE || line[i] == GREATER || line[i] == LESS 
-      || (line[i] == AMPERSAND && line[i - 1] == AMPERSAND))
-      return (print_error("parse error\n", 2));
-  return (EXIT_SUCCESS);
-}
+//   i = 0;
+//   if (line == NULL)
+//     return (EXIT_SUCCESS);
+//   while (line[i] && is_space(line[i]))
+//       i++;
+//   if(line[i] && line[i] == CPIPE)
+//       return (print_error("parse error\n", 2));
+//   while(line[i++]);
+//   i -= 2;
+//   while (i >= 0 && is_space(line[i]))
+//       i--;
+//   if (line[i] == CPIPE || line[i] == GREATER || line[i] == LESS 
+//       || (line[i] == AMPERSAND && line[i - 1] == AMPERSAND))
+//       return (print_error("parse error\n", 2));
+//   return (EXIT_SUCCESS);
+// }
 
 t_token	*new_token(void *content, t_lexeme lex)
 {
@@ -304,93 +305,93 @@ void	ft_lstadd_token_front(t_token **lst, t_token *new)
 	}
 }
 
-//use a stack
-t_token *getlst(t_token *tokenlst)
-{
-  t_token *newlst;
+// //use a stack
+// t_token *getlst(t_token *tokenlst)
+// {
+//   t_token *newlst;
 
-  newlst = NULL;
-  while (tokenlst != NULL && is_schar(tokenlst->lexem) != 2)
-  {
-    if (newlst == NULL)
-      ft_lstadd_token_back(&newlst, tokendup(tokenlst));
-    else
-    {
-      if (is_schar(tokenlst->lexem) == 1 || tokenlst->lexem == O_FILE 
-        || tokenlst->lexem == DELIMITER)
-        ft_lstadd_token_back(&newlst, tokendup(tokenlst));
-      else if (newlst->lexem == CMD)
-      {
-        rotate(&newlst);
-        ft_lstadd_token_front(&newlst, tokendup(tokenlst));
-        reverse_rotate(&newlst);
-      }
-      else 
-      {
-        ft_lstadd_token_front(&newlst, tokendup(tokenlst));        
-      }
-    }
-    tokenlst = tokenlst->next;
-  }
-  return newlst;
-}
+//   newlst = NULL;
+//   while (tokenlst != NULL && is_schar(tokenlst->lexem) != 2)
+//   {
+//     if (newlst == NULL)
+//       ft_lstadd_token_back(&newlst, tokendup(tokenlst));
+//     else
+//     {
+//       if (is_schar(tokenlst->lexem) == 1 || tokenlst->lexem == O_FILE 
+//         || tokenlst->lexem == DELIMITER)
+//         ft_lstadd_token_back(&newlst, tokendup(tokenlst));
+//       else if (newlst->lexem == CMD)
+//       {
+//         rotate(&newlst);
+//         ft_lstadd_token_front(&newlst, tokendup(tokenlst));
+//         reverse_rotate(&newlst);
+//       }
+//       else 
+//       {
+//         ft_lstadd_token_front(&newlst, tokendup(tokenlst));        
+//       }
+//     }
+//     tokenlst = tokenlst->next;
+//   }
+//   return newlst;
+// }
 
-t_token *modify_redlst(t_token **tokenlst)
-{
-  t_token *new_token;
-  t_token *tmp;
+// t_token *modify_redlst(t_token **tokenlst)
+// {
+//   t_token *new_token;
+//   t_token *tmp;
 
-  tmp = *tokenlst;
-  new_token = NULL;
-  while (tmp != NULL)
-  {
-    if (redirection_found(tmp))
-    {
-      ft_lstadd_token_back(&new_token, getlst(tmp));
-      while (tmp != NULL && is_schar(tmp->lexem) != 2)
-        tmp = tmp->next;        
-    }
-    else 
-    {
-      ft_lstadd_token_back(&new_token, tokendup(tmp));      
-      tmp = tmp->next;
-    }
-  }
-  tokens_lstclear(tokenlst);
-  return (new_token);
-}
+//   tmp = *tokenlst;
+//   new_token = NULL;
+//   while (tmp != NULL)
+//   {
+//     if (redirection_found(tmp))
+//     {
+//       ft_lstadd_token_back(&new_token, getlst(tmp));
+//       while (tmp != NULL && is_schar(tmp->lexem) != 2)
+//         tmp = tmp->next;        
+//     }
+//     else 
+//     {
+//       ft_lstadd_token_back(&new_token, tokendup(tmp));      
+//       tmp = tmp->next;
+//     }
+//   }
+//   tokens_lstclear(tokenlst);
+//   return (new_token);
+// }
 
-int delete_tokensnode(t_token **tokenlst, size_t position)
-{
-  size_t i;
-  t_token *tmp;
-  t_token *node;
+// int delete_tokensnode(t_token **tokenlst, size_t position)
+// {
+//   size_t i;
+//   t_token *tmp;
+//   t_token *node;
 
-  i = 0;
-  if (*tokenlst == NULL)
-    return EXIT_FAILURE;
-  tmp = *tokenlst;
+//   i = 0;
+//   if (*tokenlst == NULL)
+//     return EXIT_FAILURE;
+//   tmp = *tokenlst;
 
-  if (position == 0)
-  {
-    *tokenlst = tmp->next;
-    free(tmp);
-    tmp = NULL;
-    return (EXIT_SUCCESS);
-  }
-  else
-  {
-    while (tmp != NULL && i < position - 1)
-    {
-      tmp = tmp->next;
-      i++;
-    }
-    if (tmp == NULL || tmp->next == NULL)
-      return EXIT_FAILURE;
-    node = tmp->next->next;
-    free(tmp->next);
-    tmp->next = node;
-    tmp = NULL;
-  }
-  return EXIT_SUCCESS;
-}
+//   if (position == 0)
+//   {
+//     *tokenlst = tmp->next;
+//     free(tmp);
+//     tmp = NULL;
+//     return (EXIT_SUCCESS);
+//   }
+//   else
+//   {
+//     while (tmp != NULL && i < position - 1)
+//     {
+//       tmp = tmp->next;
+//       i++;
+//     }
+//     if (tmp == NULL || tmp->next == NULL)
+//       return EXIT_FAILURE;
+//     node = tmp->next->next;
+//     free(tmp->next);
+//     tmp->next = node;
+//     tmp = NULL;
+//   }
+//   return EXIT_SUCCESS;
+// }

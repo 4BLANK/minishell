@@ -64,3 +64,35 @@ GROUPING ================================================
                 | <or_command>
 
 =========================================================
+<command_line> ::= <group> '&&' <command_line>
+                | <group> '||' <command_line>
+                | <group>
+                | <command_line_or>
+
+<group> ::= '(' <command_line> ')' <redirection>
+          | '(' <command_line> ')'
+
+<command_line_or> ::= <group> '||' <command_line_or>
+                    | <command_line_and> '||' <command_line_or>
+                    | <command_line_and>
+
+<command_line_and> ::= <pipe_line> '&&' <command_line_and>
+                    | <pipe_line>
+
+<pipeline> ::= <grouped_command> | <pipe_line>
+             | <command> '|' <pipeline>
+             | <grouped_command>
+             | <command>
+
+<command> ::= <simple_command> <redirection>
+            | <simple_command>
+
+<simple_command> ::= <pathname> <arguments>
+
+<arguments> ::= <argument> <arguments>
+              | (EMPTY)
+
+<redirection> ::= '>' <filename>
+                | '<' <filename>
+                | '>>' <filename>
+                | (EMPTY)

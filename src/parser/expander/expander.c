@@ -111,7 +111,6 @@ char *expand_token(char *str)
     char *new_str;
     char *envname;
     char *s1;
-
     char quote_type;
     int quote_flag;
     int i;
@@ -266,6 +265,19 @@ t_token *split_tokens(char *str)
     return tokens;
 }
 
+size_t toklst_size(t_token *toks)
+{
+    size_t len;
+
+    len = 0;
+    while (toks != NULL)
+    {
+        len++;
+        toks = toks->next;
+    }
+    return (len);
+}
+
 t_token *expand_noquotes(t_token **head)
 {
     t_token *tokens_list;
@@ -294,12 +306,20 @@ t_token *expand_noquotes(t_token **head)
             {
                 str = expand_string(tokens->content);
                 tmp = split_tokens(str);
-                free(str);
-                if (tmp != NULL)
+                if (tokens->lexem == O_FILE && toklst_size(tmp) > 1)
+                {
+                    tokens_lstclear(&tmp);
+                    tmp = ft_lstnew_token(ft_strdup(tokens->content));
+                    printf(RED"=================>1\n"RESET);
+                    tmp->lexem = AMBIGUOUS;
+                    ft_lstadd_token_back(&tokens_list, tmp);
+                }
+                else if (tmp != NULL)
                 {
                     tmp->lexem = tokens->lexem;
                     ft_lstadd_token_back(&tokens_list, tmp);
                 }
+                free(str);
             }
         }
         else 
@@ -312,29 +332,25 @@ t_token *expand_noquotes(t_token **head)
         tokens = tokens->next;
     }
     tokens_lstclear(head);
-
-    // printf(RED"\n-------------------------\n");
-    // print_lst(tokens_list);
-    // printf("\n-------------------------\n"RESET);
-
+    printf(RED"\n"RESET);
+    print_lst(tokens_list);
     return (tokens_list);
 }
 
-int is_quoted(char *str)
-{
-    size_t i;
-
-    i = 0;
-    if (str == NULL || str[i] == '=')
-        return true;
-    while (str[i] && str[i] != '=')
-    {
-        if (str[i] == DQUOTE || str[i] == DQUOTE)
-            return true; 
-        i++;
-    }
-    return false;
-}
+// int is_quoted(char *str)
+// {
+//     size_t i;
+//     i = 0;
+//     if (str == NULL || str[i] == '=')
+//         return true;
+//     while (str[i] && str[i] != '=')
+//     {
+//         if (str[i] == DQUOTE || str[i] == DQUOTE)
+//             return true; 
+//         i++;
+//     }
+//     return false;
+// }
 
 // int set_envlist(t_token **tokenlst, char ***env)
 // {
@@ -454,7 +470,15 @@ int expand_wildcard(t_token **toks)
         }
         else
         {
-            ft_lstadd_token_back(&newtoklst, exp_tok);
+            if (toks_head->lexem == O_FILE && toklst_size(exp_tok) > 1)
+            {
+                tokens_lstclear(&exp_tok);
+                tmp = ft_lstnew_token(ft_strdup(toks_head->content));
+                tmp->lexem = AMBIGUOUS;
+                ft_lstadd_token_back(&newtoklst, tmp);
+            }
+            else 
+                ft_lstadd_token_back(&newtoklst, exp_tok);
             exp_tok = NULL;
         }
         toks_head = toks_head->next;
@@ -489,8 +513,24 @@ int expander(t_token **tokens)
         *tokens = (*tokens)->next;
     }
     *tokens = tmp;
+    printf(GREEN "\n== EXPANDER OUT =======>\n" RESET);
+    print_lst(*tokens);
+    printf(GREEN "\n=======================>\n" RESET);
     lexer(*tokens);     
     if (rm_token_quotes(*tokens))
         return (EXIT_FAILURE);
+    return (EXIT_SUCCESS);
+}
+
+int expander_core(t_token **toklst)
+{
+    *toklst = expand_noquotes(toklst);
+    if (expander(toklst))
+        return (EXIT_FAILURE);
+    if (expand_wildcard(toklst))
+        return (EXIT_FAILURE);
+    printf(GREEN "\n== EXPANDER OUT =======>\n" RESET);
+    print_lst(*toklst);
+    printf(GREEN "\n=======================>\n" RESET);
     return (EXIT_SUCCESS);
 }

@@ -33,7 +33,6 @@
 extern char *lexs_type[];
 extern char *ast_node_types[];
 
-
 // TOKENS LEXEME
 typedef enum
 {
@@ -46,6 +45,7 @@ typedef enum
     O_REDIRECTION,
     HEREDOC,
     DELIMITER,
+    AMBIGUOUS,
     APPEND,
     AND,
     OR,
@@ -238,5 +238,7 @@ char *get_name(char *str, int itr);
 t_argument *wildcard_core(char *pattern);
 void	clear_argslst(t_argument **lst);
 int expand_wildcard(t_token **toks);
+
+int expander_core(t_token **toklst);
 
 #endif
