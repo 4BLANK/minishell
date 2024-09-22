@@ -16,7 +16,7 @@ int redirect(t_ast_node *cmd, int *left, int *right)
       *right = 0;
       status = redirect_output(tmp->name);
     }
-    if (tmp->type == I_REDIRECTION)
+    if (tmp->type == I_REDIRECTION || tmp->type == HEREDOC)
     {
       *left = 0;
       status = redirect_input(tmp->name);

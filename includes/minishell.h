@@ -12,6 +12,12 @@
 #include <sys/wait.h>
 #include <dirent.h>
 
+typedef struct s_tmps
+{
+    char *filename;
+    struct s_tmps *next;
+} t_tmps;
+
 typedef struct s_shell
 {
   int ex_status;
@@ -19,6 +25,7 @@ typedef struct s_shell
   t_envlist *envlst;
   int pipefd[2];
   char **args;
+  t_tmps *tmps;
 } t_shell;
 
 typedef struct s_pair
