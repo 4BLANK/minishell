@@ -1,5 +1,4 @@
 #include "../../../includes/minishell.h"
-#include <fcntl.h>
 
 int append_redirect_output(const char *filename)
 {

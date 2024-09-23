@@ -40,32 +40,61 @@ char *create_tmp()
     return (str);
 }
 
-void here_doc(char **delimiter)
+static void child_routine(char *file_name, char **delimiter, int fd)
+{
+    char *line;
+
+    line = NULL;
+    handle_signals(HDOC);
+    while (1)
+    {
+        line = readline("heredoc> ");
+        if (!line)
+        {
+            ft_putstr_fd("chnghl o mnghl: warning: here-document delimited by EOF, wanted: ", 2);
+            ft_putstr_fd(*delimiter, 2);
+            ft_putstr_fd("\n", 2);
+            return ;
+        }
+        if (!ft_strcmp(*delimiter, line))
+        {
+            ft_putstr_fd(line, fd);
+            ft_putstr_fd("\n", fd);
+        }
+        else
+        {
+            free(*delimiter);
+            *delimiter = file_name;
+            return ;
+        }
+    }
+}
+
+int here_doc(char **delimiter)
 {
   int fd;
-  char *line;
   char *file_name;
+  pid_t pid; 
+  int status;
 
-  line = NULL;
   file_name = create_tmp();
   fd = open(file_name, O_CREAT | O_RDWR, 0644);
+  status = 0;
   if (fd < 0)
-      return ;
-  while (1)
+      return (EXIT_FAILURE);
+  pid = fork();
+  if (pid > 0)
   {
-    line = readline("heredoc> ");
-    if (!line)
-      return ;
-    if (!ft_strcmp(*delimiter, line))
-    {
-      ft_putstr_fd(line, fd);
-      ft_putstr_fd("\n", fd);
-    }
-    else
-    {
-      free(*delimiter);
-      *delimiter = file_name;
-      return ;
-    }
+      waitpid(pid, &status, 0);
+      if (WIFEXITED(status))
+          status = WEXITSTATUS(status);
+      else
+      {
+          //*status = WTERMSIG(*status);
+          status += 128;
+      }
   }
+  else if (pid == 0)
+      child_routine(file_name, delimiter, fd);
+  return (status);
 }
