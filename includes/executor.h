@@ -13,3 +13,4 @@ int here_doc(char **delimiter);
 int check_error_type(char *cmd_path);
 int specify_error(int status, char *cmd_path);
 int tiny_check();
+int echo(char **args);
