@@ -42,7 +42,6 @@ bool is_match(const char *s, const char *p) {
     s_len = strlen(s);
     p_len = strlen(p);
 
-    // Allocate the DP table
     dp = (bool **)malloc((s_len + 1) * sizeof(bool *));
     i = 0;
     while (i <= s_len) {
@@ -50,48 +49,42 @@ bool is_match(const char *s, const char *p) {
         i++;
     }
 
-    // Initialize dp[0][0] to true (empty pattern matches empty string)
     dp[0][0] = true;
 
-    // Initialize the first row (matching an empty string with the pattern)
     j = 1;
     while (j <= p_len) {
         if (p[j - 1] == '*') {
-            dp[0][j] = dp[0][j - 1];  // '*' can match an empty sequence
+            dp[0][j] = dp[0][j - 1];  
         } else {
-            dp[0][j] = false;  // Other characters can't match an empty string
+            dp[0][j] = false;
         }
         j++;
     }
 
-    // Initialize the first column (no pattern matches a non-empty string)
     i = 1;
     while (i <= s_len) {
         dp[i][0] = false;
         i++;
     }
 
-    // Fill the DP table
     i = 1;
     while (i <= s_len) {
         j = 1;
         while (j <= p_len) {
             if (p[j - 1] == s[i - 1]) {
-                dp[i][j] = dp[i - 1][j - 1];  // Match one character
+                dp[i][j] = dp[i - 1][j - 1];  
             } else if (p[j - 1] == '*') {
-                dp[i][j] = dp[i - 1][j] || dp[i][j - 1];  // '*' matches empty or more characters
+                dp[i][j] = dp[i - 1][j] || dp[i][j - 1];
             } else {
-                dp[i][j] = false;  // No match
+                dp[i][j] = false; 
             }
             j++;
         }
         i++;
     }
 
-    // Store the result before freeing the memory
     result = dp[s_len][p_len];
 
-    // Free the allocated memory
     i = 0;
     while (i <= s_len) {
         free(dp[i]);
@@ -106,11 +99,13 @@ t_argument *wildcard_core(char *pattern)
 {
     t_argument *e_args;
     t_argument *e_matched;
+    t_argument *hold;
     t_argument *tmp;
     
     tmp = NULL;
     e_matched = NULL;
     e_args = get_curdir_entries();
+    hold = e_args;
     if (e_args == NULL)
         return (NULL);
     while (e_args != NULL)
@@ -124,6 +119,6 @@ t_argument *wildcard_core(char *pattern)
         }
         e_args = e_args->next;
     }
-    clear_argslst(&e_args);
+    clear_argslst(&hold);
     return (e_matched);
 }

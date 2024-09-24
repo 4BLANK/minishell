@@ -15,23 +15,24 @@ char check_quotes(char *s)
 size_t rm_quotelen(char *str)
 {
     size_t len;
+    size_t i;
     int flag;
-    int quote;
-    int i;
+    char quote;
 
     i = 0;
     flag = 0;
-    len = ft_strlen(str);
+    len = 0;
     while (str[i])
     {
         if (flag == 0 && (str[i] == QUOTE || str[i] == DQUOTE))
         {
             flag = 1;
             quote = str[i];
-            len -= 2;
         }
         else if (flag == 1 && str[i] == quote)
             flag = 0;
+        else 
+            len++;
         i++;
     }
     return (len);
