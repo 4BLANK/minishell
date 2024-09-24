@@ -40,7 +40,7 @@ char *create_tmp()
     return (str);
 }
 
-static void child_routine(char *file_name, char **delimiter, int fd)
+static int child_routine(char **delimiter, int fd)
 {
     char *line;
 
@@ -54,19 +54,15 @@ static void child_routine(char *file_name, char **delimiter, int fd)
             ft_putstr_fd("chnghl o mnghl: warning: here-document delimited by EOF, wanted: ", 2);
             ft_putstr_fd(*delimiter, 2);
             ft_putstr_fd("\n", 2);
-            return ;
+            return (EXIT_FAILURE);
         }
         if (!ft_strcmp(*delimiter, line))
         {
             ft_putstr_fd(line, fd);
-            ft_putstr_fd("\n", fd);
+            ft_putstr_fd("\n", fd); 
         }
         else
-        {
-            free(*delimiter);
-            *delimiter = file_name;
-            return ;
-        }
+            return (EXIT_SUCCESS);
     }
 }
 
@@ -91,10 +87,16 @@ int here_doc(char **delimiter)
       else
       {
           //*status = WTERMSIG(*status);
+          printf("\n");
           status += 128;
+      }
+      if (!status)
+      {
+          free(*delimiter);
+          *delimiter = file_name;
       }
   }
   else if (pid == 0)
-      child_routine(file_name, delimiter, fd);
+      exit(child_routine(delimiter, fd));
   return (status);
 }

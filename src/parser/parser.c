@@ -21,7 +21,5 @@ int parser (t_ast_node **ast, char *line)
         return (PARSE_ERROR);
     *ast = build_ast(tokenlst);
     tokens_lstclear(&tokenlst);
-    // distroy_envlst(&sh->envlst);
-    // exit(1);
     return (EXIT_SUCCESS);
 }
