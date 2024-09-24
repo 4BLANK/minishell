@@ -5,6 +5,7 @@ t_shell *sh;
 int main (void)
 {
   char *line;
+  int status;
   // struct sigaction sa;
   t_ast_node *ast;
 
@@ -19,11 +20,14 @@ int main (void)
     if (!line)
       exit(0);
     add_history(line);
-    sh->ex_status = parser(&ast, line);
-    if (ast != NULL)
+   
+    status = parser(&ast, line);
+    if (status != 0)
+      sh->ex_status = status;  
+    if (ast != NULL && !status)
     {
       // printf(GREEN "\n== AST =================>\n" RESET);
-      print_ast_tree(ast, 0);
+      //print_ast_tree(ast, 0);
       // EXECTUTE AST
       sh->ex_status = kickoff(ast);
       // DISTROY AST

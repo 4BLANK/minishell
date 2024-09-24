@@ -51,6 +51,7 @@ static int child_routine(char **delimiter, int fd)
         line = readline("heredoc> ");
         if (!line)
         {
+            line = expand_heredoc(line);
             ft_putstr_fd("chnghl o mnghl: warning: here-document delimited by EOF, wanted: ", 2);
             ft_putstr_fd(*delimiter, 2);
             ft_putstr_fd("\n", 2);
