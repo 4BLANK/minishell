@@ -1,5 +1,25 @@
 #include "../../../includes/minishell.h"
 
+
+void distroy_tmps(t_tmps **lst)
+{
+	t_tmps	*node;
+	t_tmps	*next;
+
+	if (lst && *lst)
+	{
+		node = *lst;
+		while (node != NULL)
+		{
+			next = node->next;
+			unlink(node->filename);
+		    free(node);
+			node = next;
+		}
+		*lst = NULL;
+	}
+}
+
 t_ast_gc *new_gb(void *ptr)
 {
     t_ast_gc *gb;
