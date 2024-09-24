@@ -248,5 +248,6 @@ void	clear_argslst(t_argument **lst);
 int expand_wildcard(t_token **toks);
 
 int expander_core(t_token **toklst);
+char *expand_heredoc(char *str);
 
 #endif

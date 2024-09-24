@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-//TODO: kemal had l9wada
+//TODO: kemal had l9wada expandi ta wild cards
 char *export_expander(char *str)
 {
     size_t i;
@@ -167,19 +167,20 @@ int export_var(char *arg)
     return (EXIT_SUCCESS);
 }
 
-int export_cmd(t_argument *arguments)
+int export_cmd(char **args)
 {
     t_argument *args;
+    size_t i;
     int status;
     
+    i = 1;
     status = 0;
-    args = arguments->next;
-    if (!args)
+    if (str_arraysize(args) == 1)
         print_env(sh->envlst);    
-    while (args != NULL)
+    while (args[i] != NULL)
     {
-        status = export_var(args->content);
-        args = args->next;
+        status = export_var(args[i]);
+        i++;
     }
     return (status);
 }

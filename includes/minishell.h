@@ -53,5 +53,4 @@ int built_ins(char **args, int *status, t_pair *pipe_location, int pipefd[2]);
 int execute(char **args, t_pair *pipe_location, int pipefd[2], int *status);
 void distroy_tmps(t_tmps **lst);
 int exit_cmd(char **args);
-
 #endif
