@@ -18,6 +18,11 @@ void handle_signals(int mode)
     signal(SIGINT, handler);
     signal(SIGQUIT, SIG_IGN);
   }
+  if (mode == HDOC)
+  {
+    signal(SIGINT, SIG_DFL);
+    signal(SIGQUIT, SIG_IGN);
+  }
   if (mode == CHILD)
   {
     signal(SIGINT, SIG_DFL);

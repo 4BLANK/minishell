@@ -7,7 +7,11 @@ int parent_routine(pid_t pid, int *status, char *cmd_path)
   if (WIFEXITED(*status))
     *status = WEXITSTATUS(*status);
   else
-    printf("\n");
+  {
+      //*status = WTERMSIG(*status);
+      *status += 128;
+      printf("\n");
+  }
   specify_error(*status, sh->args[0]);
   return (*status);
 }

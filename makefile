@@ -34,6 +34,7 @@ SRC =	./src/main.c\
 		./src/built-in/cd_cmd.c\
 		./src/built-in/unset_cmd.c\
 		./src/built-in/env_cmd.c\
+		./src/built-in/echo_cmd.c\
 		./src/parser/expander/env_utils.c\
 		./src/built-in/export_cmd.c\
 		
