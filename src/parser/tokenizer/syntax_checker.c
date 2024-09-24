@@ -194,7 +194,6 @@ int syntax_err_check(t_token *tokenlst)
     }
     if (ft_strcmp(content, "<<"))
     {
-        printf(RED"IN\n"RESET);
         here_doc(&(tok->next)->content);
     }
     // if error remove herdoc tmp files

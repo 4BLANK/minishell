@@ -113,10 +113,12 @@ char *expand_token(char *str)
     char *s1;
     char quote_type;
     int quote_flag;
+    char *tmp;
     int i;
 
     i = 0;
     quote_flag = 0;
+    tmp = NULL;
     new_str = NULL;
     while (str[i])
     {
@@ -129,15 +131,26 @@ char *expand_token(char *str)
             quote_flag = 0;
         if (quote_flag == 1 && str[i] == DOLLAR_SIGN && quote_type != QUOTE && str[i + 1]) 
         {
-            new_str = expand_pid_or_exit(new_str, str[i], str[i + 1]);
-            if (new_str != NULL)
+            //new_str = expand_pid_or_exit(new_str, str[i], str[i + 1]);
+            tmp = expand_pid_or_exit(new_str, str[i], str[i + 1]);
+            if (tmp != NULL)
+            {
+                // free(new_str);
+                // new_str = NULL;
+                new_str = tmp;
+                //new_str = concat(new_str, tmp, 0);
+                // free(tmp);
                 i++;
-            envname = get_name(str, i + 1);
-            s1 = ft_strdup(ft_getenv(envname));
-            new_str = concat(new_str, s1, 0);
-            i = i + ft_strlen(envname);
-            free(s1);
-            free(envname);
+            }
+            else 
+            {
+                envname = get_name(str, i + 1);
+                s1 = ft_strdup(ft_getenv(envname));
+                new_str = concat(new_str, s1, 0);
+                i = i + ft_strlen(envname);
+                free(s1);
+                free(envname);
+            }
         }
         else
             new_str = concat(new_str, str + i, 1);
@@ -439,12 +452,19 @@ int return_expand(t_token *old_tok, t_token **new_tok)
         {
             *new_tok = args_to_toks(args);
             if (*new_tok == NULL)
-                return (clear_argslst(&args), EXIT_FAILURE);
+            {
+                clear_argslst(&args);
+                return (EXIT_FAILURE);
+            }
         }
         else 
-            return (clear_argslst(&args), EXIT_FAILURE);
+        {
+            clear_argslst(&args);
+            return (EXIT_FAILURE);
+        }
     }
-    return (clear_argslst(&args), EXIT_SUCCESS);
+    clear_argslst(&args);
+    return (EXIT_SUCCESS);
 }
 
 int expand_wildcard(t_token **toks)

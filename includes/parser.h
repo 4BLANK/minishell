@@ -112,6 +112,14 @@ typedef struct s_ast_node
     } data;
 } t_ast_node;
 
+typedef struct s_ast_gc
+{
+    void *ptr;
+    struct s_ast_gc *next;
+}t_ast_gc;
+
+void ptr_collector(void *ptr);
+
 // TOKENIZER UTILS
 char *remove_quote(char *str);
 int rm_token_quotes(t_token *tokenlst);
@@ -168,7 +176,7 @@ int export_cmd(t_argument *arguments);
 int env_cmd(void);
 int pwd_cmd(char **args);
 int cd_cmd(char **args, char **env);
-int unset_cmd(char **args, char ***env);
+int unset_cmd(char **args);
 
 int overwrite_env(char *name, char *value);
 

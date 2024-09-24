@@ -23,6 +23,7 @@ typedef struct s_shell
   int ex_status;
   char *home;
   t_envlist *envlst;
+  t_ast_gc *trash;
   int pipefd[2];
   char **args;
   t_tmps *tmps;
