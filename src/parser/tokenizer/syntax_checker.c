@@ -178,6 +178,7 @@ int syntax_err_check(t_token *tokenlst)
   t_token *tok;
   t_token *prev_tok;
   char *content;
+  int status;
 
   tok = tokenlst;
   prev_tok = NULL;
@@ -194,10 +195,10 @@ int syntax_err_check(t_token *tokenlst)
     }
     if (ft_strcmp(content, "<<"))
     {
-        here_doc(&(tok->next)->content);
+        status = here_doc(&(tok->next)->content);
+        if (status != 0)
+            return (status);
     }
-    // if error remove herdoc tmp files
-    // change delimiter to the file name 
     prev_tok = tok;
     tok = tok->next;
   }
