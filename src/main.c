@@ -27,6 +27,7 @@ int main (void)
       // EXECTUTE AST
       sh->ex_status = kickoff(ast);
       // DISTROY AST
+      distroy_tmps(&sh->tmps);
       ast_distroy(&ast);
     }
   }  
