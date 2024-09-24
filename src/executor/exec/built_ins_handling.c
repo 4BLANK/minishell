@@ -2,7 +2,7 @@
 
 int is_built_in(char *str)
 {
-  return (!(ft_strncmp(str, "pwd", 3)) || !(ft_strncmp(str, "echo", 4)));
+  return (!(ft_strncmp(str, "pwd", 3)) || !(ft_strncmp(str, "echo", 4)) || !(ft_strncmp(str, "exit", 4)));
 }
 
 int execute(char **args, t_pair *pipe_location, int pipefd[2], int *status)
@@ -20,7 +20,7 @@ int execute(char **args, t_pair *pipe_location, int pipefd[2], int *status)
     if (!ft_strncmp(args[0], "env", 3))
         *status = pwd_cmd(args);
     if (!ft_strncmp(args[0], "exit", 4))
-        *status = pwd_cmd(args);
+        *status = exit_cmd(args);
     if (!ft_strncmp(args[0], "export", 6))
         *status = pwd_cmd(args);
     if (!ft_strncmp(args[0], "cd", 2))
