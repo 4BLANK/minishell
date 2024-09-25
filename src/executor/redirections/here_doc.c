@@ -40,7 +40,7 @@ char *create_tmp()
     return (str);
 }
 
-static int child_routine(char **delimiter, int fd)
+static int child_routine(char **delimiter, int fd, int flag)
 {
     char *line;
 
@@ -51,7 +51,6 @@ static int child_routine(char **delimiter, int fd)
         line = readline("heredoc> ");
         if (!line)
         {
-            line = expand_heredoc(line);
             ft_putstr_fd("chnghl o mnghl: warning: here-document delimited by EOF, wanted: ", 2);
             ft_putstr_fd(*delimiter, 2);
             ft_putstr_fd("\n", 2);
@@ -59,6 +58,8 @@ static int child_routine(char **delimiter, int fd)
         }
         if (!ft_strcmp(*delimiter, line))
         {
+            if (flag == 1)
+                line = expand_heredoc(line);
             ft_putstr_fd(line, fd);
             ft_putstr_fd("\n", fd); 
         }
@@ -67,7 +68,7 @@ static int child_routine(char **delimiter, int fd)
     }
 }
 
-int here_doc(char **delimiter)
+int here_doc(char **delimiter, int flag)
 {
   int fd;
   char *file_name;
@@ -98,6 +99,6 @@ int here_doc(char **delimiter)
       }
   }
   else if (pid == 0)
-      exit(child_routine(delimiter, fd));
+      exit(child_routine(delimiter, fd, flag));
   return (status);
 }

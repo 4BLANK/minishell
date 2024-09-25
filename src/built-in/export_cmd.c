@@ -124,22 +124,17 @@ void ft_setenv(char *name, char *value)
     value = remove_quote(value);
     if (env_exist(name) && value != NULL)
     {
-        printf("kain\n");
         if (overwrite_env(name, value))
             return ;
     }
     else if (env_exist(name) && value == NULL)
-    {
-        printf("kain walakin value null\n");
         return ;
-    }
     else
     {
         var = lstnew_env(name, value);
         if (var == NULL)
             return ;
         lstadd_env_back(&sh->envlst, var);
-        // print_env(sh->envlst);
     }
 }
 
@@ -152,24 +147,17 @@ int export_var(char *arg)
     name = NULL;
     value = NULL;
     new_arg = export_expander(arg);
-    // printf(RED"\n--------------------------\n");
-    // printf("old = %s\n", arg);
-    // printf("new = %s\n", new_arg);
-    // printf("\n--------------------------\n"RESET);
     if (invalid_arg(new_arg))
         return (EXIT_FAILURE);
     name = getenv_name(new_arg);
     value = getenv_value(new_arg);
     ft_setenv(name, value);
     free(new_arg);
-    // free(name);
-    // free(value);
     return (EXIT_SUCCESS);
 }
 
 int export_cmd(char **args)
 {
-    t_argument *args;
     size_t i;
     int status;
     

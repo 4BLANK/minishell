@@ -2,7 +2,10 @@
 
 int is_built_in(char *str)
 {
-  return (!(ft_strncmp(str, "pwd", 3)) || !(ft_strncmp(str, "echo", 4)) || !(ft_strncmp(str, "exit", 4)));
+  return (!(ft_strncmp(str, "pwd", 3)) || !(ft_strncmp(str, "echo", 4))\
+   || !(ft_strncmp(str, "exit", 4)) || !(ft_strncmp(str, "env", 3)) \
+   || !(ft_strncmp(str, "export", 6)) || !(ft_strncmp(str, "cd", 2))\
+   || !(ft_strncmp(str, "unset", 5)));
 }
 
 int execute(char **args, t_pair *pipe_location, int pipefd[2], int *status)
@@ -18,15 +21,15 @@ int execute(char **args, t_pair *pipe_location, int pipefd[2], int *status)
     if (!ft_strncmp(args[0], "echo", 4))
         *status = echo(args);
     if (!ft_strncmp(args[0], "env", 3))
-        *status = pwd_cmd(args);
+        *status = env_cmd();
     if (!ft_strncmp(args[0], "exit", 4))
         *status = exit_cmd(args);
     if (!ft_strncmp(args[0], "export", 6))
-        *status = pwd_cmd(args);
+        *status = export_cmd(args);
     if (!ft_strncmp(args[0], "cd", 2))
-        *status = pwd_cmd(args);
+        *status = cd_cmd(args);
     if (!ft_strncmp(args[0], "unset", 5))
-        *status = pwd_cmd(args);
+        *status = unset_cmd(args);
     return (1);
 }
 
