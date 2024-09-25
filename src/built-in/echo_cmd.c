@@ -38,7 +38,7 @@ void print_without_nl(char **args)
 
   i = 0;
   if (!args)
-      printf("");
+    return ;
   while (args[i])
   {
     printf("%s", args[i]);
