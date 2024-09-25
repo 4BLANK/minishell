@@ -119,12 +119,10 @@ int tokenizer(char *line, t_token **tokenlst)
   char *holder;
   int quote_flag;
   char quote_type;
-  int stop_flag;
   int i;
   int j;
 
   i = 0;
-  stop_flag = 0;
   quote_flag = 0;
   holder = NULL;
   while (line[i])

@@ -38,10 +38,8 @@ int remove_envnode(t_envlist **env, size_t pos)
 
 int dalete_var(t_envlist *env, char *name)
 {
-    t_envlist *tmp;
     size_t pos;
 
-    tmp = NULL;
     pos = 1;
     while (env != NULL)
     {
