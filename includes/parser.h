@@ -172,11 +172,13 @@ t_token *expand_noquotes(t_token **tokens);
 size_t str_arraysize(char **str);
 
 // builtin
-int export_cmd(t_argument *arguments);
+int export_cmd(char **args);
 int env_cmd(void);
 int pwd_cmd(char **args);
-int cd_cmd(char **args, char **env);
+int cd_cmd(char **args);
 int unset_cmd(char **args);
+
+int ft_error(char *cmd, char *arg, char *error);
 
 int overwrite_env(char *name, char *value);
 
