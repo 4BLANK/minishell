@@ -2,10 +2,10 @@
 
 int is_built_in(char *str)
 {
-  return (!(ft_strncmp(str, "pwd", 3)) || !(ft_strncmp(str, "echo", 4))\
-   || !(ft_strncmp(str, "exit", 4)) || !(ft_strncmp(str, "env", 3)) \
-   || !(ft_strncmp(str, "export", 6)) || !(ft_strncmp(str, "cd", 2))\
-   || !(ft_strncmp(str, "unset", 5)));
+  return (!(ft_strncmp(str, "pwd", 4)) || !(ft_strncmp(str, "echo", 5))\
+   || !(ft_strncmp(str, "exit", 5)) || !(ft_strncmp(str, "env", 4)) \
+   || !(ft_strncmp(str, "export", 7)) || !(ft_strncmp(str, "cd", 3))\
+   || !(ft_strncmp(str, "unset", 6)));
 }
 
 int execute(char **args, t_pair *pipe_location, int pipefd[2], int *status)
