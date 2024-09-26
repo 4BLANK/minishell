@@ -14,3 +14,5 @@ int check_error_type(char *cmd_path);
 int specify_error(int status, char *cmd_path);
 int tiny_check();
 int echo(char **args);
+int pre_exec_errors(char *cmd, char *cmd_path);
+int is_built_in(char *str);

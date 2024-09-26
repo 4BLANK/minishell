@@ -12,15 +12,12 @@ int parent_routine(pid_t pid, int *status, char *cmd_path)
       *status += 128;
       printf("\n");
   }
-  specify_error(*status, sh->args[0]);
   return (*status);
 }
 
 int child_routine(t_ast_node *node, t_pair *pipe_location, int pipefd[2], char **cmd_path)
 {
     handle_signals(CHILD);
-    if (tiny_check())
-      return (127);
     if (get_commandpath(cmd_path, sh->args[0], __environ))
       return (EXIT_FAILURE);
     if (redirect(node, &(pipe_location->left), &(pipe_location->right)))
@@ -30,7 +27,7 @@ int child_routine(t_ast_node *node, t_pair *pipe_location, int pipefd[2], char *
     if (pipe_location->left)
       dup2(pipefd[0], STDIN_FILENO);
     if (execv(*cmd_path, sh->args) < 0)
-      exit(check_error_type(*cmd_path));
+      exit(sh->ex_status);
     exit(EXIT_SUCCESS);
 }
 
@@ -46,6 +43,9 @@ int execute_command(t_ast_node *node, int left, int right, int pipefd[2])
   pipe_location.right = right;
   sh->args = lst_tostrarray(node->data.childs.left->data.arg_list);
   status = 0;
+  get_commandpath(&cmd_path, sh->args[0], __environ);
+  if (!is_built_in(sh->args[0]) && pre_exec_errors(sh->args[0], cmd_path))
+    return (sh->ex_status);
   if (built_ins(sh->args, &status, &pipe_location, pipefd))
     return (status);
   pid = fork();
