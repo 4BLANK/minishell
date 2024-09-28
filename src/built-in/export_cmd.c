@@ -47,10 +47,8 @@ char *export_expander(char *str)
 
 bool env_exist(char *name)
 {
-    size_t i;
     t_envlist *lst;
 
-    i = 0;
     lst = sh->envlst;
     while (lst != NULL)
     {

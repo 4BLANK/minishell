@@ -119,6 +119,7 @@ int is_all_quotes(char *str)
 //   int quote_flag;
 //   char quote_type;
 //   int stop_flag;
+
 //   int i;
 //   int j;
 

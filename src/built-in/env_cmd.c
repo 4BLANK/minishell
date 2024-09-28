@@ -2,10 +2,8 @@
 
 int env_cmd(void)
 {
-    size_t i;
     t_envlist *lst;
 
-    i = 0;
     lst = sh->envlst;
     if (lst == NULL)
         return (EXIT_SUCCESS);
