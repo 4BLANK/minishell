@@ -32,6 +32,7 @@
 
 extern char *lexs_type[];
 extern char *ast_node_types[];
+// extern t_shell *sh;
 
 // TOKENS LEXEME
 typedef enum
@@ -114,16 +115,34 @@ typedef struct s_ast_node
 
 typedef struct s_ast_gc
 {
-    void *ptr;
+    t_ast_node *node;
+    t_file *files;
+    t_argument *args;
     struct s_ast_gc *next;
 }t_ast_gc;
 
-void ptr_collector(void *ptr);
+void ptr_collector(t_ast_node *n, t_file *f, t_argument *a);
+void	clear_fileslst(t_file **lst);
+void distroy_gc(t_ast_gc **lst);
+
+char *expand_token(char *str);
+t_token *split_tokens(char *str);
+size_t toklst_size(t_token *toks);
+t_token *split_tokens(char *str);
+// char *expand_env_var(char *str, size_t *i);
+
+int tokens_spliter(char *line, t_token **toklst);
+char *expand_string(char *str);
+
+int expand_wildcard(t_token **toks);
+char *expand_heredoc(char *str);
+
+char    *concat(char *dest, char *src, int flag);
 
 // TOKENIZER UTILS
-char *remove_quote(char *str);
+char    *remove_quote(char *str);
 int rm_token_quotes(t_token *tokenlst);
-char check_quotes(char *s);
+char    check_quotes(char *s);
 void lexer(t_token *tokens);
 int count_repetition(char *line, char c, int itr);
 int modify_line(char **line);

@@ -213,7 +213,7 @@ int syntax_err_check(t_token *tokenlst)
     }
     if (ft_strcmp(content, "<<"))
     {
-        if (is_quoted((tok->next)->content))
+        if (!is_quoted((tok->next)->content))
             flag = 1;
         (tok->next)->content = remove_quote((tok->next)->content); 
         status = here_doc(&(tok->next)->content, flag);

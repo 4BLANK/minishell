@@ -28,3 +28,6 @@ check why !!!!!
 heredox expand 
 heredoc dilimiter remove quote
 remove quote
+
+
+export expand

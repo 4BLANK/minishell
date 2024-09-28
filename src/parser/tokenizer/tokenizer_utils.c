@@ -113,114 +113,62 @@ int is_all_quotes(char *str)
   return 0;
 }
 
-//TODO: handel echo command
-int tokenizer(char *line, t_token **tokenlst)
-{
-  char *holder;
-  int quote_flag;
-  char quote_type;
-  int i;
-  int j;
+// int tokenizer(char *line, t_token **tokenlst)
+// {
+//   char *holder;
+//   int quote_flag;
+//   char quote_type;
+//   int stop_flag;
 
-  i = 0;
-  quote_flag = 0;
-  holder = NULL;
-  while (line[i])
-  {
-    // if (*tokenlst != NULL && check_for_echo(*tokenlst))
-    // {
-    //   stop_flag = 0;
-    //   j = i;
-    //   while (line[i] && stop_flag == 0)
-    //   {
-    //     if (quote_flag == 0  && (line[i] == QUOTE || line[i] == DQUOTE))
-    //     {
-    //       quote_flag = 1;
-    //       quote_type = line[i++];
-    //     }
-    //     if (quote_flag == 1 && line[i] == quote_type)
-    //       quote_flag = 0;
-    //     if (stop_flag == 0 && (line[i] == CPIPE || line[i] == GREATER
-    //       || line[i] == LESS))
-    //     {
-    //       stop_flag = 1;
-    //       break;
-    //     }
-    //     i++;
-    //   }
-    //   if (quote_flag == 1)
-    //     return (print_error("unclosed quote detected!\n", 2));
-    //   if (stop_flag == 1)
-    //     i--;
-    //   if (i != j)
-    //   {
-    //     holder = ft_substr(line, j, i - j);
-    //     if (holder != NULL)
-    //       ft_lstadd_token_back(tokenlst, ft_lstnew_token(holder));
-    //   }
-    // }
-    if (line[i] && !is_space(line[i]))
-    {
-      j = i;
-      while (line[j])
-      {
-        if (quote_flag == 0 && (line[j] == QUOTE || line[j] == DQUOTE))
-        {
-          quote_flag = 1;
-          quote_type = line[j];
-        }
-        else if (quote_flag == 1 && line[j] == quote_type)
-        {
-          quote_flag = 0;
-          if (line[j + 1] && is_space(line[j + 1]))
-          {
-            j++;
-            break;
-          }
-        }
-        else if (is_space(line[j]) && quote_flag == 0)
-        {
-          break;
-        }
-        j++;
-      }
-      if (quote_flag == 1)
-      {
-        return (print_error("unclosed quote detected!\n", 2));
-      }
-      if (i != j)
-      {
-        holder = ft_substr(line, i, j - i);        
-        if (holder != NULL /*&& !is_all_quotes(holder)*/)
-          ft_lstadd_token_back(tokenlst, ft_lstnew_token(holder));
-      }
-      i = j;
-    }
-    if(line[i] != '\0')
-      i++;
-  }
-  return (EXIT_SUCCESS);
-}
-
-
-// int initial_parsing(char *line)
-// { 
 //   int i;
+//   int j;
 
 //   i = 0;
-//   if (line == NULL)
-//     return (EXIT_SUCCESS);
-//   while (line[i] && is_space(line[i]))
+//   stop_flag = 0;
+//   quote_flag = 0;
+//   holder = NULL;
+//   while (line[i])
+//   {
+//     if (line[i] && !is_space(line[i]))
+//     {
+//       j = i;
+//       while (line[j])
+//       {
+//         if (quote_flag == 0 && (line[j] == QUOTE || line[j] == DQUOTE))
+//         {
+//           quote_flag = 1;
+//           quote_type = line[j];
+//         }
+//         else if (quote_flag == 1 && line[j] == quote_type)
+//         {
+//           quote_flag = 0;
+//           if (line[j + 1] && is_space(line[j + 1]))
+//           {
+//             j++;
+//             break;
+//           }
+//         }
+//         else if (is_space(line[j]) && quote_flag == 0)
+//         {
+//           break;
+//         }
+//         j++;
+//       }
+//       if (quote_flag == 1)
+//       {
+//         return (print_error("unclosed quote detected!\n", 2));
+//       }
+//       if (i != j)
+//       {
+//         holder = ft_substr(line, i, j - i);        
+//         if (holder != NULL)
+//           ft_lstadd_token_back(tokenlst, ft_lstnew_token(holder));
+//       }
+//       i = j;
+//     }
+//     if(line[i] != '\0')
 //       i++;
-//   if(line[i] && line[i] == CPIPE)
-//       return (print_error("parse error\n", 2));
-//   while(line[i++]);
-//   i -= 2;
-//   while (i >= 0 && is_space(line[i]))
-//       i--;
-//   if (line[i] == CPIPE || line[i] == GREATER || line[i] == LESS 
-//       || (line[i] == AMPERSAND && line[i - 1] == AMPERSAND))
-//       return (print_error("parse error\n", 2));
+//   }
 //   return (EXIT_SUCCESS);
 // }
 
@@ -279,19 +227,19 @@ int rm_token_quotes(t_token *tokenlst)
   return (EXIT_SUCCESS);
 }
 
-t_token *tokendup(t_token *token)
-{
-  t_token *dup;
+// t_token *tokendup(t_token *token)
+// {
+//   t_token *dup;
 
-  if (token == NULL)
-    return NULL;
-  dup = ft_lstnew_token(ft_strdup(token->content));
-  if (dup == NULL)
-    return NULL;
-  dup->lexem = token->lexem;
-  dup->next = NULL;
-  return dup;
-}
+//   if (token == NULL)
+//     return NULL;
+//   dup = ft_lstnew_token(ft_strdup(token->content));
+//   if (dup == NULL)
+//     return NULL;
+//   dup->lexem = token->lexem;
+//   dup->next = NULL;
+//   return dup;
+// }
 
 void	ft_lstadd_token_front(t_token **lst, t_token *new)
 {

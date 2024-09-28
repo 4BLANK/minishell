@@ -24,7 +24,6 @@ SRC =	./src/main.c\
 		./src/parser/tokenizer/tokenizer_utils.c\
 		./src/parser/tokenizer/syntax_checker.c\
 		./src/parser/tokenizer/lexer.c\
-		./src/parser/tokenizer/stack_utils.c\
 		./src/parser/ast/ast_utils.c\
 		./src/parser/ast/utils.c\
 		./src/parser/ast/ast.c\
@@ -39,7 +38,14 @@ SRC =	./src/main.c\
 		./src/built-in/exit_cmd.c\
 		./src/parser/expander/env_utils.c\
 		./src/built-in/export_cmd.c\
-		
+		./src/parser/gc/garbage_collector.c\
+		./src/parser/tokenizer/tokenizer.c\
+		./src/parser/expander/concat.c\
+		./src/parser/expander/expand_no_quotes.c\
+		./src/parser/expander/split_tokens.c\
+		./src/parser/expander/expand_token.c\
+		./src/parser/expander/expand_wildcard.c\
+
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)

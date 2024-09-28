@@ -38,39 +38,50 @@ size_t rm_quotelen(char *str)
     return (len);
 }
 
-//TODO: fix this bug
+static int check_quote(char c, int *flag, char *quote)
+{
+    int result;
+
+    result = 0;
+    if (*flag == 0 && (c == QUOTE || c == DQUOTE))
+    {
+        *flag = 1;
+        *quote = c;
+        result = 1;
+    }
+    else if (*flag == 1 && c == *quote)
+    {
+        result = 1;
+        *flag = 0;
+    }
+    return (result);
+}
+
 char *remove_quote(char *str)
 {
-    char *unqoute_str;
-    char quote;
-    int flag;
     int i;
     int j;
+    char *newstr;
+    char quote;
+    int flag;
 
     i = 0;
     j = 0;
     flag = 0;
     if (str == NULL)
         return (NULL);
-    unqoute_str = malloc (sizeof(char) * (rm_quotelen(str) + 1));
-    if (unqoute_str == NULL)
+    newstr = malloc(sizeof(char) * (rm_quotelen(str) + 1));
+    if (newstr == NULL)
         return (NULL);
     while (str[i])
     {
-        if (flag == 0 && (str[i] == QUOTE || str[i] == DQUOTE))
-        {
-            flag = 1;
-            quote = str[i];
-        }
-        else if (flag == 1 && str[i] == quote)
-            flag = 0;
-        else 
-            unqoute_str[j++] = str[i];
+        if(!check_quote(str[i], &flag, &quote))
+            newstr[j++] = str[i];
         i++;
     }
+    newstr[j] = '\0';
     free(str);
-    unqoute_str[j] = '\0';
-    return (unqoute_str);
+    return (newstr);
 }
 
 // int check_for_echo(t_token *tokens)
@@ -132,6 +143,44 @@ int schar_detected(char c)
     return (0);
 }
 
+int toggle_quotes(char c, int flag)
+{
+    if (flag == 0 && (c == DQUOTE ||  c == QUOTE))
+        flag = 1;
+    else if (flag == 1 && (c == DQUOTE ||  c == QUOTE))
+        flag = 0;
+    return (flag);
+}
+
+size_t handle_ampersand(char *line, ssize_t i)
+{
+    size_t count;
+
+    count = 0;
+    if (!i || line[i - 1] != AMPERSAND)
+    {
+        if (line[i + 1] && line[i + 1] == AMPERSAND)
+            count++;
+    }
+    return (count);
+}
+
+size_t count_operator(char *line, ssize_t i)
+{
+    size_t count;
+
+    count = 0;
+    if (line[i] == OPAREN || line[i] == CPAREN)
+        count++;
+    else if (line[i] == GREATER && (!i || line[i - 1] != GREATER))
+        count++;
+    else if (line[i] == LESS && (!i || line[i - 1] != LESS))
+        count++;
+    else if (line[i] == CPIPE && (!i || line[i - 1] != CPIPE))
+        count++;
+    return (count);
+}
+
 size_t count_schar(char *line)
 {
     ssize_t i;
@@ -143,79 +192,120 @@ size_t count_schar(char *line)
     count = 0;
     while (line[++i])
     {
-        if (flag == 0 && (line[i] == DQUOTE ||  line[i] == QUOTE))
-            flag = 1;
-        else if (flag == 1 && (line[i] == DQUOTE ||  line[i] == QUOTE))
-            flag = 0;
+        flag = toggle_quotes(line[i], flag);
         if (flag == 0 && schar_detected(line[i]))
         {
-            if (line[i] == OPAREN || line[i] == CPAREN)
-                count++;
-            else if (line[i] == GREATER && (!i || line[i - 1] != GREATER))
-                    count++;
-            else if (line[i] == LESS && (!i || line[i - 1] != LESS))
-                count++;
-            else if (line[i] == CPIPE && (!i || line[i - 1] != CPIPE))
-                count++;
-            else if (line[i] == AMPERSAND && (!i || line[i - 1] != AMPERSAND))
-            {
-                if (line[i + 1] &&  line[i + 1] == AMPERSAND)
-                    count++;
-            }
+            if (line[i] == AMPERSAND)
+                count += handle_ampersand(line, i);
+            else
+                count += count_operator(line, i);
         }
     }
     return (count);
 }
 
+void process_character(char *newline, char *line, size_t *i, size_t *j)
+{
+    if (line[*i] == CPAREN || line[*i] == OPAREN)
+    {
+        newline[(*j)++] = ' ';
+        newline[*j] = line[*i];
+        newline[++(*j)] = ' ';
+    }
+    else if (line[*i] == AMPERSAND)
+    {
+        if (*i != 0 && line[*i - 1] != line[*i] 
+            && line[*i + 1] && line[*i + 1] == line[*i])
+            newline[(*j)++] = ' ';
+        newline[*j] = line[*i];
+        if (line[*i + 1] && line[*i + 1] != line[*i] 
+            && (*i != 0 && line[*i - 1] == line[*i]))
+            newline[++(*j)] = ' ';
+    }
+    else
+    {
+        if ((*i != 0 && line[*i - 1] != line[*i]))
+            newline[(*j)++] = ' ';
+        newline[*j] = line[*i];
+        if (line[*i + 1] && line[*i + 1] != line[*i])
+            newline[++(*j)] = ' ';
+    }
+}
+
 char *expand_line(char *line, size_t len)
 {
-    char *newline;
     size_t i;
     size_t j;
     int flag;
+    char *newline;
 
-    i = -1;
-    j = 0;
     flag = 0;
-    newline = (char *)malloc (sizeof(char) * len);
-    while (line[++i])
+    i = 0;
+    j = 0;
+    newline = (char *)malloc(sizeof(char) * len);
+    if (newline == NULL)
+        return (NULL);
+    while (line[i])
     {
-        if (flag == 0 && (line[i] == DQUOTE ||  line[i] == QUOTE))
-            flag = 1;
-        else if (flag == 1 && (line[i] == DQUOTE ||  line[i] == QUOTE))
-            flag = 0;
+        flag = toggle_quotes(line[i], flag);
         if (flag == 0 && schar_detected(line[i]))
-        {
-            if (line[i] == CPAREN || line[i] == OPAREN)
-            {
-                newline[j++] = ' ';
-                newline[j] = line[i];
-                newline[++j] = ' ';
-            }
-            else if (line[i] == AMPERSAND)
-            {
-                if (i != 0 && line[i - 1] != line[i] && line[i + 1] && line[i + 1] == line[i])
-                    newline[j++] = ' ';
-                newline[j] = line[i];
-                if (line[i + 1] && line[i + 1] != line[i] && (i != 0 && line[i - 1] == line[i]))
-                    newline[++j] = ' ';
-            }
-            else 
-            {
-                if ((i != 0 && line[i - 1] != line[i]))
-                    newline[j++] = ' ';
-                newline[j] = line[i];
-                if (line[i + 1] && line[i + 1] != line[i])
-                    newline[++j] = ' ';
-            }
-        }
+            process_character(newline, line, &i, &j);
         else 
             newline[j] = line[i];
         j++;
+        i++;
     }
     newline[j] = '\0';
     return (newline);
 }
+
+
+// char *expand_line(char *line, size_t len)
+// {
+//     char *newline;
+//     size_t i;
+//     size_t j;
+//     int flag;
+
+//     i = -1;
+//     j = 0;
+//     flag = 0;
+//     newline = (char *)malloc (sizeof(char) * len);
+//     while (line[++i])
+//     {
+//         flag = toggle_quotes(line[i], flag);
+//         if (flag == 0 && schar_detected(line[i]))
+//         {
+//             if (line[i] == CPAREN || line[i] == OPAREN)
+//             {
+//                 newline[j++] = ' ';
+//                 newline[j] = line[i];
+//                 newline[++j] = ' ';
+//             }
+//             else if (line[i] == AMPERSAND)
+//             {
+//                 if (i != 0 && line[i - 1] != line[i] && line[i + 1] && line[i + 1] == line[i])
+//                     newline[j++] = ' ';
+//                 newline[j] = line[i];
+//                 if (line[i + 1] && line[i + 1] != line[i] && (i != 0 && line[i - 1] == line[i]))
+//                     newline[++j] = ' ';
+//             }
+//             else 
+//             {
+//                 if ((i != 0 && line[i - 1] != line[i]))
+//                     newline[j++] = ' ';
+//                 newline[j] = line[i];
+//                 if (line[i + 1] && line[i + 1] != line[i])
+//                     newline[++j] = ' ';
+//             }
+//         }
+//         else 
+//             newline[j] = line[i];
+//         j++;
+//     }
+//     newline[j] = '\0';
+//     return (newline);
+// }
 
 int get_expanded_line(char **line)
 {

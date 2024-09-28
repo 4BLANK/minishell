@@ -49,6 +49,7 @@ t_ast_node *ast_create_node(t_node_type type, t_argument *args, t_file *files)
     new_node = (t_ast_node *)malloc(sizeof(t_ast_node));
     if (new_node == NULL)
         return NULL;
+    // ptr_collector(new_node, NULL, NULL);        
     new_node->type = type;
     new_node->data.childs.right = NULL;
     new_node->data.childs.left = NULL;
@@ -206,6 +207,8 @@ t_ast_node *form_command(t_token **tokenlst)
     }
     if (args == NULL && files == NULL)
         return (NULL);
+    // ptr_collector(NULL, files, NULL);
+    // ptr_collector(NULL, files, args);    
     command = ast_create_node(COMMAND, NULL, NULL);
     if (command == NULL)
         return NULL;
