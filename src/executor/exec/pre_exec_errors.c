@@ -78,9 +78,7 @@ int pre_exec_errors(char *cmd, char *cmd_path)
 {
   sh->ex_status = 0;
   if (has_slash_or_dot(cmd))
-  {
     on_slash_or_dot(cmd);
-  }
   else
 {
     if (access(cmd_path, X_OK))
