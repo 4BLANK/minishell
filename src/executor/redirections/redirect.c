@@ -26,6 +26,7 @@ int redirect(t_ast_node *cmd, int *left, int *right)
       *right = 0;
       status = append_redirect_output(tmp->name);
     }
+    // amb
     if (status)
       return (status);
     tmp = tmp->next;

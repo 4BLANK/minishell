@@ -29,7 +29,7 @@ int main (void)
       // printf(GREEN "\n== AST =================>\n" RESET);
       //print_ast_tree(ast, 0);
       // EXECTUTE AST
-      sh->ex_status = kickoff(ast);
+      //sh->ex_status = kickoff(ast);
       // DISTROY AST
       distroy_tmps(&sh->tmps);
       ast_distroy(&ast);

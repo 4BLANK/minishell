@@ -7,8 +7,8 @@ int parser (t_ast_node **ast, char *line)
     (void)ast;
     tokenlst = NULL;
     if (modify_line(&line) > 0)
-        return (free(line), PARSE_ERROR);
-    if (tokenizer(line, &tokenlst)  || syntax_err_check(tokenlst))
+        return (free(line), PARSE_ERROR);    
+    if (tokens_spliter(line, &tokenlst)  || syntax_err_check(tokenlst))
     {
         tokens_lstclear(&tokenlst);
         return (free(line), PARSE_ERROR);

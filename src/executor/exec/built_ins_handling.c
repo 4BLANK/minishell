@@ -45,7 +45,6 @@ int under_pipes(int *status, char **args, t_pair *l, int pipefd[2])
       *status = WEXITSTATUS(*status);
     else
       printf("\n");
-    printf("status : %d\n", *status);
     return (1);
   }
   else if (pid == -1)

@@ -59,7 +59,10 @@ static int child_routine(char **delimiter, int fd, int flag)
         if (!ft_strcmp(*delimiter, line))
         {
             if (flag == 1)
+            {
+                printf("expand\n");
                 line = expand_heredoc(line);
+            }
             ft_putstr_fd(line, fd);
             ft_putstr_fd("\n", fd); 
         }

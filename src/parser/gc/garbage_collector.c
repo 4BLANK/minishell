@@ -1,10 +1,9 @@
 #include "../../../includes/minishell.h"
 
-
-void distroy_tmps(t_tmps **lst)
+void distroy_gc(t_ast_gc **lst)
 {
-	t_tmps	*node;
-	t_tmps	*next;
+	t_ast_gc	*node;
+	t_ast_gc	*next;
 
 	if (lst && *lst)
 	{
@@ -12,23 +11,29 @@ void distroy_tmps(t_tmps **lst)
 		while (node != NULL)
 		{
 			next = node->next;
-			unlink(node->filename);
-		    free(node);
+		    if (node->node != NULL)
+				free(node->node);
+			else if (node->files != NULL)
+				clear_fileslst(&(node->files));
+			else if (node->args != NULL)
+				clear_argslst(&(node->args));
+			free(node);
 			node = next;
 		}
 		*lst = NULL;
 	}
 }
 
-t_ast_gc *new_gb(void *ptr)
+t_ast_gc *new_gb(t_ast_node *n, t_file *f, t_argument *a)
 {
     t_ast_gc *gb;
     
     gb = malloc(sizeof(t_ast_gc));
     if (gb == NULL)
         return (NULL);
-    gb->ptr = ptr;
-    gb->next = NULL;
+    gb->node = n;
+	gb->files = f;
+    gb->args = a;
     return (gb);
 }
 
@@ -52,12 +57,12 @@ void add_gb(t_ast_gc **lst, t_ast_gc *new_node)
 	}
 }
 
-void ptr_collector(void *ptr)
+void ptr_collector(t_ast_node *n, t_file *f, t_argument *a)
 {
     t_ast_gc *gb;
 
-    gb = new_gb(ptr);
+    gb = new_gb(n, f, a);
     if (gb == NULL)
-        return (gb);
+        return ;
     add_gb(&sh->trash, gb);
 }
