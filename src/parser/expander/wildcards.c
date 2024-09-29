@@ -18,13 +18,16 @@ t_argument *get_curdir_entries(void)
     de = readdir(dir);
     while (de != NULL)
     {
-        var = ft_argsnew(ft_strdup(de->d_name));
-        if (var == NULL)
-        {
-            closedir(dir);
-            return (NULL);
+        if (de->d_name[0] != '.')
+        {    
+            var = ft_argsnew(ft_strdup(de->d_name));
+            if (var == NULL)
+            {
+                closedir(dir);
+                return (NULL);
+            }
+            ft_argsadd_back(&args, var);
         }
-        ft_argsadd_back(&args, var);
         de = readdir(dir);
     }
     closedir(dir);
