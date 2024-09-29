@@ -37,7 +37,6 @@ static int child_routine(char **delimiter, int fd, int flag)
             if (flag == 1)
                 line = expand_heredoc(line);
             ft_putstr_fd(line, fd);
-            printf("%s\n", line);
             ft_putstr_fd("\n", fd); 
         }
         else
