@@ -10,7 +10,7 @@ int env_cmd(void)
     while (lst != NULL)
     {
         if (lst->value != NULL)
-            printf("%s=%s\n", lst->name, lst->value);
+            ft_printf("%s=%s\n", lst->name, lst->value);
         lst = lst->next;
     }
     return (EXIT_SUCCESS);

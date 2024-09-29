@@ -68,9 +68,9 @@ void print_env(t_envlist *envlst)
     while (envlst != NULL)
     {
         if (envlst->value == NULL)
-            printf("declare -x %s\n", envlst->name);
+            ft_printf("declare -x %s\n", envlst->name);
         else     
-            printf("declare -x %s=\"%s\"\n", envlst->name, envlst->value);
+            ft_printf("declare -x %s=\"%s\"\n", envlst->name, envlst->value);
         envlst = envlst->next;
     }
 }
