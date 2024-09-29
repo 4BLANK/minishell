@@ -45,6 +45,13 @@ CFILES = 	ft_atoi.c\
 			ft_putendl_fd.c\
 			ft_strlcat.c\
 			ft_substr.c\
+			ft_printf.c\
+			ft_putchar.c\
+			ft_putstr.c\
+			ft_putaddress.c\
+			ft_putnbr_base.c\
+			ft_putnbr_base_cap.c\
+			ft_putnbr_base_int.c\
 
 BFILES =	ft_lstnew_bonus.c\
 			ft_lstadd_front_bonus.c\
