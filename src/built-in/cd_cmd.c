@@ -41,10 +41,10 @@ int cd_cmd(char **args)
         }
         pwd = home;
     }
-    if (is_dir(pwd) != 1 || !chdir(pwd))
+    if (is_dir(pwd) != 1 || chdir(pwd))
         return (EXIT_FAILURE);
-    if (overwrite_env("PWD", pwd))
-        return (free(home), EXIT_FAILURE);
+    // if (overwrite_env("PWD", pwd))
+    //     return (free(home), EXIT_FAILURE);
     free(home);
     return (EXIT_SUCCESS);
 }

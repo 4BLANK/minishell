@@ -64,12 +64,9 @@ int chack_parn(t_token *tokenlst)
 
 int is_invalid_pipe_and(char *tmp, t_token *tok, t_token *prev_tok)
 {
-    if ((tmp[0] == CPIPE || tmp[0] == AMPERSAND) 
-        && (!prev_tok || !(tok->next)))      
-    {
-        printf("1\n");
+    if ((tmp[0] == CPIPE || (ft_strncmp(tmp, "&&", 2) == 0)) 
+        && (tok->next == NULL || prev_tok == NULL))      
         return (EXIT_FAILURE);
-    }
     return (EXIT_SUCCESS);
 }
 int is_invalid_greater_less(char *tmp, t_token *tok)
@@ -145,7 +142,7 @@ int is_invalid_special_char(char *tmp, t_token *tok, t_token *prev_tok)
         printf("1\n");
         return (EXIT_FAILURE);
     }
-    if (is_invalid_pipe_and(tmp, prev_tok, tok))
+    if (is_invalid_pipe_and(tmp, tok, prev_tok))
     {
         printf("2\n");
         return (EXIT_FAILURE);
@@ -209,7 +206,10 @@ int syntax_err_check(t_token *tokenlst)
     if (schar_detected(content[0]))
     {
       if (is_invalid_special_char(content, tok, prev_tok))
+      {
+        printf("error\n");
         return (s_error(content));
+      }
     }
     if (ft_strcmp(content, "<<"))
     {
