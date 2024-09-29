@@ -225,22 +225,3 @@ int syntax_err_check(t_token *tokenlst)
   }
   return (EXIT_SUCCESS);
 }
-
-void distroy_tmps(t_tmps **lst)
-{
-	t_tmps	*node;
-	t_tmps	*next;
-
-	if (lst && *lst)
-	{
-		node = *lst;
-		while (node != NULL)
-		{
-			next = node->next;
-			unlink(node->filename);
-		    free(node);
-			node = next;
-		}
-		*lst = NULL;
-	}
-}

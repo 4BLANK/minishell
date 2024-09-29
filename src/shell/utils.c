@@ -21,6 +21,5 @@ t_shell *setshell(char **env)
         return NULL;
     sh->envlst = init_envlist(env);
     sh->ex_status = 0;
-    sh->home = getenv("HOME");
     return (sh);
 }

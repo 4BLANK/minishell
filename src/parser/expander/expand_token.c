@@ -3,6 +3,7 @@
 static void expand_token_core(char **new_str, char *str, size_t *i);
 static void expand_env_var(char *str, char **new_str, size_t *i);
 
+// fix if env does not exist
 char *expand_heredoc(char *str)
 {
     size_t itr;

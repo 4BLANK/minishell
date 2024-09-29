@@ -2,7 +2,7 @@
 
 static void process_tok(t_token *tok, t_token **toklst);
 static int manage_flag(t_token *tok, int flag);
-static int is_all_space(char *str);
+// static int is_all_space(char *str);
 
 t_token *expand_noquotes(t_token **head)
 {
@@ -43,15 +43,16 @@ static void process_tok(t_token *tok, t_token **toklst)
     {
         str = expand_string(tok->content);
         tmp = split_tokens(str);
-        if (tok->lexem == O_FILE && (tmp == NULL || toklst_size(tmp) > 1 
-            || is_all_space(tmp->content)))
+        if (tok->lexem == O_FILE && (tmp == NULL || toklst_size(tmp) > 1))
         {
             tokens_lstclear(&tmp);
             tmp = ft_lstnew_token(ft_strdup(tok->content));
+            printf("%s\n", str);
+            printf("in\n");
             tmp->lexem = AMBIGUOUS;
             ft_lstadd_token_back(toklst, tmp);
         }
-        else if (tmp != NULL)
+        else
         {
             tmp->lexem = tok->lexem;
             ft_lstadd_token_back(toklst, tmp);
@@ -60,23 +61,23 @@ static void process_tok(t_token *tok, t_token **toklst)
     }
 }
 
-static int is_all_space(char *str)
-{
-    size_t itr;
-    int res;
+// static int is_all_space(char *str)
+// {
+//     size_t itr;
+//     int res;
 
-    itr = 0;
-    res = 0;
-    if (str == NULL)
-        return (res);
-    while (str[itr])
-    {
-        if (!is_space(str[itr]))
-            res = 1;
-        itr++;
-    }
-    return (res);
-}
+//     itr = 0;
+//     res = 0;
+//     if (str == NULL)
+//         return (res);
+//     while (str[itr])
+//     {
+//         if (!is_space(str[itr]))
+//             res = 1;
+//         itr++;
+//     }
+//     return (res);
+// }
 
 static int manage_flag(t_token *tok, int flag)
 {   

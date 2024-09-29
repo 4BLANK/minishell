@@ -16,30 +16,6 @@ char *create_file_name()
   return (res);
 }
 
-char *create_tmp()
-{
-    t_tmps *node;
-    t_tmps *tmp;
-    char *str;
-
-    str = NULL;
-    node = NULL;
-    str = create_file_name();
-    node = ft_calloc(sizeof(t_tmps), 1);
-    if (!node)
-        return (NULL);
-    node->filename = str;
-    node->next = NULL;
-    tmp = sh->tmps;
-    if (!(sh->tmps))
-        sh->tmps = node;
-    while (sh->tmps->next)
-        sh->tmps = sh->tmps->next;
-    sh->tmps->next = node;
-    sh->tmps = tmp;
-    return (str);
-}
-
 static int child_routine(char **delimiter, int fd, int flag)
 {
     char *line;
@@ -59,11 +35,9 @@ static int child_routine(char **delimiter, int fd, int flag)
         if (!ft_strcmp(*delimiter, line))
         {
             if (flag == 1)
-            {
-                printf("expand\n");
                 line = expand_heredoc(line);
-            }
             ft_putstr_fd(line, fd);
+            printf("%s\n", line);
             ft_putstr_fd("\n", fd); 
         }
         else
@@ -75,10 +49,10 @@ int here_doc(char **delimiter, int flag)
 {
   int fd;
   char *file_name;
-  pid_t pid; 
+  pid_t pid;
   int status;
 
-  file_name = create_tmp();
+  file_name = create_file_name();
   fd = open(file_name, O_CREAT | O_RDWR, 0644);
   status = 0;
   if (fd < 0)

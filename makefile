@@ -45,6 +45,11 @@ SRC =	./src/main.c\
 		./src/parser/expander/split_tokens.c\
 		./src/parser/expander/expand_token.c\
 		./src/parser/expander/expand_wildcard.c\
+		./src/parser/ast/and_ast.c\
+		./src/parser/ast/command_line_ast.c\
+		./src/parser/ast/or_ast.c\
+		./src/parser/ast/group_ast.c\
+		./src/parser/ast/pipeline_ast.c\
 
 OBJ = $(SRC:.c=.o)
 

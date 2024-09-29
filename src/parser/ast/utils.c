@@ -79,7 +79,7 @@ void	clear_argslst(t_argument **lst)
 	}
 }
 
-void	clear_fileslst(t_file **lst)
+void	clear_fileslst(t_file **lst, int flag)
 {
 	t_file	*node;
 	t_file	*next;
@@ -90,6 +90,8 @@ void	clear_fileslst(t_file **lst)
 		while (node != NULL)
 		{
 			next = node->next;
+            if (flag && node->type == HEREDOC)
+                unlink(node->name);
 		    free(node->name);
 		    free(node);
 			node = next;
@@ -98,7 +100,7 @@ void	clear_fileslst(t_file **lst)
 	}
 }
 
-void destroy_ast_core(t_ast_node *node)
+void destroy_ast_core(t_ast_node *node, int flag)
 {
     if (!node)
         return;
@@ -106,12 +108,12 @@ void destroy_ast_core(t_ast_node *node)
     {
         if (node->data.childs.left)
         {
-            destroy_ast_core(node->data.childs.left);
+            destroy_ast_core(node->data.childs.left, flag);
             //free(node->data.childs.left);
         }
         if (node->data.childs.right)
         {
-            destroy_ast_core(node->data.childs.right);
+            destroy_ast_core(node->data.childs.right, flag);
             //free(node->data.childs.right);
         }
     }
@@ -119,7 +121,7 @@ void destroy_ast_core(t_ast_node *node)
     {
         if (node->type == REDIRECTION)
         {
-            clear_fileslst(&node->data.files);
+            clear_fileslst(&node->data.files, flag);
         }
         else if (node->type == ARGUMENTS)
         {
@@ -129,11 +131,11 @@ void destroy_ast_core(t_ast_node *node)
     free(node);
 }
 
-void ast_distroy(t_ast_node **node)
+void ast_distroy(t_ast_node **node, int flag)
 {
     if (*node)
     {
-        destroy_ast_core(*node);
+        destroy_ast_core(*node, flag);
         *node = NULL;
     }
 }
@@ -207,8 +209,6 @@ t_ast_node *form_command(t_token **tokenlst)
     }
     if (args == NULL && files == NULL)
         return (NULL);
-    // ptr_collector(NULL, files, NULL);
-    // ptr_collector(NULL, files, args);    
     command = ast_create_node(COMMAND, NULL, NULL);
     if (command == NULL)
         return NULL;
