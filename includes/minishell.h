@@ -21,12 +21,9 @@ typedef struct s_tmps
 typedef struct s_shell
 {
   int ex_status;
-  char *home;
   t_envlist *envlst;
-  t_ast_gc *trash;
   int pipefd[2];
   char **args;
-  t_tmps *tmps;
 } t_shell;
 
 typedef struct s_pair
@@ -51,6 +48,5 @@ int execute_and(t_ast_node *node);
 int execute_group(t_ast_node *node, int left, int right, int clonefds[2]);
 int built_ins(char **args, int *status, t_pair *pipe_location, int pipefd[2]);
 int execute(char **args, t_pair *pipe_location, int pipefd[2], int *status);
-void distroy_tmps(t_tmps **lst);
 int exit_cmd(char **args);
 #endif

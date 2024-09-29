@@ -122,7 +122,7 @@ typedef struct s_ast_gc
 }t_ast_gc;
 
 void ptr_collector(t_ast_node *n, t_file *f, t_argument *a);
-void	clear_fileslst(t_file **lst);
+void	clear_fileslst(t_file **lst, int falg);
 void distroy_gc(t_ast_gc **lst);
 
 char *expand_token(char *str);
@@ -218,9 +218,10 @@ t_envlist *init_envlist(char **env);
 void print_env(t_envlist *envlst);
 void distroy_envlst(t_envlist **envlst);
 
-void ast_distroy(t_ast_node **node);
+void ast_distroy(t_ast_node **node, int flag);
 void print_files(t_file *files);
 
+bool check_token(t_lexeme token_lex, t_token **cur_tok);
 t_ast_node *command_line(t_token **cur_token);
 
 t_ast_node *command_line_or(t_token **cur_token);

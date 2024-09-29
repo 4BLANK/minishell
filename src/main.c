@@ -11,7 +11,6 @@ int main (void)
 
   ast = NULL;
   sh = setshell(__environ);
-  sh->tmps = NULL;
   while (1)
   {
     handle_signals(PARENT);
@@ -31,9 +30,10 @@ int main (void)
       // EXECTUTE AST
       //sh->ex_status = kickoff(ast);
       // DISTROY AST
-      distroy_tmps(&sh->tmps);
-      ast_distroy(&ast);
+      ast_distroy(&ast, 1);
     }
   }  
   return (EXIT_SUCCESS);
 }
+
+
