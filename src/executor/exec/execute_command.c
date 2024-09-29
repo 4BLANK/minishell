@@ -10,7 +10,7 @@ int parent_routine(pid_t pid, int *status, char *cmd_path)
   {
       //*status = WTERMSIG(*status);
       *status += 128;
-      printf("\n");
+      ft_printf("\n");
   }
   return (*status);
 }

@@ -44,7 +44,7 @@ int under_pipes(int *status, char **args, t_pair *l, int pipefd[2])
     if (WIFEXITED(*status))
       *status = WEXITSTATUS(*status);
     else
-      printf("\n");
+      ft_printf("\n");
     return (1);
   }
   else if (pid == -1)

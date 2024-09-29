@@ -13,7 +13,7 @@ int execute_group(t_ast_node *node, int left, int right, int clonefds[2])
     if (WIFEXITED(status))
       status = WEXITSTATUS(status);
     else
-      printf("\n");
+      ft_printf("\n");
     return (status);
   }
   else

@@ -19,6 +19,6 @@ int pwd_cmd(char **args)
         print_error("getcwd(): error!\n", 2);
         return status;
     }
-    printf("%s\n", pwd);
+    ft_printf("%s\n", pwd);
     return status;
 }

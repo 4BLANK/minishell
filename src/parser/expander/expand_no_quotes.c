@@ -47,8 +47,8 @@ static void process_tok(t_token *tok, t_token **toklst)
         {
             tokens_lstclear(&tmp);
             tmp = ft_lstnew_token(ft_strdup(tok->content));
-            printf("%s\n", str);
-            printf("in\n");
+            ft_printf("%s\n", str);
+            ft_printf("in\n");
             tmp->lexem = AMBIGUOUS;
             ft_lstadd_token_back(toklst, tmp);
         }

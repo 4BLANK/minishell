@@ -65,7 +65,7 @@ int here_doc(char **delimiter, int flag)
       else
       {
           //*status = WTERMSIG(*status);
-          printf("\n");
+          ft_printf("\n");
           status += 128;
       }
       if (!status)
