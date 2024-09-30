@@ -4,11 +4,11 @@ int parser (t_ast_node **ast, char *line)
 {
     t_token *tokenlst;
 
-    (void)ast;
     tokenlst = NULL;
     if (modify_line(&line) > 0)
         return (free(line), PARSE_ERROR);    
-    if (tokens_spliter(line, &tokenlst)  || syntax_err_check(tokenlst))
+    if (tokens_spliter(line, &tokenlst)  
+        || validate_token(tokenlst))
     {
         tokens_lstclear(&tokenlst);
         return (free(line), PARSE_ERROR);

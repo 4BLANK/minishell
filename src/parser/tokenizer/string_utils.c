@@ -84,25 +84,6 @@ char *remove_quote(char *str)
     return (newstr);
 }
 
-// int check_for_echo(t_token *tokens)
-// {
-//     char *holder;
-//     int i;
-
-//     i = 0;
-//     holder = ft_strdup(ft_lstlast_token(tokens)->content);
-//     while (holder[i] && (holder[i] != DQUOTE && holder[i] != QUOTE))
-//         i++;
-//     holder = remove_quote(holder);
-//     if (!ft_strncmp("echo", holder, 4) && ft_strlen(holder) == 4)
-//     {
-//         free(holder);
-//         return 1;
-//     }
-//     free(holder);
-//     return 0;
-// }
-
 int count_repetition(char *line, char c, int itr)
 {
     int i;

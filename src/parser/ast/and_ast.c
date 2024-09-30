@@ -1,5 +1,8 @@
 #include "../../../includes/parser.h"
 
+static t_ast_node *command_line_and_1(t_token **cur_token);
+static t_ast_node *command_line_and_2(t_token **cur_token);
+
 t_ast_node *command_line_and(t_token **cur_token)
 {
     t_ast_node *node;
@@ -16,7 +19,7 @@ t_ast_node *command_line_and(t_token **cur_token)
     return (NULL);
 }
 
-t_ast_node *command_line_and_1(t_token **cur_token)
+static t_ast_node *command_line_and_1(t_token **cur_token)
 {
     t_ast_node *cmd_and;
     t_ast_node *group;
@@ -44,7 +47,7 @@ t_ast_node *command_line_and_1(t_token **cur_token)
     return head_node;
 }
 
-t_ast_node *command_line_and_2(t_token **cur_token)
+static t_ast_node *command_line_and_2(t_token **cur_token)
 {
     return (pipe_line(cur_token));
 }
