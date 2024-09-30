@@ -1,5 +1,9 @@
 #include "../../../includes/parser.h"
 
+static t_ast_node *grouped_command_1(t_token **cur_token);
+static t_file *get_files(t_token **tokenlst);
+static t_ast_node *grouped_command_0(t_token **cur_token);
+
 t_ast_node *grouped_command(t_token **cur_token)
 {
     t_ast_node *node;
@@ -19,7 +23,7 @@ t_ast_node *grouped_command(t_token **cur_token)
     return (NULL);
 }
 
-t_file *get_files(t_token **tokenlst)
+static t_file *get_files(t_token **tokenlst)
 {
     t_file *files;
     t_file *tmp;
@@ -50,7 +54,7 @@ t_file *get_files(t_token **tokenlst)
     return (files);
 }
 
-t_ast_node *grouped_command_0(t_token **cur_token)
+static t_ast_node *grouped_command_0(t_token **cur_token)
 {
     t_ast_node *cmd;
     t_ast_node *group;
@@ -95,7 +99,7 @@ t_ast_node *grouped_command_0(t_token **cur_token)
     return (group);
 }
 
-t_ast_node *grouped_command_1(t_token **cur_token)
+static t_ast_node *grouped_command_1(t_token **cur_token)
 {
     t_ast_node *cmd;
     t_ast_node *group;

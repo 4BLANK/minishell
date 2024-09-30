@@ -52,47 +52,6 @@ size_t toklst_size(t_token *toks)
     return (len);
 }
 
-// char *expand_heredoc(char *str)
-// {
-//     size_t i;
-//     char *newstr;
-//     char *envname;
-//     char *s1;
-//     char *tmp;
-
-//     i = 0;
-//     newstr = NULL;
-//     tmp = NULL;
-//     while (str[i])
-//     {
-//         if (str[i] == DOLLAR_SIGN)
-//         {
-//             if (str[i + 1] && str[i + 1] == QUESTION_MARK)
-//             {
-//                 tmp = expand_pid_or_exit(newstr, str[i], str[i + 1]);
-//                 if (tmp != NULL)
-//                 {
-//                     newstr = tmp;
-//                     i++;
-//                 }
-//             }
-//             else
-//             {
-//                 envname = get_name(str, i + 1);
-//                 s1 = ft_strdup(ft_getenv(envname));
-//                 newstr = concat(newstr, s1, 0);
-//                 i = i + ft_strlen(envname);
-//                 free(s1);
-//                 free(envname);
-//             }
-//         }
-//         else
-//             newstr = concat(newstr, str + i, 1);
-//         i++;
-//     }
-//     return (newstr);
-// }
-
 int expander(t_token **tokens)
 {
     t_token *tmp;

@@ -1,5 +1,10 @@
 #include "../../../includes/parser.h"
 
+static t_ast_node *pipe_line_3(t_token **cur_token);
+static t_ast_node *pipe_line_1(t_token **cur_token);
+static t_ast_node *pipe_line_4(t_token **cur_token);
+static t_ast_node *pipe_line_2(t_token **cur_token);
+
 t_ast_node *pipe_line(t_token **cur_token)
 {
     t_ast_node *node;
@@ -24,7 +29,7 @@ t_ast_node *pipe_line(t_token **cur_token)
     return (NULL);
 }
 
-t_ast_node *pipe_line_3(t_token **cur_token)
+static t_ast_node *pipe_line_3(t_token **cur_token)
 {
     t_ast_node *cmd;
     t_ast_node *pipeline;
@@ -52,7 +57,7 @@ t_ast_node *pipe_line_3(t_token **cur_token)
     return head_node;
 }
 
-t_ast_node *pipe_line_1(t_token **cur_token)
+static t_ast_node *pipe_line_1(t_token **cur_token)
 {
     t_ast_node *cmd;
     t_ast_node *pipeline;
@@ -80,12 +85,12 @@ t_ast_node *pipe_line_1(t_token **cur_token)
     return head_node;
 }
 
-t_ast_node *pipe_line_4(t_token **cur_token)
+static t_ast_node *pipe_line_4(t_token **cur_token)
 {
     return (grouped_command(cur_token));
 }
 
-t_ast_node *pipe_line_2(t_token **cur_token)
+static t_ast_node *pipe_line_2(t_token **cur_token)
 {
     return (form_command(cur_token));
 }

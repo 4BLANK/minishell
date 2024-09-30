@@ -44,16 +44,13 @@ bool is_match(const char *s, const char *p) {
 
     s_len = strlen(s);
     p_len = strlen(p);
-
     dp = (bool **)malloc((s_len + 1) * sizeof(bool *));
     i = 0;
     while (i <= s_len) {
         dp[i] = (bool *)malloc((p_len + 1) * sizeof(bool));
         i++;
     }
-
     dp[0][0] = true;
-
     j = 1;
     while (j <= p_len) {
         if (p[j - 1] == '*') {
@@ -63,13 +60,11 @@ bool is_match(const char *s, const char *p) {
         }
         j++;
     }
-
     i = 1;
     while (i <= s_len) {
         dp[i][0] = false;
         i++;
     }
-
     i = 1;
     while (i <= s_len) {
         j = 1;
@@ -85,18 +80,16 @@ bool is_match(const char *s, const char *p) {
         }
         i++;
     }
-
     result = dp[s_len][p_len];
-
     i = 0;
     while (i <= s_len) {
         free(dp[i]);
         i++;
     }
     free(dp);
-
-    return result;
+    return (result);
 }
+
 
 t_argument *wildcard_core(char *pattern)
 {
@@ -125,3 +118,4 @@ t_argument *wildcard_core(char *pattern)
     clear_argslst(&hold);
     return (e_matched);
 }
+

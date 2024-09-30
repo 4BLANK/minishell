@@ -13,6 +13,67 @@ bool check_token(t_lexeme token_lex, t_token **cur_tok)
     return (false);
 }
 
+t_ast_node *ast_create_node(t_node_type type, t_argument *args, t_file *files)
+{
+    t_ast_node *new_node;
+
+    new_node = (t_ast_node *)malloc(sizeof(t_ast_node));
+    if (new_node == NULL)
+        return NULL;
+    new_node->type = type;
+    new_node->data.childs.right = NULL;
+    new_node->data.childs.left = NULL;
+    if (args != NULL)
+        new_node->data.arg_list = args;
+    else if (files != NULL)
+        new_node->data.files = files;
+    return new_node;
+}
+
+t_ast_node *form_command(t_token **tokenlst)
+{
+    void *tmp;
+    t_file *files;
+    t_argument *args;
+    t_ast_node *command;
+    int lex_tmp;
+
+    args = NULL;
+    files = NULL;
+    command  = NULL;
+    while (*tokenlst != NULL && is_schar((*tokenlst)->lexem) != 2)
+    {
+        if (is_schar((*tokenlst)->lexem) == 1)
+        {
+            lex_tmp = (*tokenlst)->lexem;
+            *tokenlst = (*tokenlst)->next;
+            if ((*tokenlst)->lexem == AMBIGUOUS)
+                lex_tmp = AMBIGUOUS;
+            tmp = (t_file *)new_file(ft_strdup((*tokenlst)->content), lex_tmp);
+            if (tmp == NULL)
+                return (NULL);
+            addfile_back(&files, tmp);
+        }
+        else if (is_schar((*tokenlst)->lexem) == 0)
+        {
+            tmp = (t_argument *)ft_argsnew(ft_strdup((*tokenlst)->content));
+            if (tmp == NULL)
+                return (NULL);
+            ft_argsadd_back(&args, tmp);
+        }
+        tmp = NULL;
+        *tokenlst = (*tokenlst)->next;
+    }
+    if (args == NULL && files == NULL)
+        return (NULL);
+    command = ast_create_node(COMMAND, NULL, NULL);
+    if (command == NULL)
+        return NULL;
+    command->data.childs.left = ast_create_node(ARGUMENTS, args, NULL);
+    command->data.childs.right = ast_create_node(REDIRECTION, NULL, files);
+    return (command);
+}
+
 t_ast_node *build_ast(t_token *tokens)
 {
     t_ast_node *ast;

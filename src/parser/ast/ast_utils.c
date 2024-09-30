@@ -32,17 +32,23 @@ t_argument	*ft_argsnew(void *content)
 	return (node);
 }
 
-t_ast_node *alloc_ast_node(t_node_type type, t_argument *args)
+void	clear_argslst(t_argument **lst)
 {
-    t_ast_node *new_node;
+	t_argument	*node;
+	t_argument	*next;
 
-    new_node = (t_ast_node *)malloc(sizeof(t_ast_node));
-    if (new_node == NULL)
-        return NULL;
-    new_node->type = type;
-    if (args != NULL)
-        new_node->data.arg_list = args;
-    return new_node;
+	if (lst && *lst)
+	{
+		node = *lst;
+		while (node != NULL)
+		{
+			next = node->next;
+		    free(node->content);
+		    free(node);
+			node = next;
+		}
+		*lst = NULL;
+	}
 }
 
 int is_schar (t_lexeme lexem)
@@ -55,93 +61,6 @@ int is_schar (t_lexeme lexem)
         return 2;
     return 0;
 }
-
-int pipe_exist(t_token *tokens)
-{
-    while (tokens != NULL)
-    {
-        if (tokens->lexem == PIPE)
-            return 1;
-        tokens = tokens->next;
-    }
-    return 0;
-}
-
-// t_ast_node *insert_right(t_ast_node *root, t_token *node){} 
-// t_ast_node *insert_left(t_node_type *head, t_node_type *node){}
-
-// ls > ls > ls
-
-
-
-// t_ast_node *new_ast_node(t_node_type type, t_token *tokens)
-// {
-//     t_ast_node *node;
-//     t_token *tmp;
-
-//     tmp = NULL;
-//     node = alloc_ast_node(type, NULL);
-//     if (type == COMMAND && tokens != NULL)
-//     {
-//         node->data.childs.right = alloc_ast_node(ARGUMENTS, args_table(tokens, ARGUMENTS));
-//         if (redirection_found(tokens))
-//         {
-//             while(tokens != NULL && is_schar(tokens->lexem) == 0)
-//                 tokens = tokens->next;
-//             node->data.childs.left = get_redirection_tree(REDIRECTION, tokens);
-            
-//         }
-//     }
-//     return node;
-// }
-
-
-// t_ast_node *generate_ast_tree(t_token *tokens)
-// {
-//     t_ast_node *root;
-//     t_ast_node *tmp;
-//     t_token *head;
-
-//     head = tokens;
-//     root = NULL;
-//     tmp = NULL;
-//     while (head != NULL)
-//     {
-//         if (root == NULL)
-//         {
-//             root = new_ast_node(COMMAND, head);
-//         }
-//         else 
-//         {
-//             if (head->lexem == CMD)
-//             {
-//                 tmp = new_ast_node(COMMAND, head);
-//                 if (root->data.childs.right == NULL)
-//                 {
-//                     root->data.childs.right = tmp;
-//                 }
-//                 else 
-//                 {
-//                     root->data.childs.left = tmp;
-//                 }
-//                 tmp = NULL;
-//             }
-//             else if (head->lexem == PIPE)
-//             {
-
-//                 tmp = new_ast_node(PIPELINE, NULL);
-//                 {
-//                     tmp->data.childs.right = root;
-//                     root = tmp;
-//                 }
-//                 root = tmp;
-//                 tmp = NULL;
-//             }
-//         }
-//         head = head->next;
-//     }
-//     return root;
-// }
 
 void print_args(t_argument *args)
 {

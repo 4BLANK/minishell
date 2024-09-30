@@ -22,7 +22,9 @@ SRC =	./src/main.c\
 		./src/parser/parser.c\
 		./src/parser/tokenizer/string_utils.c\
 		./src/parser/tokenizer/tokenizer_utils.c\
-		./src/parser/tokenizer/syntax_checker.c\
+		./src/parser/tokenizer/validate_tok.c\
+		./src/parser/tokenizer/invalid_tok.c\
+		./src/parser/tokenizer/tok_tools.c\
 		./src/parser/tokenizer/lexer.c\
 		./src/parser/ast/ast_utils.c\
 		./src/parser/ast/utils.c\
@@ -50,6 +52,7 @@ SRC =	./src/main.c\
 		./src/parser/ast/or_ast.c\
 		./src/parser/ast/group_ast.c\
 		./src/parser/ast/pipeline_ast.c\
+		./src/parser/tokenizer/lexer_tools.c\
 
 OBJ = $(SRC:.c=.o)
 

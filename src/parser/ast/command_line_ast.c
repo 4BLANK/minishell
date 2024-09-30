@@ -1,5 +1,10 @@
 #include "../../../includes/parser.h"
 
+static t_ast_node *command_line_1(t_token **cur_token);
+static t_ast_node *command_line_2(t_token **cur_token);
+static t_ast_node *command_line_3(t_token **cur_token);
+static t_ast_node *command_line_4(t_token **cur_token);
+
 t_ast_node *command_line(t_token **cur_token)
 {
     t_ast_node *node;
@@ -24,7 +29,7 @@ t_ast_node *command_line(t_token **cur_token)
     return (NULL);
 }
 
-t_ast_node *command_line_1(t_token **cur_token)
+static t_ast_node *command_line_1(t_token **cur_token)
 {
     t_ast_node *cmd_line;
     t_ast_node *group;
@@ -52,7 +57,7 @@ t_ast_node *command_line_1(t_token **cur_token)
     return (cmd_line);
 }
 
-t_ast_node *command_line_2(t_token **cur_token)
+static t_ast_node *command_line_2(t_token **cur_token)
 {
     t_ast_node *cmd_line;
     t_ast_node *group;
@@ -81,12 +86,12 @@ t_ast_node *command_line_2(t_token **cur_token)
 }
 
 
-t_ast_node *command_line_3(t_token **cur_token)
+static t_ast_node *command_line_3(t_token **cur_token)
 {
     return (grouped_command(cur_token));
 }
 
-t_ast_node *command_line_4(t_token **cur_token)
+static t_ast_node *command_line_4(t_token **cur_token)
 {
     return (command_line_or(cur_token));
 }
