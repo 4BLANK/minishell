@@ -35,8 +35,9 @@ int exit_cmd(char **args)
     }
     else
         status = sh->ex_status;
-    if (args[2])
+    if (args[1] && args[2])
     {
+        ft_putstr_fd("\n", 2);
         ft_putstr_fd("chnghl o mnghl: exit:", 2);
         ft_putstr_fd(args[1], 2);
         ft_putstr_fd(": too many arguments\n", 2);
