@@ -127,7 +127,7 @@ size_t toklst_size(t_token *toks);
 void red_lexer(t_token *tokens, int red_nbr);
 int validate_token(t_token *tokenlst);
 int is_invalid_special_char(char *tmp, t_token *tok, t_token *prev_tok);
-int s_error(char *tmp);
+int s_error(t_token *tok);
 char    *remove_quote(char *str);
 char **lst_tostrarray(t_argument *head);
 int rm_token_quotes(t_token *tokenlst);
