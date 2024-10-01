@@ -1,9 +1,16 @@
 #include "../../../includes/minishell.h"
 
-int s_error(char *tmp)
+int s_error(t_token *tok)
 {
-    (void)tmp;
-    ft_putstr_fd("changal :syntax error\n", 2);
+    char *tmp;
+    if (tok == NULL)
+        tmp = "newline";
+    else 
+        tmp = tok->content;
+    ft_putstr_fd("mongol: syntax error near unexpected token", 2); 
+    ft_putstr_fd(" `", 2);
+    ft_putstr_fd(tmp, 2);
+    ft_putstr_fd("'\n", 2);
     return (EXIT_FAILURE);
 }
 
@@ -26,9 +33,9 @@ int chack_parn(t_token *tokenlst)
         tok = tok->next;
     }
     if (p_count > 0)
-        return (s_error(")"));
+        return (print_error("unclosed parenthesis\n", 1));
     else if (p_count < 0)
-        return (s_error("("));    
+        return (print_error("unclosed parenthesis\n", 1));    
     return (EXIT_SUCCESS);
 }
 
@@ -68,7 +75,7 @@ int validate_token(t_token *tokenlst)
     if (schar_detected(content[0]))
     {
       if (is_invalid_special_char(content, tok, prev_tok))
-        return (s_error(content));
+        return (s_error(tok->next));
     }
     if (ft_strcmp(content, "<<"))
     {
