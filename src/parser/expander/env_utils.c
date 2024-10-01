@@ -53,7 +53,7 @@ char *getenv_value(char *variable)
     start = 0;
     value = NULL;
     if (variable == NULL)
-        return NULL;
+        return (NULL);
     while (variable[start] && variable[start] != '=')
         start++;
     if (start == ft_strlen(variable))
