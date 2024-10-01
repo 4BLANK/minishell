@@ -43,8 +43,8 @@ int cd_cmd(char **args)
     }
     if (is_dir(pwd) != 1 || chdir(pwd))
         return (EXIT_FAILURE);
-    // if (overwrite_env("PWD", pwd))
-    //     return (free(home), EXIT_FAILURE);
+    if (overwrite_env(ft_strdup("PWD"), ft_strdup(getcwd(NULL, 0))))
+        return (free(home), EXIT_FAILURE);
     free(home);
     return (EXIT_SUCCESS);
 }
