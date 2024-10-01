@@ -1,5 +1,38 @@
 #include "../../../includes/minishell.h"
 
+static int process_heredoc(t_token *tok);
+static int is_quoted(char *str);
+static int chack_parn(t_token *tokenlst);
+
+int validate_token(t_token *tokenlst)
+{
+  t_token *tok;
+  t_token *prev_tok;
+  int status;
+
+  tok = tokenlst;
+  prev_tok = NULL;
+  if (chack_parn(tok))
+    return (EXIT_FAILURE);
+  while (tok != NULL)
+  {
+    if (schar_detected((tok->content)[0]))
+    {
+      if (is_invalid_special_char(tok->content, tok, prev_tok))
+        return (s_error(tok->next));
+    }
+    if (ft_strcmp(tok->content, "<<"))
+    {
+        status = process_heredoc(tok);
+        if (status != 0)
+            return (status);
+    }
+    prev_tok = tok;
+    tok = tok->next;
+  }
+  return (EXIT_SUCCESS);
+}
+
 int s_error(t_token *tok)
 {
     char *tmp;
@@ -14,7 +47,34 @@ int s_error(t_token *tok)
     return (EXIT_FAILURE);
 }
 
-int chack_parn(t_token *tokenlst)
+static int process_heredoc(t_token *tok)
+{
+    int flag;
+
+    flag = 0;
+    if (!is_quoted((tok->next)->content))
+        flag = 1;
+    (tok->next)->content = remove_quote((tok->next)->content); 
+    return (here_doc(&(tok->next)->content, flag));
+}
+
+static int is_quoted(char *str)
+{
+    size_t i;
+
+    i = 0;
+    if (str == NULL)
+        return (0);
+    while (str[i])
+    {
+        if (str[i] == QUOTE || str[i] == DQUOTE)
+            return (1);
+        i++;
+    }
+    return (0);
+}
+
+static int chack_parn(t_token *tokenlst)
 {
     t_token *tok;
     char *tmp;
@@ -37,57 +97,4 @@ int chack_parn(t_token *tokenlst)
     else if (p_count < 0)
         return (print_error("unclosed parenthesis\n", 1));    
     return (EXIT_SUCCESS);
-}
-
-int is_quoted(char *str)
-{
-    size_t i;
-
-    i = 0;
-    if (str == NULL)
-        return (0);
-    while (str[i])
-    {
-        if (str[i] == QUOTE || str[i] == DQUOTE)
-            return (1);
-        i++;
-    }
-    return (0);
-}
-
-int validate_token(t_token *tokenlst)
-{
-  t_token *tok;
-  t_token *prev_tok;
-  char *content;
-  int status;
-  int flag;
-
-  tok = tokenlst;
-  prev_tok = NULL;
-  content = NULL;
-  flag = 0;
-  if (chack_parn(tok))
-    return (EXIT_FAILURE);
-  while (tok != NULL)
-  {
-    content = tok->content;
-    if (schar_detected(content[0]))
-    {
-      if (is_invalid_special_char(content, tok, prev_tok))
-        return (s_error(tok->next));
-    }
-    if (ft_strcmp(content, "<<"))
-    {
-        if (!is_quoted((tok->next)->content))
-            flag = 1;
-        (tok->next)->content = remove_quote((tok->next)->content); 
-        status = here_doc(&(tok->next)->content, flag);
-        if (status != 0)
-            return (status);
-    }
-    prev_tok = tok;
-    tok = tok->next;
-  }
-  return (EXIT_SUCCESS);
 }
