@@ -100,10 +100,11 @@ int overwrite_env(char *name, char *value)
         return (EXIT_FAILURE);
     while (env != NULL)
     {
-        if (ft_strcmp(env->name, name))
+        if (ft_strncmp(env->name, name, sizeof(name)) == 0)
         {
             tmp = env->value;
             env->value = value;
+            break;
         }
         env = env->next;
     }
