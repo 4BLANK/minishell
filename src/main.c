@@ -18,8 +18,8 @@ int main (void)
     handle_signals(IGNORE);
     if (!line)
       exit(0);
-    add_history(line);
-   
+    if (line[0] != '\0')
+      add_history(line);
     status = parser(&ast, line);
     if (status != 0)
       sh->ex_status = status;  
