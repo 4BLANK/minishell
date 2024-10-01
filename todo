@@ -31,3 +31,81 @@ remove quote
 
 
 export expand
+
+
+cat | ls
+cat has to be SIGPIPED and the prompt should get back
+
+
+-> pwd | adfa
+== TOKENS LIST =========>
+1 -> [pwd | CMD] 
+2 -> [| | PIPE] 
+3 -> [adfa | CMD] 
+
+=======EXPANDER+>
+1 -> [pwd | CMD] 
+2 -> [| | PIPE] 
+3 -> [adfa | CMD] 
+
+==243903== 
+==243903== FILE DESCRIPTORS: 5 open (3 std) at exit.
+==243903== Open file descriptor 4:
+==243903==    at 0x49D907D: pipe (pipe.c:29)
+==243903==    by 0x4026A7: start_of_piping (execute_pipeline.c:8)
+==243903==    by 0x4028BF: execute_pipeline (execute_pipeline.c:56)
+==243903==    by 0x40200F: kickoff (exec.c:8)
+==243903==    by 0x40139F: main (main.c:31)
+==243903== 
+==243903== Open file descriptor 3:
+==243903==    at 0x49D907D: pipe (pipe.c:29)
+==243903==    by 0x4026A7: start_of_piping (execute_pipeline.c:8)
+==243903==    by 0x4028BF: execute_pipeline (execute_pipeline.c:56)
+==243903==    by 0x40200F: kickoff (exec.c:8)
+==243903==    by 0x40139F: main (main.c:31)
+==243903== 
+==243903== 
+==243903== HEAP SUMMARY:
+==243903==     in use at exit: 216,488 bytes in 639 blocks
+==243903==   total heap usage: 3,521 allocs, 2,882 frees, 417,392 bytes allocated
+==243903== 
+==243903== LEAK SUMMARY:
+==243903==    definitely lost: 1,183 bytes in 81 blocks
+==243903==    indirectly lost: 375 bytes in 54 blocks
+==243903==      possibly lost: 0 bytes in 0 blocks
+==243903==    still reachable: 214,930 bytes in 504 blocks
+==243903==         suppressed: 0 bytes in 0 blocks
+==243903== Rerun with --leak-check=full to see details of leaked memory
+==243903== 
+==243903== For lists of detected and suppressed errors, rerun with: -s
+==243903== ERROR SUMMARY: 2 errors from 1 contexts (suppressed: 0 from 0)
+==243503== Syscall param access(pathname) points to unaddressable byte(s)
+==243503==    at 0x49D894B: access (access.c:27)
+==243503==    by 0x402C2B: pre_exec_errors (pre_exec_errors.c:86)
+==243503==    by 0x4025DD: execute_command (execute_command.c:47)
+==243503==    by 0x402863: end_of_piping (execute_pipeline.c:43)
+==243503==    by 0x402937: execute_pipeline (execute_pipeline.c:64)
+==243503==    by 0x40200F: kickoff (exec.c:8)
+==243503==    by 0x40139F: main (main.c:31)
+==243503==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
+==243503== 
+chnghl o mnghl: adfa: command not found
+
+
+
+asdffasd > o1
+should open o1 then check if the command is valid ola chi9lwa 
+
+touch o2
+chmod -w o2
+echo hello > o1 > o2 > o3
+!does not create o1 + does not throw error + prints hello to screen
+(maybe builtin)
+
+
+> o3
+invalid read
+
+
+""
+should give cmd not found
