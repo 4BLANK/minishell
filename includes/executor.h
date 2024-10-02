@@ -2,6 +2,8 @@
 #define CHILD 1
 #define IGNORE 2
 #define HDOC 3
+#define SAVE 0
+#define RECOVER 1
 
 //redirections
 void handle_signals(int mode);

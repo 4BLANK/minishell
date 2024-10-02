@@ -8,32 +8,39 @@ int is_built_in(char *str)
    || !(ft_strncmp(str, "unset", 6)));
 }
 
-int execute(char **args, t_pair *pipe_location, int pipefd[2], int *status)
+int execute(t_ast_node *node, t_pair *pl, int pipefd[2], int *status)
 {
-    if (!is_built_in(args[0]))
-        return (0);
-    if (pipe_location->right)
-        dup2(pipefd[1], STDOUT_FILENO);
-    if (pipe_location->left)
-        dup2(pipefd[0], STDIN_FILENO);
-    if (!ft_strncmp(args[0], "pwd", 3))
-        *status = pwd_cmd(args);
-    if (!ft_strncmp(args[0], "echo", 4))
-        *status = echo(args);
-    if (!ft_strncmp(args[0], "env", 3))
-        *status = env_cmd();
-    if (!ft_strncmp(args[0], "exit", 4))
-        *status = exit_cmd(args);
-    if (!ft_strncmp(args[0], "export", 6))
-        *status = export_cmd(args);
-    if (!ft_strncmp(args[0], "cd", 2))
-        *status = cd_cmd(args);
-    if (!ft_strncmp(args[0], "unset", 5))
-        *status = unset_cmd(args);
-    return (1);
+  if (!is_built_in(sh->args[0]))
+    return (0);
+  int save[2];
+  save[0] = dup(STDIN_FILENO);
+  save[1] = dup(STDOUT_FILENO);
+  if (redirect(node, &(pl->left), &(pl->right)))
+    exit(EXIT_FAILURE);
+  if (pl->right)
+    dup2(pipefd[1], STDOUT_FILENO);
+  if (pl->left)
+    dup2(pipefd[0], STDIN_FILENO);
+  if (!ft_strncmp(sh->args[0], "pwd", 3))
+    *status = pwd_cmd(sh->args);
+  if (!ft_strncmp(sh->args[0], "echo", 4))
+    *status = echo(sh->args);
+  if (!ft_strncmp(sh->args[0], "env", 3))
+    *status = env_cmd();
+  if (!ft_strncmp(sh->args[0], "exit", 4))
+    *status = exit_cmd(sh->args);
+  if (!ft_strncmp(sh->args[0], "export", 6))
+    *status = export_cmd(sh->args);
+  if (!ft_strncmp(sh->args[0], "cd", 2))
+    *status = cd_cmd(sh->args);
+  if (!ft_strncmp(sh->args[0], "unset", 5))
+    *status = unset_cmd(sh->args);
+  dup2(save[0], STDIN_FILENO);
+  dup2(save[1], STDOUT_FILENO);
+  return (1);
 }
 
-int under_pipes(int *status, char **args, t_pair *l, int pipefd[2])
+int under_pipes(int *status, t_ast_node *node, t_pair *l, int pipefd[2])
 {
   int pid;
 
@@ -51,16 +58,17 @@ int under_pipes(int *status, char **args, t_pair *l, int pipefd[2])
     exit(EXIT_FAILURE);
   else
   {
-    execute(args, l, pipefd, status);
+    execute(node, l, pipefd, status);
     exit(*status);
   }
 }
 
-int built_ins(char **args, int *status, t_pair *l, int pipefd[2])
+int built_ins(t_ast_node *node, int *status, t_pair *pl, int pipefd[2])
 {
-    if (is_built_in(args[0]) && (l->right || l->left))
-        return (under_pipes(status, args, l, pipefd));
-    else if (is_built_in(args[0]) && !(l->right || l->left))
-        return (execute(args, l, pipefd, status));
-    return (0);
+  sh->args = lst_tostrarray(node->data.childs.left->data.arg_list);
+  if (is_built_in(sh->args[0]) && (pl->right || pl->left))
+    return (under_pipes(status, node, pl, pipefd));
+  else if (is_built_in(sh->args[0]) && !(pl->right || pl->left))
+    return (execute(node, pl, pipefd, status));
+  return (0);
 }

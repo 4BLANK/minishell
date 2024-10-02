@@ -5,7 +5,7 @@ int redirect_output(const char *filename)
 {
   int fd;
 
-  fd = open(filename, O_CREAT | O_RDWR, 0644);
+  fd = open(filename, O_CREAT | O_RDWR | O_TRUNC, 0644);
   if (fd < 0)
   {
     perror("chnghl omnghl:");
