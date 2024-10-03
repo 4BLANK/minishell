@@ -56,6 +56,8 @@ int get_commandpath(char **cmd_path, char *cmd)
   char *cmd_p;
 
   env_path = ft_getenv("PATH");
+  if (!cmd || !cmd[0])
+    return (EXIT_SUCCESS);
   if (env_path == NULL)
   {
     *cmd_path = ft_strdup(cmd);
