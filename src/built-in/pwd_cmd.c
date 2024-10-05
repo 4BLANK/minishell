@@ -16,9 +16,10 @@ int pwd_cmd(char **args)
     if (!(pwd = getcwd(NULL, 0)))
     {
         status = 1;
+        printf("%s\n", ft_getenv("PWD"));
         print_error("getcwd(): error!\n", 2);
-        return status;
+        return (status);
     }
     ft_printf("%s\n", pwd);
-    return status;
+    return (status);
 }

@@ -55,23 +55,16 @@ size_t toklst_size(t_token *toks)
 int expander(t_token **tokens)
 {
     t_token *tmp;
-    int flag;
-
-    flag = 0;
+    
     tmp = (*tokens);
     while ((*tokens) != NULL)
     {
-        if (flag == 0 && (*tokens)->lexem == CMD 
-            && ft_strcmp((*tokens)->content, "export"))
-            flag = 1;
-        else if (flag == 1 && is_schar((*tokens)->lexem) != 0)
-            flag = 0;
-        if (!(flag == 1 && (*tokens)->lexem == ARG))
-        {
+        // if (!((*tokens)->lexem == ARG))
+        // {
             if ((*tokens)->lexem == STRING || (*tokens)->lexem == ARG 
                 || (*tokens)->lexem == CMD || (*tokens)->lexem == O_FILE)
                 (*tokens)->content = expand_token((*tokens)->content);
-        }
+        // }
         *tokens = (*tokens)->next;
     }
     *tokens = tmp;

@@ -26,7 +26,7 @@ int main (void)
     if (ast != NULL && !status)
     {
       // printf(GREEN "\n== AST =================>\n" RESET);
-      //print_ast_tree(ast, 0);
+      // print_ast_tree(ast, 0);
       // EXECTUTE AST
       sh->ex_status = kickoff(ast);
       // DISTROY AST

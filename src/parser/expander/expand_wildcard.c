@@ -3,7 +3,7 @@
 static void insert_wc_tok(t_token *head, t_token **exp_tok, t_token **newtoklst);
 static int return_expand(t_token *old_tok, t_token **new_tok);
 static t_token *args_to_toks(t_argument *args);
-static int manage_flag(t_token *tok, int flag);
+// static int manage_flag(t_token *tok, int flag);
 static int is_quoted(char *str);
 
 int expand_wildcard(t_token **toks)
@@ -11,15 +11,15 @@ int expand_wildcard(t_token **toks)
     t_token *exp_tok;
     t_token *newtoklst;
     t_token *toks_head;
-    int flag;
+    // int flag;
 
-    flag = 0;
+    // flag = 0;
     toks_head = *toks;
     exp_tok = NULL;
     newtoklst = NULL;
     while (toks_head != NULL)
     {
-        flag = manage_flag(toks_head, flag);
+        // flag = manage_flag(toks_head, flag);
         // handle wildcard inside quotes
         if (return_expand(toks_head, &exp_tok))
             return (EXIT_FAILURE);
@@ -127,12 +127,12 @@ static t_token *args_to_toks(t_argument *args)
     return (tok);
 }
 
-static int manage_flag(t_token *tok, int flag)
-{   
-    if (flag == 0 && tok->lexem == CMD 
-        && ft_strcmp(tok->content, "export"))
-        flag = 1;
-    else if (flag == 1 && is_schar(tok->lexem) != 0)
-        flag = 0;
-    return (flag);
-}
+// static int manage_flag(t_token *tok, int flag)
+// {   
+//     if (flag == 0 && tok->lexem == CMD 
+//         && ft_strcmp(tok->content, "export"))
+//         flag = 1;
+//     else if (flag == 1 && is_schar(tok->lexem) != 0)
+//         flag = 0;
+//     return (flag);
+// }
