@@ -18,7 +18,7 @@ int execute_group(t_ast_node *node, t_pair *pl, int clonefds[2], pid_t *last_pid
       ft_printf("\n");
     return (status);
   }
-  else
+  else if (pid == 0)
   {
     if (redirect(node, &(pl->left), &(pl->right)))
       exit(EXIT_FAILURE);
