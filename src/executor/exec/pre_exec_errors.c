@@ -81,7 +81,7 @@ int pre_exec_errors(char *cmd, char *cmd_path)
     on_slash_or_dot(cmd);
   else
 {
-    if (access(cmd_path, X_OK))
+    if (!cmd_path || access(cmd_path, X_OK))
     {
       printerr(cmd, 4);
       sh->ex_status = 127;

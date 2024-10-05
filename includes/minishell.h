@@ -42,11 +42,12 @@ void handler(int sig);
 int redirect(t_ast_node *cmd, int *left, int *right);
 int parser (t_ast_node **ast, char *line);
 int execute_pipeline(t_ast_node *node);
-int execute_command(t_ast_node *node, int left, int right, int pipefd[2]);
+int execute_command(t_ast_node *node, t_pair *pl, int pipefd[2], pid_t *last_pid);
 int execute_or(t_ast_node *node);
 int execute_and(t_ast_node *node);
-int execute_group(t_ast_node *node, int left, int right, int clonefds[2]);
-int built_ins(char **args, int *status, t_pair *pipe_location, int pipefd[2]);
-int execute(char **args, t_pair *pipe_location, int pipefd[2], int *status);
+int execute_group(t_ast_node *node, t_pair *pl, int clonefds[2], pid_t *last_pid);
+int built_ins(t_ast_node *node, int *status, t_pair *pipe_location, int pipefd[2]);
+/*int execute(char **args, t_pair *pipe_location, int pipefd[2], int *status);*/
 int exit_cmd(char **args);
+
 #endif
