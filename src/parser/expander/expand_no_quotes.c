@@ -1,7 +1,7 @@
 #include "../../../includes/minishell.h"
 
 static void process_tok(t_token *tok, t_token **toklst);
-static int manage_flag(t_token *tok, int flag);
+// static int manage_flag(t_token *tok, int flag);
 // static int is_all_space(char *str);
 
 t_token *expand_noquotes(t_token **head)
@@ -16,7 +16,7 @@ t_token *expand_noquotes(t_token **head)
     flag = 0;
     while (tok != NULL)
     {
-        flag = manage_flag(tok, flag);
+        // flag = manage_flag(tok, flag);
         if (flag == 0 && (is_schar(tok->lexem) == 0 
             || tok->lexem == O_FILE) && tok->lexem != DELIMITER)
             process_tok(tok, &toklst);
@@ -52,7 +52,7 @@ static void process_tok(t_token *tok, t_token **toklst)
             tmp->lexem = AMBIGUOUS;
             ft_lstadd_token_back(toklst, tmp);
         }
-        else
+        else if (tmp != NULL)
         {
             tmp->lexem = tok->lexem;
             ft_lstadd_token_back(toklst, tmp);
@@ -79,12 +79,12 @@ static void process_tok(t_token *tok, t_token **toklst)
 //     return (res);
 // }
 
-static int manage_flag(t_token *tok, int flag)
-{   
-    if (flag == 0 && tok->lexem == CMD 
-        && ft_strcmp(tok->content, "export"))
-        flag = 1;
-    else if (flag == 1 && is_schar(tok->lexem) != 0)
-        flag = 0;
-    return (flag);
-}
+// static int manage_flag(t_token *tok, int flag)
+// {   
+//     if (flag == 0 && tok->lexem == CMD 
+//         && ft_strcmp(tok->content, "export"))
+//         flag = 1;
+//     else if (flag == 1 && is_schar(tok->lexem) != 0)
+//         flag = 0;
+//     return (flag);
+// }
