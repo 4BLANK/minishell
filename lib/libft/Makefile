@@ -90,3 +90,5 @@ fclean : clean
 	$(RM) $(NAME)
 
 .PHONY : clean fclean re all
+
+.SILENT:
