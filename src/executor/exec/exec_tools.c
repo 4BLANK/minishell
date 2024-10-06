@@ -39,7 +39,7 @@ char *get_cmd_path(char *env_path, char *cmd)
   while (splited_path[itr] != NULL)
   {
     cmd_path = ft_strjoin(splited_path[itr], cmd);
-    if (!access(cmd_path, F_OK))
+    if (!access(cmd_path, F_OK) && !is_dir0(cmd_path))
     {
       free_strarray(splited_path);
       return (cmd_path);
@@ -55,6 +55,11 @@ int get_commandpath(char **cmd_path, char *cmd)
   char *env_path;
   char *cmd_p;
 
+  if (has_slash(cmd))
+  {
+    *cmd_path = ft_strdup(cmd);
+    return (EXIT_SUCCESS);
+  }
   env_path = ft_getenv("PATH");
   if (!cmd || !cmd[0])
     return (EXIT_SUCCESS);

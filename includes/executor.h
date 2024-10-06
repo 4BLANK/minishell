@@ -18,3 +18,5 @@ int tiny_check();
 int echo(char **args);
 int pre_exec_errors(char *cmd, char *cmd_path);
 int is_built_in(char *str);
+int has_slash(char *str);
+int is_dir0(char *pwd);
