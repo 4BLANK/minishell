@@ -51,8 +51,8 @@ int execute_command(t_ast_node *node, t_pair *pl, int pipefd[2], pid_t *last_pid
   status = 0;
   if (sh->args)
     get_commandpath(&cmd_path, sh->args[0]);
-  if (sh->args && built_ins(node, &status, pl, pipefd))
-    return (status);
+  if (sh->args && built_ins(node, pl, pipefd))
+    return (sh->ex_status);
   pid = fork();
   if (last_pid)
     *last_pid = pid;

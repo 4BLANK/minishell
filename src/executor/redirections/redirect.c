@@ -11,6 +11,12 @@ int redirect(t_ast_node *cmd, int *left, int *right)
   status = EXIT_SUCCESS;
   while (tmp)
   {
+    if (tmp->type == AMBIGUOUS)
+    {
+      ft_putstr_fd("ambigyowos\n", 2);
+      status = 1;
+      sh->ex_status = 1;
+    }
     if (tmp->type == O_REDIRECTION)
     {
       *right = 0;

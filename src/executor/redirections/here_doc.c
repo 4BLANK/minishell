@@ -30,7 +30,7 @@ static int child_routine(char **delimiter, int fd, int flag)
             ft_putstr_fd("chnghl o mnghl: warning: here-document delimited by EOF, wanted: ", 2);
             ft_putstr_fd(*delimiter, 2);
             ft_putstr_fd("\n", 2);
-            return (EXIT_FAILURE);
+            return (EXIT_SUCCESS);
         }
         if (!ft_strcmp(*delimiter, line))
         {
