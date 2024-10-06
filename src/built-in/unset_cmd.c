@@ -60,14 +60,19 @@ static int remove_envnode(t_envlist **env, size_t pos)
 static int dalete_var(t_envlist *env, char *name)
 {
     size_t pos;
+    t_envlist *lst;
 
     pos = 0;
-    while (env != NULL)
+    lst = env;
+    while (lst != NULL)
     {
-        if (ft_strncmp(name, env->name, sizeof(name)) == 0)
+        if (ft_strncmp(name, lst->name, sizeof(name)) == 0)
+        {
             remove_envnode(&sh->envlst, pos);
+            break;
+        }
         pos++;
-        env = env->next;
+        lst = lst->next;
     }
     return (EXIT_SUCCESS);
 }
