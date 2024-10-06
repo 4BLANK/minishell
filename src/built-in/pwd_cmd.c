@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pwd_cmd.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/06 10:14:00 by mzelouan          #+#    #+#             */
+/*   Updated: 2024/10/06 10:14:01 by mzelouan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-int	pwd_cmd(char	**args)
+int	pwd_cmd(char **args)
 {
-	int     status;
-	char    *pwd;
-       
+	int		status;
+	char	*pwd;
+
 	pwd = NULL;
 	status = 0;
 	if (str_arraysize(args) > 1)
@@ -12,7 +24,7 @@ int	pwd_cmd(char	**args)
 		print_error("pwd: too many arguments\n", 2);
 		return (1);
 	}
-    pwd = getcwd(NULL, 0);
+	pwd = getcwd(NULL, 0);
 	if (!pwd)
 	{
 		printf("%s\n", ft_getenv("PWD"));
