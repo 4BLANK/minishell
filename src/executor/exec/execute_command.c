@@ -14,6 +14,8 @@ int parent_routine(pid_t pid, int *status, t_pair *pl)
       ft_printf("\n");
     }
   }
+  free_strarray(sh->args);
+  sh->args = NULL;
   return (*status);
 }
 
@@ -21,7 +23,7 @@ int child_routine(t_ast_node *node, t_pair *pl, int pipefd[2], char **cmd_path)
 {
   handle_signals(CHILD);
   if (sh->args && get_commandpath(cmd_path, sh->args[0]))
-    return (EXIT_FAILURE);
+    exit(EXIT_FAILURE);
   if (redirect(node, &(pl->left), &(pl->right)))
     exit(EXIT_FAILURE);
   if (pl->right)
@@ -52,8 +54,8 @@ int execute_command(t_ast_node *node, t_pair *pl, int pipefd[2], pid_t *last_pid
   cmd_path = NULL;
   sh->args = lst_tostrarray(node->data.childs.left->data.arg_list);
   status = 0;
-  if (sh->args)
-    get_commandpath(&cmd_path, sh->args[0]);
+  /*if (sh->args)*/
+  /*  get_commandpath(&cmd_path, sh->args[0]);*/
   if (sh->args && built_ins(node, pl, pipefd))
     return (sh->ex_status);
   pid = fork();
