@@ -25,14 +25,17 @@ int child_routine(t_ast_node *node, t_pair *pl, int pipefd[2], char **cmd_path)
   if (redirect(node, &(pl->left), &(pl->right)))
     exit(EXIT_FAILURE);
   if (pl->right)
-    dup2(pipefd[1], STDOUT_FILENO);
-  if (pl->left)
-    dup2(pipefd[0], STDIN_FILENO);
-  if (pipefd)
   {
+    dup2(pipefd[1], STDOUT_FILENO);
     close(pipefd[1]);
+  }
+  if (pl->left)
+  {
+    dup2(pipefd[0], STDIN_FILENO);
     close(pipefd[0]);
   }
+  if (pipefd && pipefd[2])
+    close(pipefd[2]);
   if (pre_exec_errors(sh->args[0], *cmd_path))
     exit(sh->ex_status);
   if (!*cmd_path || execv(*cmd_path, sh->args) < 0)

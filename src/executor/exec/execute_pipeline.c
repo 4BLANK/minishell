@@ -1,6 +1,6 @@
 #include "../../../includes/minishell.h"
 
-int start_of_piping(t_ast_node *node, int (*clonefds)[2])
+int start_of_piping(t_ast_node *node, int (*clonefds)[3])
 {
   int status;
   status = 0;
@@ -16,7 +16,7 @@ int start_of_piping(t_ast_node *node, int (*clonefds)[2])
   return (status);
 }
 
-int middle_of_piping(t_ast_node *node, int (*clonefds)[2])
+int middle_of_piping(t_ast_node *node, int (*clonefds)[3])
 {
   int status;
   status = 0;
@@ -24,16 +24,18 @@ int middle_of_piping(t_ast_node *node, int (*clonefds)[2])
   close((*clonefds)[1]);
   pipe(sh->pipefd);
   (*clonefds)[1] = sh->pipefd[1];
+  (*clonefds)[2] = sh->pipefd[0];
   if (node->data.childs.left->type == COMMAND)
     execute_command(node->data.childs.left, (t_pair []){{1, 1}}, *clonefds, NULL);
   if (node->data.childs.left->type == GROUP_NODE)
     execute_group(node->data.childs.left, (t_pair []){{1, 1}}, *clonefds, NULL);
   close((*clonefds)[0]);
   (*clonefds)[0] = sh->pipefd[0];
+  (*clonefds)[2] = 0;
   return (status);
 }
 
-pid_t end_of_piping(t_ast_node *node, int (*clonefds)[2])
+pid_t end_of_piping(t_ast_node *node, int (*clonefds)[3])
 {
     pid_t pid;
 
@@ -73,20 +75,22 @@ int waiting(pid_t last_pid, int childs)
 
 int execute_pipeline(t_ast_node *node)
 {
-    int childs;
-    int clonefds[2];
-    pid_t pid;
+  int childs;
+  int clonefds[3];
+  pid_t pid;
 
-    start_of_piping(node, &clonefds);
+
+  clonefds[2] = 0;
+  start_of_piping(node, &clonefds);
+  node = node->data.childs.right;
+  childs = 2;
+  while (node != NULL && node->type == PIPELINE)
+  {
+    middle_of_piping(node, &clonefds);
     node = node->data.childs.right;
-    childs = 2;
-    while (node != NULL && node->type == PIPELINE)
-    {
-        middle_of_piping(node, &clonefds);
-        node = node->data.childs.right;
-        childs++;
-    }
-    clonefds[0] = sh->pipefd[0];
-    pid = end_of_piping(node, &clonefds);
-    return (waiting(pid, childs));
+    childs++;
+  }
+  clonefds[0] = sh->pipefd[0];
+  pid = end_of_piping(node, &clonefds);
+  return (waiting(pid, childs));
 }
