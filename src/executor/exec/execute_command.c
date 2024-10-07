@@ -21,7 +21,7 @@ int parent_routine(pid_t pid, int *status, t_pair *pl)
 
 int child_routine(t_ast_node *node, t_pair *pl, int pipefd[2], char **cmd_path)
 {
-  handle_signals(CHILD);
+  handle_signals(CHILD); 
   if (sh->args && get_commandpath(cmd_path, sh->args[0]))
     exit(EXIT_FAILURE);
   if (redirect(node, &(pl->left), &(pl->right)))
@@ -39,9 +39,21 @@ int child_routine(t_ast_node *node, t_pair *pl, int pipefd[2], char **cmd_path)
   if (pipefd && pipefd[2])
     close(pipefd[2]);
   if (pre_exec_errors(sh->args[0], *cmd_path))
+  {
+    free(*cmd_path);
+    free_strarray(sh->args);
+    sh->args = NULL;
     exit(sh->ex_status);
+  }
   if (!*cmd_path || execv(*cmd_path, sh->args) < 0)
+  {
+    free(*cmd_path);
+    free_strarray(sh->args);
+    sh->args = NULL;
     exit(sh->ex_status);
+  }
+  free_strarray(sh->args);
+  sh->args = NULL;
   exit(EXIT_SUCCESS);
 }
 
@@ -63,6 +75,7 @@ int execute_command(t_ast_node *node, t_pair *pl, int pipefd[2], pid_t *last_pid
     *last_pid = pid;
   if (pid > 0)
     return (parent_routine(pid, &status, pl));
-  else
+  else if (pid == 0)
     exit(child_routine(node, pl, pipefd, &cmd_path));
+  return (EXIT_FAILURE);
 }
