@@ -28,7 +28,7 @@ int execute(t_ast_node *node, t_pair *pl, int pipefd[2])
   if (!ft_strncmp(sh->args[0], "env", 3))
     sh->ex_status = env_cmd();
   if (!ft_strncmp(sh->args[0], "exit", 4))
-    sh->ex_status = exit_cmd(sh->args);
+    sh->ex_status = exit_cmd(sh->args, &(sh->ast));
   if (!ft_strncmp(sh->args[0], "export", 6))
     sh->ex_status = export_cmd(sh->args);
   if (!ft_strncmp(sh->args[0], "cd", 2))
@@ -65,7 +65,6 @@ int under_pipes(t_ast_node *node, t_pair *l, int pipefd[2])
 
 int built_ins(t_ast_node *node, t_pair *pl, int pipefd[2])
 {
-  sh->args = lst_tostrarray(node->data.childs.left->data.arg_list);
   if (is_built_in(sh->args[0]) && (pl->right || pl->left))
     return (under_pipes(node, pl, pipefd));
   else if (is_built_in(sh->args[0]) && !(pl->right || pl->left))
