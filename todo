@@ -109,3 +109,47 @@ invalid read
 
 ""
 should give cmd not found
+
+
+
+
+
+
+
+
+
+YOUNESS
+ >>x|x>x|l
+ : command not found
+==486822== Invalid read of size 8
+==486822==    at 0x402740: child_routine (execute_command.c:36)
+==486822==    by 0x4028B0: execute_command (execute_command.c:62)
+==486822==    by 0x402967: start_of_piping (execute_pipeline.c:13)
+==486822==    by 0x402C08: execute_pipeline (execute_pipeline.c:80)
+==486822==    by 0x40216F: kickoff (exec.c:8)
+==486822==    by 0x4013CB: main (main.c:31)
+==486822==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
+==486822== 
+==486822== 
+==486822== Process terminating with default action of signal 11 (SIGSEGV)
+==486822==  Access not within mapped region at address 0x0
+==486822==    at 0x402740: child_routine (execute_command.c:36)
+==486822==    by 0x4028B0: execute_command (execute_command.c:62)
+==486822==    by 0x402967: start_of_piping (execute_pipeline.c:13)
+==486822==    by 0x402C08: execute_pipeline (execute_pipeline.c:80)
+==486822==    by 0x40216F: kickoff (exec.c:8)
+==486822==    by 0x4013CB: main (main.c:31)
+==486822==  If you believe this happened as a result of a stack
+==486822==  overflow in your program's main thread (unlikely but
+==486822==  possible), you can try to increase the size of the
+==486822==  main thread stack using the --main-stacksize= flag.
+==486822==  The main thread stack size used in this run was 8388608.
+==486822== 
+==486822== HEAP SUMMARY:
+==486822==     in use at exit: 221,354 bytes in 573 blocks
+==486822==   total heap usage: 2,350 allocs, 1,777 frees, 268,533 bytes allocated
+
+CTRL-D in herdoc must be treated as finding delimeter.
+CTRL-D != CTRL-c
+only show a warning and proceed to the next herdoc
+
