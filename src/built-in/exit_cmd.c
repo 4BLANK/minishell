@@ -19,30 +19,23 @@ static int is_numeric(char *str)
 int exit_cmd(char **args, t_ast_node **ast)
 {
   (void)ast;
-  unsigned char status;
 
   ft_putstr_fd("exit\n", 1);
   if (!args)
-  {
-    status = sh->ex_status;
-    free_mem();
-    exit(status);
-  }
+    exit(free_mem(1));
   if (args[1])
   {
     if (is_numeric(args[1]))
-      status = ft_atoi(args[1]);
+      sh->ex_status = ft_atoi(args[1]);
     else
     {
       ft_putstr_fd("chnghl o mnghl: exit:", 2);
       ft_putstr_fd(args[1], 2);
       ft_putstr_fd(": numeric agrument required\n", 2);
-      free_mem();
+      free_mem(1);
       exit(2);
     }
   }
-  else
-    status = sh->ex_status;
   if (args[1] && args[2])
   {
     ft_putstr_fd("\n", 2);
@@ -51,6 +44,5 @@ int exit_cmd(char **args, t_ast_node **ast)
     ft_putstr_fd(": too many arguments\n", 2);
     return (EXIT_FAILURE);
   }
-  free_mem();
-  exit(status);
+  exit(free_mem(1));
 }

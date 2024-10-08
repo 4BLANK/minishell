@@ -20,7 +20,7 @@ typedef struct s_tmps
 
 typedef struct s_shell
 {
-  int ex_status;
+  unsigned char ex_status;
   t_envlist *envlst;
   int pipefd[2];
   char **args;
@@ -53,6 +53,6 @@ int built_ins(t_ast_node *node, t_pair *pipe_location, int pipefd[2]);
 void	ft_setenv(char *name, char *value);
 int	overwrite_env(char *name, char *value);
 int exit_cmd(char **args, t_ast_node **ast);
-void free_mem();
+int free_mem(int s);
 
 #endif
