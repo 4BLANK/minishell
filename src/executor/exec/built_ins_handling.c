@@ -59,8 +59,7 @@ int under_pipes(t_ast_node *node, t_pair *l, int pipefd[2])
   else
   {
     execute(node, l, pipefd);
-    free_mem();
-    exit(sh->ex_status);
+    exit(free_mem(1));
   }
 }
 

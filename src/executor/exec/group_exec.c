@@ -34,7 +34,8 @@ int execute_group(t_ast_node *node, t_pair *pl, int pipefd[3], pid_t *last_pid)
     }
     if (pipefd && pipefd[2])
       close(pipefd[2]);
-    exit(kickoff(node->data.childs.left));
+    kickoff(node->data.childs.left);
+    exit(free_mem(1));
   }
   else
     status = EXIT_FAILURE;
