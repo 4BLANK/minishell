@@ -1,37 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd_cmd.c                                          :+:      :+:    :+:   */
+/*   expand_herdoc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/06 10:14:00 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/07 20:45:50 by mzelouan         ###   ########.fr       */
+/*   Created: 2024/10/07 20:35:46 by mzelouan          #+#    #+#             */
+/*   Updated: 2024/10/07 21:30:37 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../../includes/minishell.h"
 
-int	pwd_cmd(char **args)
-{
-	int		status;
-	char	*pwd;
-
-	pwd = NULL;
-	status = 0;
-	if (str_arraysize(args) > 1)
-	{
-		print_error("pwd: too many arguments\n", 2);
-		return (1);
-	}
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
-	{
-		printf("%s\n", ft_getenv("PWD"));
-		print_error("getcwd(): error!\n", 2);
-		return (1);
-	}
-	ft_printf("%s\n", pwd);
-	free(pwd);
-	return (status);
-}
+// void	check_tmp(char *tmp, char **newstr, size_t *itr)
+// {
+// 	if (tmp != NULL)
+// 	{
+// 		*newstr = tmp;
+// 		(*itr)++;
+// 	}
+// }

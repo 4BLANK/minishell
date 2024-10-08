@@ -131,9 +131,7 @@ int s_error(t_token *tok);
 char    *remove_quote(char *str);
 char **lst_tostrarray(t_argument *head);
 int rm_token_quotes(t_token *tokenlst);
-char    check_quotes(char *s);
 void lexer(t_token *tokens);
-int count_repetition(char *line, char c, int itr);
 int modify_line(char **line);
 int print_error(char *error, int exit_code);
 void	ft_lstadd_token_back(t_token **lst, t_token *new_arg);
@@ -143,6 +141,15 @@ bool	ft_strcmp(char *s1, char *s2);
 char *ft_getenv(char *env_name);
 int schar_detected(char c);
 
+size_t handle_ampersand(char *line, ssize_t i);
+size_t count_operator(char *line, ssize_t i);
+size_t count_schar(char *line);
+
+int	is_invalid_cparen(char *tmp, t_token *tok, t_token *prev_tok);
+int	check_redirection(t_token *tok);
+int	toggle_quotes(char c, int flag);
+int	check_quote(char c, int *flag, char *quote);
+void	check_tmp(char *tmp, char **newstr, size_t *itr);
 
 // DEBUG TOOLS
 void print_lst(t_token *tokens);
