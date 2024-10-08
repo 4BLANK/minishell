@@ -36,10 +36,8 @@ int	unset_cmd(char **args)
 
 static int	remove_envnode(t_envlist **env, size_t pos)
 {
-	size_t		i;
 	t_envlist	*tmp;
 
-	i = 0;
 	if (*env == NULL)
 		return (EXIT_SUCCESS);
 	tmp = *env;
