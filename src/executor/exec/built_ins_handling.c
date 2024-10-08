@@ -37,8 +37,6 @@ int execute(t_ast_node *node, t_pair *pl, int pipefd[2])
     sh->ex_status = unset_cmd(sh->args);
   dup2(save[0], STDIN_FILENO);
   dup2(save[1], STDOUT_FILENO);
-  free_strarray(sh->args);
-  sh->args = NULL;
   return (1);
 }
 
@@ -61,6 +59,7 @@ int under_pipes(t_ast_node *node, t_pair *l, int pipefd[2])
   else
   {
     execute(node, l, pipefd);
+    free_mem();
     exit(sh->ex_status);
   }
 }

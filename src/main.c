@@ -31,7 +31,7 @@ int main (void)
       sh->ast = ast;
       sh->ex_status = kickoff(ast);
       // DISTROY AST
-      ast_distroy(&ast, 1);
+      free_mem();
     }
   }  
   return (EXIT_SUCCESS);

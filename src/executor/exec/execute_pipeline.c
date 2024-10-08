@@ -84,11 +84,15 @@ int execute_pipeline(t_ast_node *node)
   start_of_piping(node, &clonefds);
   node = node->data.childs.right;
   childs = 2;
+  if (sh->args)
+    free_strarray(sh->args);
   while (node != NULL && node->type == PIPELINE)
   {
     middle_of_piping(node, &clonefds);
     node = node->data.childs.right;
     childs++;
+    if (sh->args)
+      free_strarray(sh->args);
   }
   clonefds[0] = sh->pipefd[0];
   pid = end_of_piping(node, &clonefds);

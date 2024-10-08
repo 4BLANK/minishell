@@ -36,5 +36,7 @@ int execute_group(t_ast_node *node, t_pair *pl, int pipefd[3], pid_t *last_pid)
       close(pipefd[2]);
     exit(kickoff(node->data.childs.left));
   }
+  else
+    status = EXIT_FAILURE;
   return (status);
 }
