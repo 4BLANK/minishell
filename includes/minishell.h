@@ -24,6 +24,7 @@ typedef struct s_shell
   t_envlist *envlst;
   int pipefd[2];
   char **args;
+  t_ast_node *ast;
 } t_shell;
 
 typedef struct s_pair
@@ -45,10 +46,12 @@ int execute_pipeline(t_ast_node *node);
 int execute_command(t_ast_node *node, t_pair *pl, int pipefd[2], pid_t *last_pid);
 int execute_or(t_ast_node *node);
 int execute_and(t_ast_node *node);
-int execute_group(t_ast_node *node, t_pair *pl, int clonefds[2], pid_t *last_pid);
-int built_ins(t_ast_node *node, int *status, t_pair *pipe_location, int pipefd[2]);
+int execute_group(t_ast_node *node, t_pair *pl, int clonefds[3], pid_t *last_pid);
+int built_ins(t_ast_node *node, t_pair *pipe_location, int pipefd[2]);
 /*int execute(char **args, t_pair *pipe_location, int pipefd[2], int *status);*/
-int exit_cmd(char **args);
+
 void	ft_setenv(char *name, char *value);
 int	overwrite_env(char *name, char *value);
+int exit_cmd(char **args, t_ast_node **ast);
+
 #endif

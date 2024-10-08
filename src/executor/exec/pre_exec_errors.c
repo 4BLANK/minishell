@@ -1,6 +1,6 @@
 #include "../../../includes/minishell.h"
 
-static int is_dir(char *pwd)
+int is_dir0(char *pwd)
 {
   DIR *dir;
 
@@ -13,17 +13,10 @@ static int is_dir(char *pwd)
   return (0);
 }
 
-static int has_slash_or_dot(char *str)
+int has_slash(char *str)
 {
   int i;
 
-  i = 0;
-  while (str[i])
-  {
-    if (str[i] == '.' && (str[i + 1] == '/' || str[i + 1] == '.'))
-      return (1);
-    i++;
-  }
   i = 0;
   while (str[i])
   {
@@ -49,11 +42,11 @@ static void printerr(char *str, int flag)
     ft_putstr_fd(": command not found\n", 2);
 }
 
-static void on_slash_or_dot(char *cmd)
+static void on_slash(char *cmd)
 {
   if (!access(cmd, F_OK))
   {
-    if (is_dir(cmd))
+    if (is_dir0(cmd))
     {
       printerr(cmd, 1);
       sh->ex_status = 126;
@@ -77,8 +70,8 @@ static void on_slash_or_dot(char *cmd)
 int pre_exec_errors(char *cmd, char *cmd_path)
 {
   sh->ex_status = 0;
-  if (has_slash_or_dot(cmd))
-    on_slash_or_dot(cmd);
+  if (has_slash(cmd))
+    on_slash(cmd);
   else
 {
     if (!cmd_path || access(cmd_path, X_OK))

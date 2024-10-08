@@ -17,7 +17,7 @@ int main (void)
     line = readline("-> ");
     handle_signals(IGNORE);
     if (!line)
-      exit(0);
+      exit_cmd(NULL, &ast);
     if (line[0] != '\0')
       add_history(line);
     status = parser(&ast, line);
@@ -28,6 +28,7 @@ int main (void)
       printf(GREEN "\n== AST =================>\n" RESET);
       print_ast_tree(ast, 0);
       // EXECTUTE AST
+      sh->ast = ast;
       sh->ex_status = kickoff(ast);
       // DISTROY AST
       ast_distroy(&ast, 1);

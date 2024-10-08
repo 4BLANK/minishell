@@ -14,12 +14,13 @@ size_t str_arraysize(char **str)
 
 t_shell *setshell(char **env)
 {
-    t_shell *sh;
+  t_shell *sh;
 
-    sh = (t_shell *)ft_calloc(sizeof(t_shell), 1);
-    if (sh == NULL)
-        return NULL;
-    sh->envlst = init_envlist(env);
-    sh->ex_status = 0;
-    return (sh);
+  sh = (t_shell *)ft_calloc(sizeof(t_shell), 1);
+  if (sh == NULL)
+    return NULL;
+  sh->ast = NULL;
+  sh->envlst = init_envlist(env);
+  sh->ex_status = 0;
+  return (sh);
 }
