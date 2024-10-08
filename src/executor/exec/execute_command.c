@@ -14,8 +14,6 @@ int parent_routine(pid_t pid, int *status, t_pair *pl)
       ft_printf("\n");
     }
   }
-  free_strarray(sh->args);
-  sh->args = NULL;
   return (*status);
 }
 
@@ -38,22 +36,17 @@ int child_routine(t_ast_node *node, t_pair *pl, int pipefd[2], char **cmd_path)
   }
   if (pipefd && pipefd[2])
     close(pipefd[2]);
-  if (pre_exec_errors(sh->args[0], *cmd_path))
+  if (sh->args && pre_exec_errors(sh->args[0], *cmd_path))
   {
-    free(*cmd_path);
-    free_strarray(sh->args);
-    sh->args = NULL;
+    free_mem();
     exit(sh->ex_status);
   }
   if (!*cmd_path || execv(*cmd_path, sh->args) < 0)
   {
-    free(*cmd_path);
-    free_strarray(sh->args);
-    sh->args = NULL;
+    free_mem();
     exit(sh->ex_status);
   }
-  free_strarray(sh->args);
-  sh->args = NULL;
+  free_mem();
   exit(EXIT_SUCCESS);
 }
 
