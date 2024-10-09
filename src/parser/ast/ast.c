@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 12:01:53 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/07 12:01:54 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/08 21:44:26 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ t_ast_node	*form_command(t_token **tokenlst)
 	files = NULL;
 	command = NULL;
 	get_files_and_args(&files, &args, tokenlst);
-	if (args == NULL && files == NULL)
-		return (NULL);
+	// if (args == NULL && files == NULL)
+	// 	return (NULL);
 	command = ast_create_node(COMMAND, NULL, NULL);
 	if (command == NULL)
 		return (NULL);
