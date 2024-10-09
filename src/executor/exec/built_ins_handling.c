@@ -47,7 +47,7 @@ int under_pipes(t_ast_node *node, t_pair *l, int pipefd[2])
   pid = fork();
   if (pid > 0)
   {
-    waitpid(pid, &(sh->ex_status), 0);
+    waitpid(pid, (int *)&(sh->ex_status), 0);
     if (WIFEXITED(sh->ex_status))
       sh->ex_status = WEXITSTATUS(sh->ex_status);
     else
