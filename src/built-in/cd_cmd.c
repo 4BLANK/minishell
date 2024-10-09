@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:14:18 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/07 21:22:46 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/08 18:38:16 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,12 @@ int	cd_cmd(char **args)
 	}
 	if (is_dir(pwd) != 1 || chdir(pwd))
 		return (EXIT_FAILURE);
-	if (overwrite_env(ft_strdup("PWD"), ft_strdup(getcwd(NULL, 0))))
+	pwd = getcwd(NULL, 0);
+	if (overwrite_env(ft_strdup("PWD"), ft_strdup(pwd)))
+	{
 		return (free(home), EXIT_FAILURE);
+		free(pwd);
+	}
+	free(pwd);
 	return (free(home), EXIT_SUCCESS);
 }

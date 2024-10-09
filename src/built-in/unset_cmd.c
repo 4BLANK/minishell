@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:29:59 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/06 13:30:00 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/08 18:33:21 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ static void	delete_from_middle(size_t pos, t_envlist *tmp)
 		return ;
 	node = tmp->next->next;
 	free((tmp->next)->name);
+	free((tmp->next)->value);
 	free(tmp->next);
 	tmp->next = node;
 	tmp = NULL;

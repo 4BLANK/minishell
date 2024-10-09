@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 14:42:12 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/07 14:43:05 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/08 19:18:50 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ t_envlist	*init_envlist(char **env)
 {
 	t_envlist	*envlst;
 	t_envlist	*tmp;
+	char *name;
+	char *value;
 	size_t		i;
 
 	i = 0;
@@ -83,7 +85,9 @@ t_envlist	*init_envlist(char **env)
 	tmp = NULL;
 	while (env[i])
 	{
-		tmp = lstnew_env(getenv_name(env[i]), getenv_value(env[i]));
+		name = getenv_name(env[i]);
+		value = getenv_value(env[i]);
+		tmp = lstnew_env(name, value);
 		lstadd_env_back(&envlst, tmp);
 		i++;
 	}
