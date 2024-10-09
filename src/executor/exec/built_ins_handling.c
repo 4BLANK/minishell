@@ -37,12 +37,20 @@ int	execute(t_ast_node *node, t_pair *pl, int pipefd[2])
 	if (redirect(node, &(pl->left), &(pl->right)))
 		return (EXIT_FAILURE);
 	if (pl->right)
+	{
 		dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[1]);
+	}
 	if (pl->left)
+	{
 		dup2(pipefd[0], STDIN_FILENO);
+		close(pipefd[0]);
+	}
 	type_shi();
 	dup2(save[0], STDIN_FILENO);
+	close(save[0]);
 	dup2(save[1], STDOUT_FILENO);
+	close(save[1]);
 	return (1);
 }
 
