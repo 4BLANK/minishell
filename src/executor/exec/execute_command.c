@@ -9,8 +9,8 @@ int parent_routine(pid_t pid, int *status, t_pair *pl)
       *status = WEXITSTATUS(*status);
     else
     {
-      //*status = WTERMSIG(*status);
-      *status += 128;
+      *status = WTERMSIG(*status) + 128;
+      // *status += 128;
       ft_printf("\n");
     }
   }

@@ -1,0 +1,13 @@
+bin
+grammar.txt
+includes
+lib
+makefile
+minishell
+o1
+o2
+o3
+readline.supp
+src
+todo
+x
