@@ -4,7 +4,6 @@ void handler(int sig)
 {
   if (sig == SIGINT)
   {
-    sh->ex_status = SIGINT + 128;
     rl_on_new_line();
     write(1, "\n", 1);
     rl_replace_line("", 0);

@@ -37,12 +37,22 @@ int	execute(t_ast_node *node, t_pair *pl, int pipefd[2])
 	if (redirect(node, &(pl->left), &(pl->right)))
 		return (EXIT_FAILURE);
 	if (pl->right)
+	{
 		dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[1]);
+	}
 	if (pl->left)
+	{
 		dup2(pipefd[0], STDIN_FILENO);
+		close(pipefd[0]);
+	}
+	if (pipefd && pipefd[2])
+		close(pipefd[2]);
 	type_shi();
 	dup2(save[0], STDIN_FILENO);
+	close(save[0]);
 	dup2(save[1], STDOUT_FILENO);
+	close(save[1]);
 	return (1);
 }
 
@@ -57,7 +67,10 @@ int	under_pipes(t_ast_node *node, t_pair *l, int pipefd[2])
 		if (WIFEXITED(sh->ex_status))
 			sh->ex_status = WEXITSTATUS(sh->ex_status);
 		else
+    {
+			sh->ex_status = WTERMSIG(sh->ex_status) + 128;
 			ft_printf("\n");
+    }
 		return (1);
 	}
 	else if (pid == -1)

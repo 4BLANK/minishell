@@ -71,8 +71,7 @@ int	waiting(pid_t last_pid, int childs)
 		last_exit_status = WEXITSTATUS(last_exit_status);
 	else if (WIFSIGNALED(last_exit_status))
 	{
-		last_exit_status = WTERMSIG(last_exit_status);
-		last_exit_status += 128;
+		last_exit_status = WTERMSIG(last_exit_status + 128);
 		ft_printf("\n");
 	}
 	return (last_exit_status);
