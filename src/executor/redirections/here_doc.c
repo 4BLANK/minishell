@@ -66,9 +66,8 @@ int	here_doc(char **delimiter, int flag)
 			status = WEXITSTATUS(status);
 		else
 		{
-			//*status = WTERMSIG(*status);
+			status = WTERMSIG(status + 128);
 			ft_printf("\n");
-			status += 128;
 		}
 		if (!status)
 		{

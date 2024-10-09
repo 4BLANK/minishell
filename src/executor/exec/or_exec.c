@@ -24,15 +24,15 @@ int	execute_or(t_ast_node *node)
 	unsigned char	status;
 
 	status = 1;
-	while (status != 0 && node != NULL && node->type == OR_NODE)
+	while (status != 0 && status != 130 && node != NULL && node->type == OR_NODE)
 		status = routine(&node);
-	if (status != 0 && node->type == AND_NODE)
+	if (status != 0 && status != 130 && node->type == AND_NODE)
 		status = execute_and(node);
-	if (status != 0 && node->type == COMMAND)
+	if (status != 0 && status != 130 && node->type == COMMAND)
 		status = execute_command(node, (t_pair[]){{0, 0}}, NULL, NULL);
-	if (status != 0 && node->type == GROUP_NODE)
+	if (status != 0 && status != 130 && node->type == GROUP_NODE)
 		status = execute_group(node, (t_pair[]){{0, 0}}, NULL, NULL);
-	if (status != 0 && node->type == PIPELINE)
+	if (status != 0 && status != 130 && node->type == PIPELINE)
 		status = execute_pipeline(node);
 	return (status);
 }

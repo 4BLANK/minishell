@@ -46,6 +46,8 @@ int	execute(t_ast_node *node, t_pair *pl, int pipefd[2])
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
 	}
+	if (pipefd && pipefd[2])
+		close(pipefd[2]);
 	type_shi();
 	dup2(save[0], STDIN_FILENO);
 	close(save[0]);
@@ -65,7 +67,10 @@ int	under_pipes(t_ast_node *node, t_pair *l, int pipefd[2])
 		if (WIFEXITED(sh->ex_status))
 			sh->ex_status = WEXITSTATUS(sh->ex_status);
 		else
+    {
+			sh->ex_status = WTERMSIG(sh->ex_status) + 128;
 			ft_printf("\n");
+    }
 		return (1);
 	}
 	else if (pid == -1)
