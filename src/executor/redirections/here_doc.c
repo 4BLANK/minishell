@@ -32,6 +32,8 @@ static int	child_routine(char **delimiter, int fd, int flag)
 							2);
 			ft_putstr_fd(*delimiter, 2);
 			ft_putstr_fd("\n", 2);
+      free(*delimiter);
+      free_mem(1);
 			return (EXIT_SUCCESS);
 		}
 		if (!ft_strcmp(*delimiter, line))
@@ -40,9 +42,10 @@ static int	child_routine(char **delimiter, int fd, int flag)
 				line = expand_heredoc(line);
 			ft_putstr_fd(line, fd);
 			ft_putstr_fd("\n", fd);
+      free(line);
 		}
 		else
-			return (EXIT_SUCCESS);
+			return (free_mem(1), EXIT_SUCCESS);
 	}
 }
 
