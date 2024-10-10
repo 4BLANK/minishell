@@ -40,8 +40,10 @@ int	execute(t_ast_node *node, t_pair *pl, int pipefd[2])
     close(save[0]);
     dup2(save[1], STDOUT_FILENO);
     close(save[1]);
-    close(pipefd[1]);
-    close(pipefd[0]);
+    if (pipefd && pipefd[1])
+      close(pipefd[1]);
+    if (pipefd && pipefd[0])
+      close(pipefd[0]);
     if (pipefd && pipefd[2])
       close(pipefd[2]);
 		return (EXIT_FAILURE);
