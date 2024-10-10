@@ -35,7 +35,17 @@ int	execute(t_ast_node *node, t_pair *pl, int pipefd[2])
 	save[0] = dup(STDIN_FILENO);
 	save[1] = dup(STDOUT_FILENO);
 	if (redirect(node, &(pl->left), &(pl->right)))
+  {
+    dup2(save[0], STDIN_FILENO);
+    close(save[0]);
+    dup2(save[1], STDOUT_FILENO);
+    close(save[1]);
+    close(pipefd[1]);
+    close(pipefd[0]);
+    if (pipefd && pipefd[2])
+      close(pipefd[2]);
 		return (EXIT_FAILURE);
+  }
 	if (pl->right)
 	{
 		dup2(pipefd[1], STDOUT_FILENO);

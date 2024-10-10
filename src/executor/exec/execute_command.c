@@ -28,7 +28,13 @@ int	child_routine(t_ast_node *node, t_pair *pl, int pipefd[2], char **cmd_path)
 	if (sh->args && get_commandpath(cmd_path, sh->args[0]))
 		exit(free_mem(1));
 	if (redirect(node, &(pl->left), &(pl->right)))
+  {
+    close(pipefd[1]);
+    close(pipefd[0]);
+    if (pipefd && pipefd[2])
+      close(pipefd[2]);
 		exit(free_mem(1));
+  }
 	if (pl->right)
 	{
 		dup2(pipefd[1], STDOUT_FILENO);
