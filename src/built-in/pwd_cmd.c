@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 10:14:00 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/07 20:45:50 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/10 17:33:27 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	pwd_cmd(char **args)
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 	{
-		printf("%s\n", ft_getenv("PWD"));
 		print_error("getcwd(): error!\n", 2);
 		return (1);
 	}
