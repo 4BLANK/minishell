@@ -48,6 +48,7 @@ static int	linessssss(char *cmd_p, char **cmd_path, char *env_path, char *cmd)
 		*cmd_path = ft_strdup(cmd);
 		return (EXIT_SUCCESS);
 	}
+	free(cmd_p);
 	return (EXIT_FAILURE);
 }
 
@@ -73,6 +74,5 @@ int	get_commandpath(char **cmd_path, char *cmd)
 	}
 	if (!linessssss(cmd_p, cmd_path, env_path, cmd))
 		return (EXIT_SUCCESS);
-	free(cmd_p);
 	return (EXIT_SUCCESS);
 }
