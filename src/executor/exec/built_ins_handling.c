@@ -60,11 +60,11 @@ int	execute(t_ast_node *node, t_pair *pl, int pipefd[2])
 	}
 	if (pipefd && pipefd[2])
 		close(pipefd[2]);
-	type_shi();
 	dup2(save[0], STDIN_FILENO);
 	close(save[0]);
 	dup2(save[1], STDOUT_FILENO);
 	close(save[1]);
+	type_shi();
 	return (1);
 }
 
