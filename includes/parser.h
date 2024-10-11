@@ -18,6 +18,7 @@
 #define MAGENTA "\x1b[35m"
 #define CYAN "\x1b[36m"
 
+#define DOOMSDAY 69
 # define QUOTE 39
 # define DQUOTE 34
 # define CPIPE 124

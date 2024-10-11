@@ -11,6 +11,19 @@ void handler(int sig)
   }
 }
 
+void here_doc_handler(int sig)
+{
+  (void)sig;
+  unlink(shd()->filename);
+  free(shd()->filename);
+  shd()->filename = NULL;
+  tokens_lstclear(shd()->tokens);
+  close(shd()->fd);
+  distroy_envlst(&sh->envlst);
+  free(sh);
+  exit(DOOMSDAY);
+}
+
 void handle_signals(int mode)
 {
   if (mode == PARENT)
@@ -20,7 +33,7 @@ void handle_signals(int mode)
   }
   if (mode == HDOC)
   {
-    signal(SIGINT, SIG_DFL);
+    signal(SIGINT, here_doc_handler);
     signal(SIGQUIT, SIG_IGN);
   }
   if (mode == CHILD)

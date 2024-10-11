@@ -58,22 +58,23 @@ int	waiting(pid_t last_pid, int childs)
 {
 	int	last_exit_status;
 	int	exit_status;
+  int printed;
 
 	last_exit_status = 0;
 	exit_status = 0;
+  printed = 0;
 	while (childs)
 	{
 		if (wait(&exit_status) == last_pid)
 			last_exit_status = exit_status;
+    if (WIFSIGNALED(exit_status) && !printed)
+      printed = ft_printf("\n");
 		childs--;
 	}
 	if (WIFEXITED(last_exit_status))
 		last_exit_status = WEXITSTATUS(last_exit_status);
 	else if (WIFSIGNALED(last_exit_status))
-	{
 		last_exit_status = WTERMSIG(last_exit_status) + 128;
-		ft_printf("\n");
-	}
 	return (last_exit_status);
 }
 

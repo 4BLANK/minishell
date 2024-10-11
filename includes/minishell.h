@@ -33,6 +33,14 @@ typedef struct s_pair
   int right;
 } t_pair;
 
+typedef struct s_hdata
+{
+  t_token **tokens;
+  char *delimiter;
+  char *filename;
+  int fd;
+} t_hdata;
+
 char **lst_tostrarray(t_argument *head);
 int kickoff(t_ast_node *node);
 
@@ -54,5 +62,7 @@ void	ft_setenv(char *name, char *value);
 int	overwrite_env(char *name, char *value);
 int exit_cmd(char **args, t_ast_node **ast);
 int free_mem(int s);
+void set_heredoc_signal_data(t_token **t, char *f, char *d, int fd);
+t_hdata *shd();
 
 #endif
