@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 10:14:00 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/10 17:33:27 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/11 01:30:24 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,9 @@ int	pwd_cmd(char **args)
 	int		status;
 	char	*pwd;
 
+	(void)args;
 	pwd = NULL;
 	status = 0;
-	if (str_arraysize(args) > 1)
-	{
-		print_error("pwd: too many arguments\n", 2);
-		return (1);
-	}
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 	{

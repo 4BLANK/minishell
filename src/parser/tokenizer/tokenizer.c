@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 14:04:40 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/07 21:34:41 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/11 02:09:16 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,15 @@ int	tokens_spliter(char *line, t_token **toklst)
 		{
 			tok_end = find_tok_end(line, itr, &quote_flag, &quote_type);
 			if (quote_flag == 1)
-				return (print_error("unclosed quote detected!\n", 2));
+				return (free(line), print_error("unclosed quote detected!\n", 2));
 			if (itr == tok_end || extract_tok(line, itr, tok_end, toklst))
-				return (print_error("tokenizer error!\n", 2));
+				return (free(line), print_error("tokenizer error!\n", 2));
 			itr = tok_end;
 		}
 		if (line[itr] != '\0')
 			itr++;
 	}
-	return (EXIT_SUCCESS);
+	return (free(line), EXIT_SUCCESS);
 }
 
 // int	check_quote(char c, int *flag, char *quote)

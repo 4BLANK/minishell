@@ -2,15 +2,16 @@
 
 int	parent_routine(pid_t pid, int *status, t_pair *pl)
 {
-	if (sh->args && pl && !(pl->right) && !(pl->left)
-		&& !(is_built_in(sh->args[0])))
+	if ((sh->args == NULL && pl && !(pl->right) && !(pl->left)) 
+	|| (sh->args && pl && !(pl->right) && !(pl->left)
+		&& !(is_built_in(sh->args[0]))))
 	{
 		waitpid(pid, status, 0);
 		if (WIFEXITED(*status))
 			*status = WEXITSTATUS(*status);
 		else
 		{
-      *status = WTERMSIG(*status) + 128;
+      		*status = WTERMSIG(*status) + 128;
 			ft_printf("\n");
 		}
 	}
@@ -27,14 +28,17 @@ int	child_routine(t_ast_node *node, t_pair *pl, int pipefd[2], char **cmd_path)
 	handle_signals(CHILD);
 	if (sh->args && get_commandpath(cmd_path, sh->args[0]))
 		exit(free_mem(1));
-	if (redirect(node, &(pl->left), &(pl->right)))
-  {
-    close(pipefd[1]);
-    close(pipefd[0]);
-    if (pipefd && pipefd[2])
-      close(pipefd[2]);
+	if (redirect(node, &(pl->left), &(pl->right)) != 0)
+	{
+		printf("1\n");
+		if (pipefd && pipefd[1])
+			close(pipefd[1]);
+		if (pipefd && pipefd[0])
+			close(pipefd[0]);
+		if (pipefd && pipefd[2])
+			close(pipefd[2]);
 		exit(free_mem(1));
-  }
+	}
 	if (pl->right)
 	{
 		dup2(pipefd[1], STDOUT_FILENO);

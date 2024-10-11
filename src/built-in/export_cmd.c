@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:19:25 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/06 13:21:03 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/11 01:16:08 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,13 @@ int	export_var(char *arg)
 		return (EXIT_FAILURE);
 	name = getenv_name(arg);
 	value = getenv_value(arg);
+	if (value == NULL && ft_strlen(name) != ft_strlen(arg))
+	{
+		value = malloc(1);
+		if (value == NULL)
+			return (EXIT_FAILURE);
+		value[0] = '\0';
+	}
 	ft_setenv(name, value);
 	return (EXIT_SUCCESS);
 }

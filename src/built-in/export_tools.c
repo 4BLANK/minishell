@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:20:28 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/06 13:23:07 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/11 01:27:22 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,16 @@ void	ft_setenv(char *name, char *value)
 	var = NULL;
 	if (name == NULL)
 		return ;
-	value = remove_quote(value);
 	if (env_exist(name) && value != NULL)
 	{
 		if (overwrite_env(name, value))
 			return ;
 	}
 	else if (env_exist(name) && value == NULL)
+	{
+		free(name);
 		return ;
+	}
 	else
 	{
 		var = lstnew_env(name, value);

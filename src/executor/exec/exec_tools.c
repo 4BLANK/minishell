@@ -61,7 +61,7 @@ int	get_commandpath(char **cmd_path, char *cmd)
 	env_path = NULL;
 	if (has_slash(cmd))
 	{
-		*cmd_path = ft_strdup(cmd);
+		*cmd_path = ft_strdup(cmd); // dak leak ra mnhna 
 		return (EXIT_SUCCESS);
 	}
 	env_path = ft_getenv("PATH");
