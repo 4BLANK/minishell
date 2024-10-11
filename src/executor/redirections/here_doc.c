@@ -83,13 +83,14 @@ int	here_doc(char **delimiter, int flag, t_token **toklst)
 	else if (pid == 0)
 	{
 		status = child_routine(delimiter, fd, flag);
-		// AYMAN FREE HADCHI TAHOWA MN DIR CTR-C OLA CHI 9LWA RA HADCHI LI KHASO ITFREIA
+		// AYMAN FREE HADCHI TAHOWA MN DIR CTR-C, CTR-D OLA CHI 9LWA RA HADCHI LI KHASO ITFREIA
 		free(file_name);
 		free(*delimiter);
 		*delimiter = NULL;
 		tokens_lstclear(toklst);
 		distroy_envlst(&sh->envlst);
 		free(sh);
+		// AYMAN RA KHASK TCLOSE THE FD LI 7ELITI LFO9 RAH TI LEAKI
 		exit(status);
 	}
 	return (status);
