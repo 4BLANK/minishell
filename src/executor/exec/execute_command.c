@@ -15,7 +15,6 @@ int	parent_routine(pid_t pid, int *status, t_pair *pl)
       ft_printf("\n");
 		}
 	}
-	
 	return (*status);
 }
 
