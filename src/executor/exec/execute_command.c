@@ -9,10 +9,10 @@ int	parent_routine(pid_t pid, int *status, t_pair *pl)
 		waitpid(pid, status, 0);
 		if (WIFEXITED(*status))
 			*status = WEXITSTATUS(*status);
-		else
+		else if (WIFSIGNALED(*status))
 		{
-      		*status = WTERMSIG(*status) + 128;
-			ft_printf("\n");
+      *status = WTERMSIG(*status) + 128;
+      ft_printf("\n");
 		}
 	}
 	if (sh->args)
@@ -30,7 +30,6 @@ int	child_routine(t_ast_node *node, t_pair *pl, int pipefd[2], char **cmd_path)
 		exit(free_mem(1));
 	if (redirect(node, &(pl->left), &(pl->right)) != 0)
 	{
-		printf("1\n");
 		if (pipefd && pipefd[1])
 			close(pipefd[1]);
 		if (pipefd && pipefd[0])

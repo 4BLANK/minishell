@@ -31,11 +31,7 @@ static int	child_routine(char **delimiter, int fd, int flag)
 				wanted: ", 2);
 			ft_putstr_fd(*delimiter, 2);
 			ft_putstr_fd("\n", 2);
-      		// free(*delimiter);
-      		// free_mem(1);
-			// HNAIA DIMA TAT EXITI BI 0 ?????
-			// CTR-C RA MAKHDAMACH HNAIA 
-			// &IYAD LEAK HNAIA
+      close(fd);
 			return (EXIT_SUCCESS);
 		}
 		if (!ft_strcmp(*delimiter, line))
@@ -44,7 +40,7 @@ static int	child_routine(char **delimiter, int fd, int flag)
 				line = expand_heredoc(line);
 			ft_putstr_fd(line, fd);
 			ft_putstr_fd("\n", fd);
-      		free(line);
+      free(line);
 		}
 		else
 			return (EXIT_SUCCESS);
@@ -79,18 +75,21 @@ int	here_doc(char **delimiter, int flag, t_token **toklst)
 			free(*delimiter);
 			*delimiter = file_name;
 		}
+    else if (status == DOOMSDAY)
+      free(file_name);
+    close(fd);
 	}
 	else if (pid == 0)
 	{
+    set_heredoc_signal_data(toklst, file_name, *delimiter, fd);
 		status = child_routine(delimiter, fd, flag);
-		// AYMAN FREE HADCHI TAHOWA MN DIR CTR-C, CTR-D OLA CHI 9LWA RA HADCHI LI KHASO ITFREIA
 		free(file_name);
 		free(*delimiter);
 		*delimiter = NULL;
 		tokens_lstclear(toklst);
 		distroy_envlst(&sh->envlst);
 		free(sh);
-		// AYMAN RA KHASK TCLOSE THE FD LI 7ELITI LFO9 RAH TI LEAKI
+    close(fd);
 		exit(status);
 	}
 	return (status);
