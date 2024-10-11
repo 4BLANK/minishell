@@ -31,6 +31,7 @@ int	child_routine(t_ast_node *node, t_pair *pl, int pipefd[2], char **cmd_path)
 			close(pipefd[0]);
 		if (pipefd && pipefd[2])
 			close(pipefd[2]);
+    free(*cmd_path);
 		exit(free_mem(1));
 	}
 	if (pl->right)
