@@ -16,6 +16,8 @@ static unsigned char	routine(t_ast_node **node)
 	if ((*node)->data.childs.left->type == OR_NODE)
 		status = execute_or((*node)->data.childs.left);
 	(*node) = (*node)->data.childs.right;
+	if (status == 0 && sh && sh->args)
+		free_strarray(sh->args);
 	return (status);
 }
 
