@@ -6,23 +6,23 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 14:05:06 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/07 15:53:49 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/11 01:59:47 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-static int	process_heredoc(t_token *tok);
+static int	process_heredoc(t_token *tok, t_token **toklst);
 static int	is_quoted(char *str);
 static int	chack_parn(t_token *tokenlst);
 
-int	validate_token(t_token *tokenlst)
+int	validate_token(t_token **tokenlst)
 {
 	t_token	*tok;
 	t_token	*prev_tok;
 	int		status;
 
-	tok = tokenlst;
+	tok = *tokenlst;
 	prev_tok = NULL;
 	if (chack_parn(tok))
 		return (EXIT_FAILURE);
@@ -35,7 +35,7 @@ int	validate_token(t_token *tokenlst)
 		}
 		if (ft_strcmp(tok->content, "<<"))
 		{
-			status = process_heredoc(tok);
+			status = process_heredoc(tok, tokenlst);
 			if (status != 0)
 				return (status);
 		}
@@ -60,7 +60,7 @@ int	s_error(t_token *tok)
 	return (EXIT_FAILURE);
 }
 
-static int	process_heredoc(t_token *tok)
+static int	process_heredoc(t_token *tok, t_token **toklst)
 {
 	int	flag;
 
@@ -68,7 +68,7 @@ static int	process_heredoc(t_token *tok)
 	if (!is_quoted((tok->next)->content))
 		flag = 1;
 	(tok->next)->content = remove_quote((tok->next)->content);
-	return (here_doc(&(tok->next)->content, flag));
+	return (here_doc(&(tok->next)->content, flag, toklst));
 }
 
 static int	is_quoted(char *str)

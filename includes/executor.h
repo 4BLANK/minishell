@@ -11,7 +11,7 @@ int get_commandpath(char **cmd_path, char *cmd);
 int redirect_input(const char *filename);
 int redirect_output(const char *filename);
 int append_redirect_output(const char *filename);
-int here_doc(char **delimiter, int flag);
+int here_doc(char **delimiter, int flag, t_token **toklst);
 int check_error_type(char *cmd_path);
 int specify_error(int status, char *cmd_path);
 int tiny_check();

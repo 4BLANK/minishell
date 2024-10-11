@@ -153,3 +153,123 @@ CTRL-D in herdoc must be treated as finding delimeter.
 CTRL-D != CTRL-c
 only show a warning and proceed to the next herdoc
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+./ls
+chnghl o mnghl: ./ls: no such file or directory
+==210330== 
+==210330== HEAP SUMMARY:
+==210330==     in use at exit: 209,087 bytes in 273 blocks
+==210330==   total heap usage: 2,142 allocs, 1,869 frees, 454,143 bytes allocated
+==210330== 
+==210330== 5 bytes in 1 blocks are still reachable in loss record 5 of 75
+==210330==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==210330==    by 0x40AD61: ft_strdup (in /nfs/homes/mzelouan/Desktop/mini/minishell)
+==210330==    by 0x4026CA: get_commandpath (exec_tools.c:64)
+==210330==    by 0x40297C: child_routine (execute_command.c:28)
+==210330==    by 0x402BF3: execute_command (execute_command.c:75)
+==210330==    by 0x4023A6: kickoff (exec.c:10)
+==210330==    by 0x4013C7: main (main.c:32)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1 -> [echo | CMD] 
+2 -> [$HOME | ARG] 
+==217932== Invalid read of size 1
+==217932==    at 0x40A7C5: ft_strlen (in /nfs/homes/mzelouan/Desktop/mini/minishell)
+==217932==    by 0x40ADAC: ft_strdup (in /nfs/homes/mzelouan/Desktop/mini/minishell)
+==217932==    by 0x4048A6: expand_env_var (expand_token.c:134)
+==217932==    by 0x404AFE: expand_token_core (expand_token.c:124)
+==217932==    by 0x404A37: expand_string (expand_token.c:76)
+==217932==    by 0x404668: process_tok (expand_no_quotes.c:53)
+==217932==    by 0x4045A5: expand_noquotes (expand_no_quotes.c:31)
+==217932==    by 0x404484: expander_core (expander.c:86)
+==217932==    by 0x403A39: parser (parser.c:31)
+==217932==    by 0x40137D: main (main.c:23)
+==217932==  Address 0x4b21960 is 0 bytes inside a block of size 20 free'd
+==217932==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==217932==    by 0x405A4B: cd_cmd (cd_cmd.c:72)
+==217932==    by 0x40212D: type_shi (built_ins_handling.c:24)
+==217932==    by 0x401F3B: execute (built_ins_handling.c:63)
+==217932==    by 0x40232D: built_ins (built_ins_handling.c:102)
+==217932==    by 0x402B9A: execute_command (execute_command.c:67)
+==217932==    by 0x4023C6: kickoff (exec.c:10)
+==217932==    by 0x4013E3: main (main.c:32)
+==217932==  Block was alloc'd at
+==217932==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==217932==    by 0x4085D1: remove_quote (extra_string_tools.c:75)
+==217932==    by 0x403FD2: getenv_value (env_utils.c:43)
+==217932==    by 0x40417C: init_envlist (env_utils.c:89)
+==217932==    by 0x4058EB: setshell (sh_utils.c:23)
+==217932==    by 0x401313: main (main.c:13)
+==217932== 
+==217932== Invalid read of size 1
+==217932==    at 0x40ADF9: ft_strdup (in /nfs/homes/mzelouan/Desktop/mini/minishell)
+==217932==    by 0x4048A6: expand_env_var (expand_token.c:134)
+==217932==    by 0x404AFE: expand_token_core (expand_token.c:124)
+==217932==    by 0x404A37: expand_string (expand_token.c:76)
+==217932==    by 0x404668: process_tok (expand_no_quotes.c:53)
+==217932==    by 0x4045A5: expand_noquotes (expand_no_quotes.c:31)
+==217932==    by 0x404484: expander_core (expander.c:86)
+==217932==    by 0x403A39: parser (parser.c:31)
+==217932==    by 0x40137D: main (main.c:23)
+==217932==  Address 0x4b21960 is 0 bytes inside a block of size 20 free'd
+==217932==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==217932==    by 0x405A4B: cd_cmd (cd_cmd.c:72)
+==217932==    by 0x40212D: type_shi (built_ins_handling.c:24)
+==217932==    by 0x401F3B: execute (built_ins_handling.c:63)
+==217932==    by 0x40232D: built_ins (built_ins_handling.c:102)
+==217932==    by 0x402B9A: execute_command (execute_command.c:67)
+==217932==    by 0x4023C6: kickoff (exec.c:10)
+==217932==    by 0x4013E3: main (main.c:32)
+==217932==  Block was alloc'd at
+==217932==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==217932==    by 0x4085D1: remove_quote (extra_string_tools.c:75)
+==217932==    by 0x403FD2: getenv_value (env_utils.c:43)
+==217932==    by 0x40417C: init_envlist (env_utils.c:89)
+==217932==    by 0x4058EB: setshell (sh_utils.c:23)
+==217932==    by 0x401313: main (main.c:13)
+==217932== 
+

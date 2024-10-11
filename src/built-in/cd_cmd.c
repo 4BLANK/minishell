@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:14:18 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/08 18:38:16 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/11 00:33:43 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	cd_cmd(char **args)
 		return (EXIT_FAILURE);
 	}
 	pwd = args[1];
-	if (pwd == NULL)
+	if (str_arraysize(args) == 1)
 	{
 		home = ft_getenv("HOME");
 		if (!home)
@@ -64,10 +64,6 @@ int	cd_cmd(char **args)
 		return (EXIT_FAILURE);
 	pwd = getcwd(NULL, 0);
 	if (overwrite_env(ft_strdup("PWD"), ft_strdup(pwd)))
-	{
-		return (free(home), EXIT_FAILURE);
-		free(pwd);
-	}
-	free(pwd);
-	return (free(home), EXIT_SUCCESS);
+		return (free(pwd), EXIT_FAILURE);
+	return (free(pwd), EXIT_SUCCESS);
 }

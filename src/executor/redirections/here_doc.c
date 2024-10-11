@@ -28,12 +28,14 @@ static int	child_routine(char **delimiter, int fd, int flag)
 		if (!line)
 		{
 			ft_putstr_fd("chnghl o mnghl: warning: here-document delimited by EOF,\
-				wanted: ",
-							2);
+				wanted: ", 2);
 			ft_putstr_fd(*delimiter, 2);
 			ft_putstr_fd("\n", 2);
-      free(*delimiter);
-      free_mem(1);
+      		// free(*delimiter);
+      		// free_mem(1);
+			// HNAIA DIMA TAT EXITI BI 0 ?????
+			// CTR-C RA MAKHDAMACH HNAIA 
+			// &IYAD LEAK HNAIA
 			return (EXIT_SUCCESS);
 		}
 		if (!ft_strcmp(*delimiter, line))
@@ -42,14 +44,14 @@ static int	child_routine(char **delimiter, int fd, int flag)
 				line = expand_heredoc(line);
 			ft_putstr_fd(line, fd);
 			ft_putstr_fd("\n", fd);
-      free(line);
+      		free(line);
 		}
 		else
-			return (free_mem(1), EXIT_SUCCESS);
+			return (EXIT_SUCCESS);
 	}
 }
 
-int	here_doc(char **delimiter, int flag)
+int	here_doc(char **delimiter, int flag, t_token **toklst)
 {
 	int		fd;
 	char	*file_name;
@@ -69,7 +71,7 @@ int	here_doc(char **delimiter, int flag)
 			status = WEXITSTATUS(status);
 		else
 		{
-			status = WTERMSIG(status + 128);
+			status = WTERMSIG(status) + 128;
 			ft_printf("\n");
 		}
 		if (!status)
@@ -79,6 +81,16 @@ int	here_doc(char **delimiter, int flag)
 		}
 	}
 	else if (pid == 0)
-		exit(child_routine(delimiter, fd, flag));
+	{
+		status = child_routine(delimiter, fd, flag);
+		// AYMAN FREE HADCHI TAHOWA MN DIR CTR-C OLA CHI 9LWA RA HADCHI LI KHASO ITFREIA
+		free(file_name);
+		free(*delimiter);
+		*delimiter = NULL;
+		tokens_lstclear(toklst);
+		distroy_envlst(&sh->envlst);
+		free(sh);
+		exit(status);
+	}
 	return (status);
 }

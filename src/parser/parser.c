@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 14:06:01 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/07 14:06:02 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/11 02:07:48 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,14 @@ int	parser(t_ast_node **ast, char *line)
 	tokenlst = NULL;
 	if (modify_line(&line) > 0)
 		return (free(line), PARSE_ERROR);
-	if (tokens_spliter(line, &tokenlst) || validate_token(tokenlst))
+	if (tokens_spliter(line, &tokenlst) || validate_token(&tokenlst))
 	{
 		tokens_lstclear(&tokenlst);
-		return (free(line), PARSE_ERROR);
+		return (PARSE_ERROR);
 	}
-	free(line);
 	lexer(tokenlst);
-	printf(GREEN "== TOKENS LIST =========>\n" RESET);
-	print_lst(tokenlst);
+	// printf(GREEN "== TOKENS LIST =========>\n" RESET);
+	// print_lst(tokenlst);
 	if (expander_core(&tokenlst))
 		return (PARSE_ERROR);
 	*ast = build_ast(tokenlst);
