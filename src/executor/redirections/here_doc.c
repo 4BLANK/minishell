@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   here_doc.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/12 01:41:05 by mzelouan          #+#    #+#             */
+/*   Updated: 2024/10/12 03:45:43 by mzelouan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../includes/minishell.h"
 
 char	*create_file_name(void)
@@ -65,9 +77,11 @@ int	here_doc(char **delimiter, int flag, t_token **toklst)
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
 			status = WEXITSTATUS(status);
-		else
+		if (status == DOOMSDAY)
 		{
-			status = WTERMSIG(status) + 128;
+			status = 130;
+			free(file_name);
+			file_name = NULL;
 			ft_printf("\n");
 		}
 		if (!status)
@@ -75,13 +89,11 @@ int	here_doc(char **delimiter, int flag, t_token **toklst)
 			free(*delimiter);
 			*delimiter = file_name;
 		}
-    else if (status == DOOMSDAY)
-      free(file_name);
-    close(fd);
+    	close(fd);
 	}
 	else if (pid == 0)
 	{
-    set_heredoc_signal_data(toklst, file_name, *delimiter, fd);
+    	set_heredoc_signal_data(toklst, file_name, *delimiter, fd);
 		status = child_routine(delimiter, fd, flag);
 		free(file_name);
 		free(*delimiter);
@@ -89,7 +101,7 @@ int	here_doc(char **delimiter, int flag, t_token **toklst)
 		tokens_lstclear(toklst);
 		distroy_envlst(&sh->envlst);
 		free(sh);
-    close(fd);
+    	close(fd);
 		exit(status);
 	}
 	return (status);

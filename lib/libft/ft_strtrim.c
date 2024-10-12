@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 13:32:54 by mzelouan          #+#    #+#             */
-/*   Updated: 2023/11/19 06:17:01 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/12 01:58:27 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,5 @@ char	*ft_strtrim(char *s1, char *set)
 	while (s1[end] && ft_strchr(set, s1[end]))
 		end--;
 	dst = ft_substr(s1, start, end - start + 1);
-	free(s1);
 	return (dst);
 }

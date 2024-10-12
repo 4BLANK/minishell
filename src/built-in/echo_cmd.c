@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:17:52 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/06 13:18:23 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/12 03:09:01 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ int	check_nl_flag(char *str)
 	int	i;
 
 	i = 0;
-	if (str[i] && str[i] != '-')
+
+	if ((!str[i]) || (str[i] && str[i] != '-'))
 		return (1);
 	i++;
 	while (str[i])

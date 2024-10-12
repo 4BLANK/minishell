@@ -17,7 +17,10 @@ static unsigned char	routine(t_ast_node **node)
 		status = execute_or((*node)->data.childs.left);
 	(*node) = (*node)->data.childs.right;
 	if (status == 0 && sh && sh->args)
+	{
 		free_strarray(sh->args);
+		sh->args = NULL;
+	}
 	return (status);
 }
 

@@ -20,9 +20,16 @@ int	parent_routine(pid_t pid, int *status, t_pair *pl)
 
 int	child_routine(t_ast_node *node, t_pair *pl, int pipefd[2], char **cmd_path)
 {
+	char **e;
+
+	e = env_tostrarray();
 	handle_signals(CHILD);
 	if (sh->args && get_commandpath(cmd_path, sh->args[0]))
+	{
+		free(*cmd_path);
+		free_strarray(e);
 		exit(free_mem(1));
+	}
 	if (redirect(node, &(pl->left), &(pl->right)) != 0)
 	{
 		if (pipefd && pipefd[1])
@@ -31,7 +38,8 @@ int	child_routine(t_ast_node *node, t_pair *pl, int pipefd[2], char **cmd_path)
 			close(pipefd[0]);
 		if (pipefd && pipefd[2])
 			close(pipefd[2]);
-    free(*cmd_path);
+    	free(*cmd_path);
+		free_strarray(e);
 		exit(free_mem(1));
 	}
 	if (pl->right)
@@ -47,9 +55,18 @@ int	child_routine(t_ast_node *node, t_pair *pl, int pipefd[2], char **cmd_path)
 	if (pipefd && pipefd[2])
 		close(pipefd[2]);
 	if (sh->args && pre_exec_errors(sh->args[0], *cmd_path))
+	{
+		free(*cmd_path);
+		free_strarray(e);
 		exit(free_mem(1));
-	if (!*cmd_path || execv(*cmd_path, sh->args) < 0)
+	}
+	if (!*cmd_path || execve(*cmd_path, sh->args, e) < 0)
+	{
+		free_strarray(e);
 		exit(free_mem(1));
+	}
+	free_strarray(e);
+	free(*cmd_path);
 	exit(free_mem(1));
 }
 

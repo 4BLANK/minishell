@@ -2,6 +2,9 @@
 
 static void	child_routine(t_ast_node *node, t_pair *pl, int pipefd[2])
 {
+	int s;
+
+	s = 0;
 	if (redirect(node, &(pl->left), &(pl->right)))
 		exit(EXIT_FAILURE);
 	if (pl->right)
@@ -16,8 +19,9 @@ static void	child_routine(t_ast_node *node, t_pair *pl, int pipefd[2])
 	}
 	if (pipefd && pipefd[2])
 		close(pipefd[2]);
-	kickoff(node->data.childs.left);
-	exit(free_mem(1));
+	s = kickoff(node->data.childs.left);
+	free_mem(1);
+	exit(s);
 }
 
 int	execute_group(t_ast_node *node, t_pair *pl, int pipefd[3], pid_t *last_pid)

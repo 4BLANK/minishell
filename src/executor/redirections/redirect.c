@@ -15,7 +15,6 @@ int	redirect(t_ast_node *cmd, int *left, int *right)
 		{
 			ft_putstr_fd("ambigyowos\n", 2);
 			status = 1;
-			sh->ex_status = 1;
 		}
 		if (tmp->type == O_REDIRECTION)
 		{
@@ -34,7 +33,10 @@ int	redirect(t_ast_node *cmd, int *left, int *right)
 		}
 		// amb
 		if (status)
+		{
+			sh->ex_status = status;
 			return (status);
+		}
 		tmp = tmp->next;
 	}
 	return (0);

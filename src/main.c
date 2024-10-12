@@ -23,7 +23,7 @@ int	main(void)
 		status = parser(&ast, line);
 		if (status != 0)
 			sh->ex_status = status;
-		if (ast != NULL && !status)
+		if (ast != NULL && status == 0)
 		{
 			// printf(GREEN "\n== AST =================>\n" RESET);
 			// print_ast_tree(ast, 0);
