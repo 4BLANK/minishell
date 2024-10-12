@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:19:25 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/11 01:16:08 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/12 21:05:03 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,19 @@ int	export_cmd(char **args)
 {
 	size_t	i;
 	int		status;
+	int  ex_status;
 
 	i = 1;
 	status = 0;
+	ex_status = 0;
 	if (str_arraysize(args) == 1)
 		print_env(sh->envlst);
 	while (args[i] != NULL)
 	{
 		status = export_var(args[i]);
+		if (status != 0)
+			ex_status = status;
 		i++;
 	}
-	return (status);
+	return (ex_status);
 }

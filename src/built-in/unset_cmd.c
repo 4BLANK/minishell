@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:29:59 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/08 18:33:21 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/12 21:05:50 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ static int	remove_envnode(t_envlist **env, size_t pos)
 	{
 		*env = tmp->next;
 		free(tmp->name);
+		free(tmp->value);
 		free(tmp);
 		tmp = NULL;
 		return (EXIT_SUCCESS);

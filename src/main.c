@@ -34,6 +34,8 @@ int	main(void)
 			free_mem(0);
 			/*ast_distroy(&ast, 1);*/
 		}
+		else 
+			sh->ex_status = status;
 	}
 	return (EXIT_SUCCESS);
 }
