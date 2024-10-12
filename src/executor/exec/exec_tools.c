@@ -61,13 +61,13 @@ int	get_commandpath(char **cmd_path, char *cmd)
 	env_path = NULL;
 	if (has_slash(cmd))
 	{
-		*cmd_path = ft_strdup(cmd); // dak leak ra mnhna 
+		*cmd_path = ft_strdup(cmd);
 		return (EXIT_SUCCESS);
 	}
 	env_path = ft_getenv("PATH");
 	if (!cmd || !cmd[0])
 		return (EXIT_SUCCESS);
-	if (env_path == NULL)
+	if (env_path == NULL || env_path[0] == '\0')
 	{
 		*cmd_path = ft_strdup(cmd);
 		return (EXIT_SUCCESS);

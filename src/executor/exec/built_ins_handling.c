@@ -8,7 +8,7 @@ int	is_built_in(char *str)
 		|| !(ft_strncmp(str, "unset", 6)));
 }
 
-static void	type_shi(void)
+static void	type_shi(int save[2])
 {
 	if (!ft_strncmp(sh->args[0], "pwd", 3))
 		sh->ex_status = pwd_cmd(sh->args);
@@ -17,7 +17,13 @@ static void	type_shi(void)
 	if (!ft_strncmp(sh->args[0], "env", 3))
 		sh->ex_status = env_cmd();
 	if (!ft_strncmp(sh->args[0], "exit", 4))
+	{
+		dup2(save[0], STDIN_FILENO);
+		close(save[0]);
+		dup2(save[1], STDOUT_FILENO);
+		close(save[1]);		
 		sh->ex_status = exit_cmd(sh->args, &(sh->ast));
+	}
 	if (!ft_strncmp(sh->args[0], "export", 6))
 		sh->ex_status = export_cmd(sh->args);
 	if (!ft_strncmp(sh->args[0], "cd", 2))
@@ -60,11 +66,12 @@ int	execute(t_ast_node *node, t_pair *pl, int pipefd[2])
 	}
 	if (pipefd && pipefd[2])
 		close(pipefd[2]);
+
+	type_shi(save);
 	dup2(save[0], STDIN_FILENO);
 	close(save[0]);
 	dup2(save[1], STDOUT_FILENO);
 	close(save[1]);
-	type_shi();
 	return (1);
 }
 

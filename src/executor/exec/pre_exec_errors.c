@@ -73,12 +73,34 @@ int	pre_exec_errors(char *cmd, char *cmd_path)
 		on_slash(cmd);
 	else
 	{
-    if (!ft_getenv("PATH"))
-    {
-      printerr(cmd, 3);
-      sh->ex_status = 127;
-    }
-    else if (!cmd_path || access(cmd_path, X_OK))
+		if (!ft_getenv("PATH") || ft_getenv("PATH")[0] == '\0')
+		{
+			if (!access(cmd, F_OK))
+			{
+				if (is_dir0(cmd))
+				{
+					printerr(cmd, 1);
+					sh->ex_status = 126;
+				}
+				else
+				{
+					if (access(cmd, X_OK))
+					{
+						printerr(cmd, 2);
+						sh->ex_status = 126;
+					}
+					return 0;
+				}
+			}
+			else
+			{
+				printerr(cmd, 3);
+				sh->ex_status = 127;
+			}
+			// printerr(cmd, 3);
+			// sh->ex_status = 127;
+		}
+		else if (!cmd_path || access(cmd_path, X_OK))
 		{
 			printerr(cmd, 4);
 			sh->ex_status = 127;

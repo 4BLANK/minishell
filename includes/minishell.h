@@ -64,5 +64,6 @@ int exit_cmd(char **args, t_ast_node **ast);
 int free_mem(int s);
 void set_heredoc_signal_data(t_token **t, char *f, char *d, int fd);
 t_hdata *shd();
+char	**env_tostrarray();
 
 #endif

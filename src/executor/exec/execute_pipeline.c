@@ -67,7 +67,7 @@ int	waiting(pid_t last_pid, int childs)
 	{
 		if (wait(&exit_status) == last_pid)
 			last_exit_status = exit_status;
-    if (WIFSIGNALED(exit_status) && !printed)
+    if (WIFSIGNALED(exit_status) && (WTERMSIG(exit_status) == SIGINT || WTERMSIG(exit_status) == SIGQUIT) && !printed)
       printed = ft_printf("\n");
 		childs--;
 	}
@@ -89,14 +89,20 @@ int	execute_pipeline(t_ast_node *node)
 	node = node->data.childs.right;
 	childs = 2;
 	if (sh->args)
+	{
 		free_strarray(sh->args);
+		sh->args = NULL;
+	}
 	while (node != NULL && node->type == PIPELINE)
 	{
 		middle_of_piping(node, &clonefds);
 		node = node->data.childs.right;
 		childs++;
 		if (sh->args)
+		{
 			free_strarray(sh->args);
+			sh->args = NULL;
+		}
 	}
 	clonefds[0] = sh->pipefd[0];
 	pid = end_of_piping(node, &clonefds);

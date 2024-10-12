@@ -20,6 +20,7 @@ t_shell *setshell(char **env)
   if (sh == NULL)
     return NULL;
   sh->ast = NULL;
+  sh->args = NULL;
   sh->envlst = init_envlist(env);
   sh->ex_status = 0;
   return (sh);
