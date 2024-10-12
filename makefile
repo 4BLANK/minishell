@@ -2,7 +2,7 @@ NAME = minishell
 CC = cc
 LIBFT_DIR = ./lib/libft
 LIBFT = $(LIBFT_DIR)/libft.a
-FLAGS = -Wall -Wextra -Werror -ggdb
+FLAGS = -Wall -Wextra -Werror -ggdb #-fsanitize=address
 SRCDIR = ./src/ ./src/signals/ ./src/executor/redirections/ ./src/executor/exec/ ./src/parser/ ./src/parser/expander/ ./src/shell/ ./src/built-in/ ./src/parser/gc/ ./src/parser/ast/ ./src/parser/tokenizer/
 BIN_DIR = bin
 

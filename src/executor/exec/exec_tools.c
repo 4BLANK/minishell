@@ -5,6 +5,8 @@ void	free_strarray(char **str)
 	size_t	i;
 
 	i = 0;
+	if (str == NULL)
+		return ;
 	while (str[i])
 	{
 		free(str[i]);

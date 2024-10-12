@@ -24,6 +24,13 @@ int	child_routine(t_ast_node *node, t_pair *pl, int pipefd[2], char **cmd_path)
 
 	e = env_tostrarray();
 	handle_signals(CHILD);
+	if (sh->args == NULL || sh->args[0] == NULL)
+	{
+		// free(*cmd_path);
+		free_strarray(e);
+		free_mem(1);
+		exit(EXIT_SUCCESS);
+	}	
 	if (sh->args && get_commandpath(cmd_path, sh->args[0]))
 	{
 		free(*cmd_path);
