@@ -21,7 +21,7 @@ static void	type_shi(int save[2])
 		dup2(save[0], STDIN_FILENO);
 		close(save[0]);
 		dup2(save[1], STDOUT_FILENO);
-		close(save[1]);		
+		close(save[1]);
 		sh->ex_status = exit_cmd(sh->args, &(sh->ast));
 	}
 	if (!ft_strncmp(sh->args[0], "export", 6))
@@ -32,7 +32,7 @@ static void	type_shi(int save[2])
 		sh->ex_status = unset_cmd(sh->args);
 }
 
-int	execute(t_ast_node *node, t_pair *pl, int pipefd[2])
+int	execute(t_ast_node *node, t_pair *pl, int pipefd[3])
 {
 	int	save[2];
 
@@ -41,19 +41,7 @@ int	execute(t_ast_node *node, t_pair *pl, int pipefd[2])
 	save[0] = dup(STDIN_FILENO);
 	save[1] = dup(STDOUT_FILENO);
 	if (redirect(node, &(pl->left), &(pl->right)))
-  {
-    dup2(save[0], STDIN_FILENO);
-    close(save[0]);
-    dup2(save[1], STDOUT_FILENO);
-    close(save[1]);
-    if (pipefd && pipefd[1])
-      close(pipefd[1]);
-    if (pipefd && pipefd[0])
-      close(pipefd[0]);
-    if (pipefd && pipefd[2])
-      close(pipefd[2]);
-		return (EXIT_FAILURE);
-  }
+		return (redirect_fail(pipefd, save));
 	if (pl->right)
 	{
 		dup2(pipefd[1], STDOUT_FILENO);
@@ -66,16 +54,12 @@ int	execute(t_ast_node *node, t_pair *pl, int pipefd[2])
 	}
 	if (pipefd && pipefd[2])
 		close(pipefd[2]);
-
 	type_shi(save);
-	dup2(save[0], STDIN_FILENO);
-	close(save[0]);
-	dup2(save[1], STDOUT_FILENO);
-	close(save[1]);
+	close_save(save);
 	return (1);
 }
 
-int	under_pipes(t_ast_node *node, t_pair *l, int pipefd[2])
+int	under_pipes(t_ast_node *node, t_pair *l, int pipefd[3])
 {
 	int	pid;
 
@@ -86,10 +70,10 @@ int	under_pipes(t_ast_node *node, t_pair *l, int pipefd[2])
 		if (WIFEXITED(sh->ex_status))
 			sh->ex_status = WEXITSTATUS(sh->ex_status);
 		else
-    {
+		{
 			sh->ex_status = WTERMSIG(sh->ex_status) + 128;
 			ft_printf("\n");
-    }
+		}
 		return (1);
 	}
 	else if (pid == -1)
@@ -101,7 +85,7 @@ int	under_pipes(t_ast_node *node, t_pair *l, int pipefd[2])
 	}
 }
 
-int	built_ins(t_ast_node *node, t_pair *pl, int pipefd[2])
+int	built_ins(t_ast_node *node, t_pair *pl, int pipefd[3])
 {
 	if (is_built_in(sh->args[0]) && (pl->right || pl->left))
 		return (under_pipes(node, pl, pipefd));

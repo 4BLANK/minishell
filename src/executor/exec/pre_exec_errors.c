@@ -27,20 +27,6 @@ int	has_slash(char *str)
 	return (0);
 }
 
-static void	printerr(char *str, int flag)
-{
-	ft_putstr_fd("chnghl o mnghl: ", 2);
-	ft_putstr_fd(str, 2);
-	if (flag == 1)
-		ft_putstr_fd(": is a directory\n", 2);
-	if (flag == 2)
-		ft_putstr_fd(": permission denied\n", 2);
-	if (flag == 3)
-		ft_putstr_fd(": no such file or directory\n", 2);
-	if (flag == 4)
-		ft_putstr_fd(": command not found\n", 2);
-}
-
 static void	on_slash(char *cmd)
 {
 	if (!access(cmd, F_OK))
@@ -74,32 +60,7 @@ int	pre_exec_errors(char *cmd, char *cmd_path)
 	else
 	{
 		if (!ft_getenv("PATH") || ft_getenv("PATH")[0] == '\0')
-		{
-			if (!access(cmd, F_OK))
-			{
-				if (is_dir0(cmd))
-				{
-					printerr(cmd, 1);
-					sh->ex_status = 126;
-				}
-				else
-				{
-					if (access(cmd, X_OK))
-					{
-						printerr(cmd, 2);
-						sh->ex_status = 126;
-					}
-					return 0;
-				}
-			}
-			else
-			{
-				printerr(cmd, 3);
-				sh->ex_status = 127;
-			}
-			// printerr(cmd, 3);
-			// sh->ex_status = 127;
-		}
+			return (line_rm(cmd));
 		else if (!cmd_path || access(cmd_path, X_OK))
 		{
 			printerr(cmd, 4);

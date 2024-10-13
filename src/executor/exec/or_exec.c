@@ -29,7 +29,8 @@ int	execute_or(t_ast_node *node)
 	unsigned char	status;
 
 	status = 1;
-	while (status != 0 && status != 130 && node != NULL && node->type == OR_NODE)
+	while (status != 0 && status != 130 && node != NULL
+		&& node->type == OR_NODE)
 		status = routine(&node);
 	if (status != 0 && status != 130 && node->type == AND_NODE)
 		status = execute_and(node);
