@@ -15,7 +15,7 @@
 int	parser(t_ast_node **ast, char *line)
 {
 	t_token	*tokenlst;
-	int status;
+	int		status;
 
 	status = 0;
 	tokenlst = NULL;

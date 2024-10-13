@@ -6,7 +6,7 @@
 #    By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/16 15:01:17 by mzelouan          #+#    #+#              #
-#    Updated: 2023/11/19 21:36:16 by mzelouan         ###   ########.fr        #
+#    Updated: 2024/10/13 05:43:06 by mzelouan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -90,5 +90,3 @@ fclean : clean
 	$(RM) $(NAME)
 
 .PHONY : clean fclean re all
-
-.SILENT:

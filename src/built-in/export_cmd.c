@@ -81,7 +81,7 @@ int	export_cmd(char **args)
 {
 	size_t	i;
 	int		status;
-	int  ex_status;
+	int		ex_status;
 
 	i = 1;
 	status = 0;

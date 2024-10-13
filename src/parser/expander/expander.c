@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:56:30 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/10 21:50:32 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/12 23:55:08 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,5 @@ int	expander_core(t_token **toklst)
 		return (EXIT_FAILURE);
 	if (rm_token_quotes(*toklst))
 		return (EXIT_FAILURE);
-	// printf(GREEN "\n=======EXPANDER+>\n" RESET);
-	// print_lst(*toklst);
-	// printf("\n");
 	return (EXIT_SUCCESS);
 }

@@ -17,7 +17,7 @@ char	*ft_strtrim(char *s1, char *set)
 	char	*dst;
 	size_t	start;
 	size_t	end;
-	char *holder;
+	char	*holder;
 
 	if (!s1)
 		return (NULL);

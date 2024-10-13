@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/13 00:30:53 by mzelouan          #+#    #+#             */
+/*   Updated: 2024/10/13 00:30:54 by mzelouan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 t_shell	*sh;
@@ -8,7 +20,6 @@ int	main(void)
 	int			status;
 	t_ast_node	*ast;
 
-	// struct sigaction sa;
 	ast = NULL;
 	sh = setshell(__environ);
 	while (1)
@@ -25,14 +36,9 @@ int	main(void)
 			sh->ex_status = status;
 		if (ast != NULL && status == 0)
 		{
-			// printf(GREEN "\n== AST =================>\n" RESET);
-			// print_ast_tree(ast, 0);
-			// EXECTUTE AST
 			sh->ast = ast;
 			sh->ex_status = kickoff(ast);
-			// DISTROY AST
 			free_mem(0);
-			/*ast_distroy(&ast, 1);*/
 		}
 		else 
 			sh->ex_status = status;

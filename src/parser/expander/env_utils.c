@@ -76,8 +76,8 @@ t_envlist	*init_envlist(char **env)
 {
 	t_envlist	*envlst;
 	t_envlist	*tmp;
-	char *name;
-	char *value;
+	char		*name;
+	char		*value;
 	size_t		i;
 
 	i = 0;
