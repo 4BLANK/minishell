@@ -69,7 +69,6 @@ int	redirect_fail(int pipefd[3], int save[2]);
 int	redirect_fail2(char *cmd_path, int pipefd[3], char **e);
 int	line_rm(char *cmd);
 void	printerr(char *str, int flag);
-void	cr_lines(char *line, int fd, int flag);
-int	child_routine(char **delimiter, int fd, int flag);
+int	child_rt(char **delimiter, int fd, int flag);
 
 #endif

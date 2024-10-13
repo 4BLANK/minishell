@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   junk1.c                                            :+:      :+:    :+:   */
+/*   junk2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amasdouq <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 03:02:16 by amasdouq          #+#    #+#             */
-/*   Updated: 2024/10/13 03:02:53 by amasdouq         ###   ########.fr       */
+/*   Updated: 2024/10/13 03:37:17 by amasdouq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-void	cr_lines(char *line, int fd, int flag)
+static void	cr_lines(char *line, int fd, int flag)
 {
 	if (flag == 1)
 		line = expand_heredoc(line);
@@ -21,7 +21,7 @@ void	cr_lines(char *line, int fd, int flag)
 	free(line);
 }
 
-int	child_routine(char **delimiter, int fd, int flag)
+int	child_rt(char **delimiter, int fd, int flag)
 {
 	char	*line;
 
