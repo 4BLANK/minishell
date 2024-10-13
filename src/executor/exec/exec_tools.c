@@ -13,7 +13,6 @@ void	free_strarray(char **str)
 		i++;
 	}
 	free(str);
-	str = NULL;
 }
 
 char	*get_cmd_path(char *env_path, char *cmd)

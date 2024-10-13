@@ -40,11 +40,10 @@ char	**lst_tostrarray(t_argument *head)
 	return (strarray);
 }
 
-
-char *get_element(char *name, char *value)
+char	*get_element(char *name, char *value)
 {
-	char *res;
-	char *tmp;
+	char	*res;
+	char	*tmp;
 
 	tmp = ft_strjoin(name, "=");
 	res = ft_strjoin(tmp, value);
@@ -52,10 +51,10 @@ char *get_element(char *name, char *value)
 	return (res);
 }
 
-size_t envsize()
+size_t	envsize(void)
 {
-	size_t			count;
-	t_envlist *tmp;
+	size_t		count;
+	t_envlist	*tmp;
 
 	count = 0;
 	tmp = sh->envlst;
@@ -67,11 +66,11 @@ size_t envsize()
 	return (count);
 }
 
-char	**env_tostrarray()
+char	**env_tostrarray(void)
 {
-	size_t	count;
-	char	**strarray;
-	t_envlist *head;
+	size_t		count;
+	char		**strarray;
+	t_envlist	*head;
 	size_t		i;
 
 	i = 0;

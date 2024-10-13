@@ -58,17 +58,18 @@ int	waiting(pid_t last_pid, int childs)
 {
 	int	last_exit_status;
 	int	exit_status;
-  int printed;
+	int	printed;
 
 	last_exit_status = 0;
 	exit_status = 0;
-  printed = 0;
+	printed = 0;
 	while (childs)
 	{
 		if (wait(&exit_status) == last_pid)
 			last_exit_status = exit_status;
-    if (WIFSIGNALED(exit_status) && (WTERMSIG(exit_status) == SIGINT || WTERMSIG(exit_status) == SIGQUIT) && !printed)
-      printed = ft_printf("\n");
+		if (WIFSIGNALED(exit_status) && (WTERMSIG(exit_status) == SIGINT
+				|| WTERMSIG(exit_status) == SIGQUIT) && !printed)
+			printed = ft_printf("\n");
 		childs--;
 	}
 	if (WIFEXITED(last_exit_status))
@@ -88,21 +89,15 @@ int	execute_pipeline(t_ast_node *node)
 	start_of_piping(node, &clonefds);
 	node = node->data.childs.right;
 	childs = 2;
-	if (sh->args)
-	{
-		free_strarray(sh->args);
-		sh->args = NULL;
-	}
+	free_strarray(sh->args);
+	sh->args = NULL;
 	while (node != NULL && node->type == PIPELINE)
 	{
 		middle_of_piping(node, &clonefds);
 		node = node->data.childs.right;
 		childs++;
-		if (sh->args)
-		{
-			free_strarray(sh->args);
-			sh->args = NULL;
-		}
+		free_strarray(sh->args);
+		sh->args = NULL;
 	}
 	clonefds[0] = sh->pipefd[0];
 	pid = end_of_piping(node, &clonefds);

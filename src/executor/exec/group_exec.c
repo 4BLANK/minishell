@@ -2,7 +2,7 @@
 
 static void	child_routine(t_ast_node *node, t_pair *pl, int pipefd[2])
 {
-	int s;
+	int	s;
 
 	s = 0;
 	if (redirect(node, &(pl->left), &(pl->right)))

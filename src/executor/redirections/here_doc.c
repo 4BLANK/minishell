@@ -28,35 +28,38 @@ char	*create_file_name(void)
 	return (res);
 }
 
-static int	child_routine(char **delimiter, int fd, int flag)
+static void	clean_a_bit(char *file_name, char **delimiter, t_token **toklst,
+		t_pair pair)
 {
-	char	*line;
+	free(file_name);
+	free(*delimiter);
+	*delimiter = NULL;
+	tokens_lstclear(toklst);
+	distroy_envlst(&sh->envlst);
+	free(sh);
+	close(pair.left);
+	exit(pair.right);
+}
 
-	line = NULL;
-	handle_signals(HDOC);
-	while (1)
+static void	parent_rountine(pid_t pid, char *file_name, char **delimiter,
+		t_pair *pair)
+{
+	waitpid(pid, &(pair->right), 0);
+	if (WIFEXITED(pair->right))
+		pair->right = WEXITSTATUS(pair->right);
+	if (pair->right == DOOMSDAY)
 	{
-		line = readline("heredoc> ");
-		if (!line)
-		{
-			ft_putstr_fd("chnghl o mnghl: warning: here-document delimited by EOF,\
-				wanted: ", 2);
-			ft_putstr_fd(*delimiter, 2);
-			ft_putstr_fd("\n", 2);
-      close(fd);
-			return (EXIT_SUCCESS);
-		}
-		if (!ft_strcmp(*delimiter, line))
-		{
-			if (flag == 1)
-				line = expand_heredoc(line);
-			ft_putstr_fd(line, fd);
-			ft_putstr_fd("\n", fd);
-      free(line);
-		}
-		else
-			return (EXIT_SUCCESS);
+		pair->right = 130;
+		free(file_name);
+		file_name = NULL;
+		ft_printf("\n");
 	}
+	if (!pair->right)
+	{
+		free(*delimiter);
+		*delimiter = file_name;
+	}
+	close(pair->left);
 }
 
 int	here_doc(char **delimiter, int flag, t_token **toklst)
@@ -64,45 +67,25 @@ int	here_doc(char **delimiter, int flag, t_token **toklst)
 	int		fd;
 	char	*file_name;
 	pid_t	pid;
-	int		status;
 
+	t_pair(pair);
 	file_name = create_file_name();
 	fd = open(file_name, O_CREAT | O_RDWR, 0644);
-	status = 0;
+	pair.left = fd;
+	pair.right = 0;
 	if (fd < 0)
 		return (EXIT_FAILURE);
 	pid = fork();
 	if (pid > 0)
-	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			status = WEXITSTATUS(status);
-		if (status == DOOMSDAY)
-		{
-			status = 130;
-			free(file_name);
-			file_name = NULL;
-			ft_printf("\n");
-		}
-		if (!status)
-		{
-			free(*delimiter);
-			*delimiter = file_name;
-		}
-    	close(fd);
-	}
+		parent_rountine(pid, file_name, delimiter, &pair);
 	else if (pid == 0)
 	{
-    	set_heredoc_signal_data(toklst, file_name, *delimiter, fd);
-		status = child_routine(delimiter, fd, flag);
-		free(file_name);
-		free(*delimiter);
-		*delimiter = NULL;
-		tokens_lstclear(toklst);
-		distroy_envlst(&sh->envlst);
-		free(sh);
-    	close(fd);
-		exit(status);
+		set_heredoc_signal_data(toklst, file_name, *delimiter, fd);
+		pair.right = child_routine(delimiter, fd, flag);
+		clean_a_bit(file_name, delimiter, toklst, pair);
 	}
-	return (status);
+	else
+		clean_a_bit(file_name, delimiter, toklst, pair);
+	printf("[DEBUG] => [%d]\n", pair.right);
+	return (pair.right);
 }

@@ -1,15 +1,16 @@
 #include "../../../includes/minishell.h"
 
-void set_heredoc_signal_data(t_token **t, char *f, char *d, int fd)
+void	set_heredoc_signal_data(t_token **t, char *f, char *d, int fd)
 {
-  shd()->tokens = t;
-  shd()->filename = f;
-  shd()->delimiter = d;
-  shd()->fd = fd;
+	shd()->tokens = t;
+	shd()->filename = f;
+	shd()->delimiter = d;
+	shd()->fd = fd;
 }
 
-t_hdata *shd()
+t_hdata	*shd(void)
 {
-  static t_hdata hdata;
-  return (&hdata);
+	static t_hdata	hdata;
+
+	return (&hdata);
 }
