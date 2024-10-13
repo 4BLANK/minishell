@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:57:39 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/07 13:58:14 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/12 23:56:15 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,14 @@ static void	insert_tok(t_token **toks, char *str, size_t start, size_t end)
 			if (tok != NULL)
 				ft_lstadd_token_back(toks, tok);
 		}
+	}
+}
+
+void	check_tmp(char *tmp, char **newstr, size_t *itr)
+{
+	if (tmp != NULL)
+	{
+		*newstr = tmp;
+		(*itr)++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:53:04 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/07 21:31:20 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/12 23:56:02 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,6 @@
 
 static void	expand_token_core(char **new_str, char *str, size_t *i);
 static void	expand_env_var(char *str, char **new_str, size_t *i);
-
-
-void	check_tmp(char *tmp, char **newstr, size_t *itr)
-{
-	if (tmp != NULL)
-	{
-		*newstr = tmp;
-		(*itr)++;
-	}
-}
 
 char	*expand_heredoc(char *str)
 {

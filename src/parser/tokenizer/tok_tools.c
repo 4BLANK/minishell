@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 20:02:49 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/07 21:33:43 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/12 23:58:09 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,7 @@ t_token	*ft_lstnew_token(void *content)
 	token->next = NULL;
 	return (token);
 }
-// int	check_quote(char c, int *flag, char *quote)
-// {
-// 	if (*flag == 0 && (c == QUOTE || c == DQUOTE))
-// 	{
-// 		*flag = 1;
-// 		*quote = c;
-// 	}
-// 	else if (*flag == 1 && c == *quote)
-// 		*flag = 0;
-// 	return (*flag);
-// }
+
 int	check_quote(char c, int *flag, char *quote)
 {
 	int	result;

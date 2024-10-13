@@ -26,12 +26,13 @@ $(BIN_DIR) :
 	mkdir -p $(BIN_DIR)
 
 clean:
-	@rm -rf $(BIN_DIR)
-	@make clean -C $(LIBFT_DIR)
+	rm -rf $(BIN_DIR)
+	make clean -C $(LIBFT_DIR)
 
-fclean: clean
-	@rm -rf $(LIBFT)
-	@rm -rf $(NAME)
+fclean:
+	rm -rf $(BIN_DIR)
+	make clean -C $(LIBFT_DIR)
+	rm -rf $(NAME)
 
 re: fclean all
 

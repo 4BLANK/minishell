@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:14:18 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/11 00:33:43 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/13 01:06:14 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int	cd_cmd(char **args)
 	char	*pwd;
 	char	*home;
 
-	home = NULL;
 	if (str_arraysize(args) > 2)
 	{
 		ft_putstr_fd("cd: too many arguments\n", 2);
