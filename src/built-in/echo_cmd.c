@@ -17,7 +17,6 @@ int	check_nl_flag(char *str)
 	int	i;
 
 	i = 0;
-
 	if ((!str[i]) || (str[i] && str[i] != '-'))
 		return (1);
 	i++;

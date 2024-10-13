@@ -6,7 +6,7 @@
 /*   By: amasdouq <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 03:03:09 by amasdouq          #+#    #+#             */
-/*   Updated: 2024/10/13 03:03:11 by amasdouq         ###   ########.fr       */
+/*   Updated: 2024/10/13 03:23:38 by amasdouq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #define SAVE 0
 #define RECOVER 1
 
-// redirections
 void	handle_signals(int mode);
 int		get_commandpath(char **cmd_path, char *cmd);
 int		redirect_input(char *filename);

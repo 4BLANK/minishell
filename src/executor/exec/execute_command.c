@@ -6,7 +6,7 @@
 /*   By: amasdouq <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 03:01:51 by amasdouq          #+#    #+#             */
-/*   Updated: 2024/10/13 03:02:53 by amasdouq         ###   ########.fr       */
+/*   Updated: 2024/10/13 03:13:25 by amasdouq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ static int	sth_failed(char *cmd_path, char **e)
 	return (free_mem(1));
 }
 
-int	child_routine(t_ast_node *node, t_pair *pl, int pipefd[3], char **cmd_path)
+static int	child_routine(t_ast_node *node, t_pair *pl, int pipefd[3],
+		char **cmd_path)
 {
 	char	**e;
 

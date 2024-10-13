@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amasdouq <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/12 01:41:05 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/13 03:02:53 by amasdouq         ###   ########.fr       */
+/*   Created: 2024/10/13 03:37:38 by amasdouq          #+#    #+#             */
+/*   Updated: 2024/10/13 03:37:39 by amasdouq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	here_doc(char **delimiter, int flag, t_token **toklst)
 	else if (pid == 0)
 	{
 		set_heredoc_signal_data(toklst, file_name, *delimiter, fd);
-		pair.right = child_routine(delimiter, fd, flag);
+		pair.right = child_rt(delimiter, fd, flag);
 		clean_a_bit(file_name, delimiter, toklst, pair);
 	}
 	else
