@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   group_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amasdouq <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 03:01:57 by amasdouq          #+#    #+#             */
-/*   Updated: 2024/10/13 03:02:53 by amasdouq         ###   ########.fr       */
+/*   Updated: 2024/10/14 01:23:34 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	child_routine(t_ast_node *node, t_pair *pl, int pipefd[2])
 	}
 	if (pipefd && pipefd[2])
 		close(pipefd[2]);
-	s = kickoff(node->data.childs.left);
+	s = kickoff(node->u_data.s_childs.left);
 	free_mem(1);
 	exit(s);
 }

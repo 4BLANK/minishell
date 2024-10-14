@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:19:25 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/12 21:05:03 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/13 23:36:25 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ bool	env_exist(char *name)
 {
 	t_envlist	*lst;
 
-	lst = sh->envlst;
+	lst = g_sh->envlst;
 	while (lst != NULL)
 	{
 		if (!ft_strncmp(lst->name, name, ft_strlen(name)))
@@ -81,19 +81,16 @@ int	export_cmd(char **args)
 {
 	size_t	i;
 	int		status;
-	int		ex_status;
 
 	i = 1;
 	status = 0;
-	ex_status = 0;
 	if (str_arraysize(args) == 1)
-		print_env(sh->envlst);
+		print_env(g_sh->envlst);
 	while (args[i] != NULL)
 	{
-		status = export_var(args[i]);
-		if (status != 0)
-			ex_status = status;
+		if (export_var(args[i]))
+			status = 1;
 		i++;
 	}
-	return (ex_status);
+	return (status);
 }

@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 14:42:12 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/11 01:18:48 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/13 23:46:28 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*ft_getenv(char *name)
 {
 	t_envlist	*lst;
 
-	lst = sh->envlst;
+	lst = g_sh->envlst;
 	if (name == NULL || name[0] == '\0')
 		return (NULL);
 	while (lst != NULL)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amasdouq <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 03:01:51 by amasdouq          #+#    #+#             */
-/*   Updated: 2024/10/13 03:13:25 by amasdouq         ###   ########.fr       */
+/*   Updated: 2024/10/14 01:20:49 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	parent_routine(pid_t pid, int *status, t_pair *pl)
 {
-	if ((sh->args == NULL && pl && !(pl->right) && !(pl->left)) || (sh->args
+	if ((g_sh->args == NULL && pl && !(pl->right) && !(pl->left)) || (g_sh->args
 			&& pl && !(pl->right) && !(pl->left)
-			&& !(is_built_in(sh->args[0]))))
+			&& !(is_built_in(g_sh->args[0]))))
 	{
 		waitpid(pid, status, 0);
 		if (WIFEXITED(*status))
@@ -59,20 +59,20 @@ static int	child_routine(t_ast_node *node, t_pair *pl, int pipefd[3],
 	char	**e;
 
 	e = env_tostrarray();
-	if (sh->args && get_commandpath(cmd_path, sh->args[0]))
+	if (g_sh->args && get_commandpath(cmd_path, g_sh->args[0]))
 		exit(sth_failed(*cmd_path, e));
 	if (redirect(node, &(pl->left), &(pl->right)) != 0)
 		exit(redirect_fail2(*cmd_path, pipefd, e));
-	if (sh->args == NULL || sh->args[0] == NULL)
+	if (g_sh->args == NULL || g_sh->args[0] == NULL)
 	{
 		free_strarray(e);
 		free_mem(1);
 		exit(EXIT_SUCCESS);
 	}
 	duppp(pl, pipefd);
-	if (sh->args && pre_exec_errors(sh->args[0], *cmd_path))
+	if (g_sh->args && pre_exec_errors(g_sh->args[0], *cmd_path))
 		exit(sth_failed(*cmd_path, e));
-	if (!*cmd_path || execve(*cmd_path, sh->args, e) < 0)
+	if (!*cmd_path || execve(*cmd_path, g_sh->args, e) < 0)
 	{
 		free_strarray(e);
 		exit(free_mem(1));
@@ -90,10 +90,10 @@ int	execute_command(t_ast_node *node, t_pair *pl, int pipefd[3],
 	pid_t	pid;
 
 	cmd_path = NULL;
-	sh->args = lst_tostrarray(node->data.childs.left->data.arg_list);
+	g_sh->args = lst_tostrarray(node->u_data.s_childs.left->u_data.arg_list);
 	status = 0;
-	if (sh->args && built_ins(node, pl, pipefd))
-		return (sh->ex_status);
+	if (g_sh->args && built_ins(node, pl, pipefd))
+		return (g_sh->ex_status);
 	pid = fork();
 	if (last_pid)
 		*last_pid = pid;

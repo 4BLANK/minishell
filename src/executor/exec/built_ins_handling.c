@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins_handling.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amasdouq <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 03:01:39 by amasdouq          #+#    #+#             */
-/*   Updated: 2024/10/13 03:02:53 by amasdouq         ###   ########.fr       */
+/*   Updated: 2024/10/14 00:53:28 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,48 +22,46 @@ int	is_built_in(char *str)
 
 static void	type_shi(int save[2])
 {
-	if (!ft_strncmp(sh->args[0], "pwd", 3))
-		sh->ex_status = pwd_cmd(sh->args);
-	if (!ft_strncmp(sh->args[0], "echo", 4))
-		sh->ex_status = echo(sh->args);
-	if (!ft_strncmp(sh->args[0], "env", 3))
-		sh->ex_status = env_cmd();
-	if (!ft_strncmp(sh->args[0], "exit", 4))
+	if (!ft_strncmp(g_sh->args[0], "pwd", 3))
+		g_sh->ex_status = pwd_cmd(g_sh->args);
+	if (!ft_strncmp(g_sh->args[0], "echo", 4))
+		g_sh->ex_status = echo(g_sh->args);
+	if (!ft_strncmp(g_sh->args[0], "env", 3))
+		g_sh->ex_status = env_cmd();
+	if (!ft_strncmp(g_sh->args[0], "exit", 4))
 	{
 		dup2(save[0], STDIN_FILENO);
 		close(save[0]);
 		dup2(save[1], STDOUT_FILENO);
 		close(save[1]);
-		sh->ex_status = exit_cmd(sh->args, &(sh->ast));
+		g_sh->ex_status = exit_cmd(g_sh->args, &(g_sh->ast));
 	}
-	if (!ft_strncmp(sh->args[0], "export", 6))
-		sh->ex_status = export_cmd(sh->args);
-	if (!ft_strncmp(sh->args[0], "cd", 2))
-		sh->ex_status = cd_cmd(sh->args);
-	if (!ft_strncmp(sh->args[0], "unset", 5))
-		sh->ex_status = unset_cmd(sh->args);
+	if (!ft_strncmp(g_sh->args[0], "export", 6))
+		g_sh->ex_status = export_cmd(g_sh->args);
+	if (!ft_strncmp(g_sh->args[0], "cd", 2))
+		g_sh->ex_status = cd_cmd(g_sh->args);
+	if (!ft_strncmp(g_sh->args[0], "unset", 5))
+		g_sh->ex_status = unset_cmd(g_sh->args);
 }
 
 int	execute(t_ast_node *node, t_pair *pl, int pipefd[3])
 {
 	int	save[2];
 
-	if (!is_built_in(sh->args[0]))
+	if (!is_built_in(g_sh->args[0]))
 		return (0);
 	save[0] = dup(STDIN_FILENO);
 	save[1] = dup(STDOUT_FILENO);
 	if (redirect(node, &(pl->left), &(pl->right)))
 		return (redirect_fail(pipefd, save));
 	if (pl->right)
-	{
 		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
-	}
 	if (pl->left)
-	{
 		dup2(pipefd[0], STDIN_FILENO);
+	if (pipefd && pipefd[0])
 		close(pipefd[0]);
-	}
+	if (pipefd && pipefd[1])
+		close(pipefd[1]);
 	if (pipefd && pipefd[2])
 		close(pipefd[2]);
 	type_shi(save);
@@ -78,12 +76,12 @@ int	under_pipes(t_ast_node *node, t_pair *l, int pipefd[3])
 	pid = fork();
 	if (pid > 0)
 	{
-		waitpid(pid, (int *)&(sh->ex_status), 0);
-		if (WIFEXITED(sh->ex_status))
-			sh->ex_status = WEXITSTATUS(sh->ex_status);
+		waitpid(pid, (int *)&(g_sh->ex_status), 0);
+		if (WIFEXITED(g_sh->ex_status))
+			g_sh->ex_status = WEXITSTATUS(g_sh->ex_status);
 		else
 		{
-			sh->ex_status = WTERMSIG(sh->ex_status) + 128;
+			g_sh->ex_status = WTERMSIG(g_sh->ex_status) + 128;
 			ft_printf("\n");
 		}
 		return (1);
@@ -99,9 +97,9 @@ int	under_pipes(t_ast_node *node, t_pair *l, int pipefd[3])
 
 int	built_ins(t_ast_node *node, t_pair *pl, int pipefd[3])
 {
-	if (is_built_in(sh->args[0]) && (pl->right || pl->left))
+	if (is_built_in(g_sh->args[0]) && (pl->right || pl->left))
 		return (under_pipes(node, pl, pipefd));
-	else if (is_built_in(sh->args[0]) && !(pl->right || pl->left))
+	else if (is_built_in(g_sh->args[0]) && !(pl->right || pl->left))
 		return (execute(node, pl, pipefd));
 	return (0);
 }

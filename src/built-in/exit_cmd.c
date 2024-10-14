@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amasdouq <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 03:09:34 by amasdouq          #+#    #+#             */
-/*   Updated: 2024/10/13 03:12:16 by amasdouq         ###   ########.fr       */
+/*   Updated: 2024/10/13 23:36:05 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	reduce_line(char **args, char *tmp)
 	}
 	tmp = ft_strtrim(args[1], " \t\n\f\v\r");
 	if (is_numeric(tmp))
-		sh->ex_status = ft_atoi(tmp);
+		g_sh->ex_status = ft_atoi(tmp);
 	else
 	{
 		ft_putstr_fd("chnghl o mnghl: exit:", 2);

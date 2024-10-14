@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:36:58 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/06 13:40:15 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/14 01:27:22 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,17 @@ void	destroy_ast_core(t_ast_node *node, int flag)
 		return ;
 	if (node->type != REDIRECTION && node->type != ARGUMENTS)
 	{
-		if (node->data.childs.left)
-			destroy_ast_core(node->data.childs.left, flag);
-		if (node->data.childs.right)
-			destroy_ast_core(node->data.childs.right, flag);
+		if (node->u_data.s_childs.left)
+			destroy_ast_core(node->u_data.s_childs.left, flag);
+		if (node->u_data.s_childs.right)
+			destroy_ast_core(node->u_data.s_childs.right, flag);
 	}
 	else
 	{
 		if (node->type == REDIRECTION)
-			clear_fileslst(&node->data.files, flag);
+			clear_fileslst(&node->u_data.files, flag);
 		else if (node->type == ARGUMENTS)
-			clear_argslst(&node->data.arg_list);
+			clear_argslst(&node->u_data.arg_list);
 	}
 	free(node);
 }

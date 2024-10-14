@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amasdouq <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 03:37:38 by amasdouq          #+#    #+#             */
-/*   Updated: 2024/10/13 03:37:39 by amasdouq         ###   ########.fr       */
+/*   Updated: 2024/10/13 23:41:42 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ static void	clean_a_bit(char *file_name, char **delimiter, t_token **toklst,
 	free(*delimiter);
 	*delimiter = NULL;
 	tokens_lstclear(toklst);
-	distroy_envlst(&sh->envlst);
-	free(sh);
+	distroy_envlst(&g_sh->envlst);
+	free(g_sh);
 	close(pair.left);
 	exit(pair.right);
 }
@@ -86,6 +86,5 @@ int	here_doc(char **delimiter, int flag, t_token **toklst)
 	}
 	else
 		clean_a_bit(file_name, delimiter, toklst, pair);
-	printf("[DEBUG] => [%d]\n", pair.right);
 	return (pair.right);
 }

@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:29:59 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/12 21:05:50 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/13 23:37:18 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	unset_cmd(char **args)
 	while (args[i])
 	{
 		if (env_exist(args[i]))
-			dalete_var(sh->envlst, args[i]);
+			dalete_var(g_sh->envlst, args[i]);
 		i++;
 	}
 	return (EXIT_SUCCESS);
@@ -89,7 +89,7 @@ static int	dalete_var(t_envlist *env, char *name)
 	{
 		if (ft_strncmp(name, lst->name, sizeof(name)) == 0)
 		{
-			remove_envnode(&sh->envlst, pos);
+			remove_envnode(&g_sh->envlst, pos);
 			break ;
 		}
 		pos++;

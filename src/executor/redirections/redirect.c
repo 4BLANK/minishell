@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amasdouq <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 03:02:19 by amasdouq          #+#    #+#             */
-/*   Updated: 2024/10/13 03:02:53 by amasdouq         ###   ########.fr       */
+/*   Updated: 2024/10/14 01:19:37 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	red(t_file *tmp, int *status, int *left, int *right)
 		*status = append_redirect_output(tmp->name);
 	}
 	if (*status)
-		sh->ex_status = *status;
+		g_sh->ex_status = *status;
 }
 
 int	redirect(t_ast_node *cmd, int *left, int *right)
@@ -43,9 +43,9 @@ int	redirect(t_ast_node *cmd, int *left, int *right)
 	t_file	*tmp;
 	int		status;
 
-	if (!(cmd->data.childs.right))
+	if (!(cmd->u_data.s_childs.right))
 		return (EXIT_SUCCESS);
-	tmp = cmd->data.childs.right->data.files;
+	tmp = cmd->u_data.s_childs.right->u_data.files;
 	status = EXIT_SUCCESS;
 	while (tmp)
 	{

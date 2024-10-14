@@ -6,13 +6,13 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 00:30:53 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/13 00:30:54 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/14 02:28:36 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-t_shell	*sh;
+t_shell	*g_sh;
 
 int	main(void)
 {
@@ -21,7 +21,7 @@ int	main(void)
 	t_ast_node	*ast;
 
 	ast = NULL;
-	sh = setshell(__environ);
+	g_sh = setshell(__environ);
 	while (1)
 	{
 		handle_signals(PARENT);
@@ -32,16 +32,13 @@ int	main(void)
 		if (line[0] != '\0')
 			add_history(line);
 		status = parser(&ast, line);
-		if (status != 0)
-			sh->ex_status = status;
 		if (ast != NULL && status == 0)
 		{
-			sh->ast = ast;
-			sh->ex_status = kickoff(ast);
+			g_sh->ast = ast;
+			g_sh->ex_status = kickoff(ast);
 			free_mem(0);
 		}
-		else 
-			sh->ex_status = status;
+		else
+			g_sh->ex_status = status;
 	}
-	return (EXIT_SUCCESS);
 }

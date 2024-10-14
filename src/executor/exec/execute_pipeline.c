@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipeline.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amasdouq <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 03:01:54 by amasdouq          #+#    #+#             */
-/*   Updated: 2024/10/13 03:02:53 by amasdouq         ###   ########.fr       */
+/*   Updated: 2024/10/14 02:33:58 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@ int	start_of_piping(t_ast_node *node, int (*clonefds)[3])
 	int	status;
 
 	status = 0;
-	if (pipe(sh->pipefd) == -1)
+	if (pipe(g_sh->pipefd) == -1)
 		return (EXIT_FAILURE);
-	(*clonefds)[0] = sh->pipefd[0];
-	(*clonefds)[1] = sh->pipefd[1];
-	(*clonefds)[2] = sh->pipefd[0];
-	if (node->data.childs.left->type == COMMAND)
-		execute_command(node->data.childs.left, (t_pair[]){{0, 1}}, *clonefds,
-			NULL);
-	if (node->data.childs.left->type == GROUP_NODE)
-		execute_group(node->data.childs.left, (t_pair[]){{0, 1}}, *clonefds,
-			NULL);
+	(*clonefds)[0] = g_sh->pipefd[0];
+	(*clonefds)[1] = g_sh->pipefd[1];
+	(*clonefds)[2] = g_sh->pipefd[0];
+	if (node->u_data.s_childs.left->type == COMMAND)
+		execute_command(node->u_data.s_childs.left, \
+		(t_pair[]){{0, 1}}, *clonefds, NULL);
+	if (node->u_data.s_childs.left->type == GROUP_NODE)
+		execute_group(node->u_data.s_childs.left, \
+		(t_pair[]){{0, 1}}, *clonefds, NULL);
 	return (status);
 }
 
@@ -37,17 +37,17 @@ int	middle_of_piping(t_ast_node *node, int (*clonefds)[3])
 
 	status = 0;
 	close((*clonefds)[1]);
-	pipe(sh->pipefd);
-	(*clonefds)[1] = sh->pipefd[1];
-	(*clonefds)[2] = sh->pipefd[0];
-	if (node->data.childs.left->type == COMMAND)
-		execute_command(node->data.childs.left, (t_pair[]){{1, 1}}, *clonefds,
-			NULL);
-	if (node->data.childs.left->type == GROUP_NODE)
-		execute_group(node->data.childs.left, (t_pair[]){{1, 1}}, *clonefds,
-			NULL);
+	pipe(g_sh->pipefd);
+	(*clonefds)[1] = g_sh->pipefd[1];
+	(*clonefds)[2] = g_sh->pipefd[0];
+	if (node->u_data.s_childs.left->type == COMMAND)
+		execute_command(node->u_data.s_childs.left, \
+		(t_pair[]){{1, 1}}, *clonefds, NULL);
+	if (node->u_data.s_childs.left->type == GROUP_NODE)
+		execute_group(node->u_data.s_childs.left, \
+		(t_pair[]){{1, 1}}, *clonefds, NULL);
 	close((*clonefds)[0]);
-	(*clonefds)[0] = sh->pipefd[0];
+	(*clonefds)[0] = g_sh->pipefd[0];
 	(*clonefds)[2] = 0;
 	return (status);
 }
@@ -99,19 +99,19 @@ int	execute_pipeline(t_ast_node *node)
 
 	clonefds[2] = 0;
 	start_of_piping(node, &clonefds);
-	node = node->data.childs.right;
+	node = node->u_data.s_childs.right;
 	childs = 2;
-	free_strarray(sh->args);
-	sh->args = NULL;
+	free_strarray(g_sh->args);
+	g_sh->args = NULL;
 	while (node != NULL && node->type == PIPELINE)
 	{
 		middle_of_piping(node, &clonefds);
-		node = node->data.childs.right;
+		node = node->u_data.s_childs.right;
 		childs++;
-		free_strarray(sh->args);
-		sh->args = NULL;
+		free_strarray(g_sh->args);
+		g_sh->args = NULL;
 	}
-	clonefds[0] = sh->pipefd[0];
+	clonefds[0] = g_sh->pipefd[0];
 	pid = end_of_piping(node, &clonefds);
 	return (waiting(pid, childs));
 }

@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:36:32 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/06 13:36:33 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/14 01:27:00 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ static t_ast_node	*pipe_line_3(t_token **cur_token)
 	head_node = ast_create_node(PIPELINE, NULL, NULL);
 	if (head_node == NULL)
 		return (NULL);
-	head_node->data.childs.left = cmd;
-	head_node->data.childs.right = pipeline;
+	head_node->u_data.s_childs.left = cmd;
+	head_node->u_data.s_childs.right = pipeline;
 	return (head_node);
 }
 
@@ -92,8 +92,8 @@ static t_ast_node	*pipe_line_1(t_token **cur_token)
 	head_node = ast_create_node(PIPELINE, NULL, NULL);
 	if (head_node == NULL)
 		return (NULL);
-	head_node->data.childs.left = cmd;
-	head_node->data.childs.right = pipeline;
+	head_node->u_data.s_childs.left = cmd;
+	head_node->u_data.s_childs.right = pipeline;
 	return (head_node);
 }
 
