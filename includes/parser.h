@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 00:37:40 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/13 00:42:01 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/14 01:19:04 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,8 @@
 # define OPAREN 40
 # define CPAREN 41
 
-extern char						*lexs_type[];
-extern char						*ast_node_types[];
-
 // TOKENS LEXEME
-typedef enum  s_lexeme
+typedef enum s_lexeme
 {
 	STRING,
 	ARG,
@@ -58,7 +55,7 @@ typedef enum  s_lexeme
 }								t_lexeme;
 
 // AST NODE TYPES
-typedef enum    s_node_type
+typedef enum s_node_type
 {
 	GROUP_NODE,
 	AND_NODE,
@@ -112,8 +109,8 @@ typedef struct s_ast_node
 		{
 			struct s_ast_node	*left;
 			struct s_ast_node	*right;
-		} childs;
-	} data;
+		} s_childs;
+	} u_data;
 }								t_ast_node;
 
 typedef struct s_ast_gc

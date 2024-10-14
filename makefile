@@ -27,13 +27,14 @@ $(BIN_DIR) :
 
 clean:
 	rm -rf $(BIN_DIR)
-	make clean -C $(LIBFT_DIR)
+	make -C $(LIBFT_DIR) clean
 
 fclean:
 	rm -rf $(BIN_DIR)
-	make clean -C $(LIBFT_DIR)
+	make -C $(LIBFT_DIR) fclean 
 	rm -rf $(NAME)
 
 re: fclean all
 
-.SECONDARY:
+.PHONY: re all fclean clean
+.SECONDARY: 

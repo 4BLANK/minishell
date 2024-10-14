@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:34:17 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/06 13:36:03 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/14 01:26:30 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ static t_ast_node	*command_line_or_1(t_token **cur_token)
 	head_node = ast_create_node(OR_NODE, NULL, NULL);
 	if (head_node == NULL)
 		return (NULL);
-	head_node->data.childs.left = cmd_and_1;
-	head_node->data.childs.right = cmd_and_2;
+	head_node->u_data.s_childs.left = cmd_and_1;
+	head_node->u_data.s_childs.right = cmd_and_2;
 	return (head_node);
 }
 

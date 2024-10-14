@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:20:28 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/11 01:27:22 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/13 23:36:42 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	overwrite_env(char *name, char *value)
 	char		*tmp;
 
 	tmp = NULL;
-	env = sh->envlst;
+	env = g_sh->envlst;
 	if (!name || !value)
 		return (EXIT_FAILURE);
 	while (env != NULL)
@@ -58,6 +58,6 @@ void	ft_setenv(char *name, char *value)
 		var = lstnew_env(name, value);
 		if (var == NULL)
 			return ;
-		lstadd_env_back(&sh->envlst, var);
+		lstadd_env_back(&g_sh->envlst, var);
 	}
 }

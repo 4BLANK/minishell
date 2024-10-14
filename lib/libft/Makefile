@@ -6,7 +6,7 @@
 #    By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/16 15:01:17 by mzelouan          #+#    #+#              #
-#    Updated: 2024/10/13 05:43:06 by mzelouan         ###   ########.fr        #
+#    Updated: 2024/10/14 01:17:22 by mzelouan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,7 +73,6 @@ AR = ar rc
 all: $(NAME)
 
 $(NAME) : $(OFILES)
-
 
 bonus : $(OBFILES) $(OFILES)
 

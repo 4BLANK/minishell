@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:46:31 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/06 13:55:35 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/14 02:33:26 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,9 @@ static t_ast_node	*grouped_command_0(t_token **cur_token)
 		group = ast_create_node(GROUP_NODE, NULL, NULL);
 		if (files == NULL || group == NULL)
 			return (ast_distroy(&cmd, 0), NULL);
-		group->data.childs.left = cmd;
-		group->data.childs.right = ast_create_node(REDIRECTION, NULL, files);
+		group->u_data.s_childs.left = cmd;
+		group->u_data.s_childs.right = ast_create_node(REDIRECTION, \
+		NULL, files);
 	}
 	return (group);
 }
@@ -105,7 +106,7 @@ static t_ast_node	*grouped_command_1(t_token **cur_token)
 	group = ast_create_node(GROUP_NODE, NULL, NULL);
 	if (group == NULL)
 		return (NULL);
-	group->data.childs.left = cmd;
-	group->data.childs.right = NULL;
+	group->u_data.s_childs.left = cmd;
+	group->u_data.s_childs.right = NULL;
 	return (group);
 }

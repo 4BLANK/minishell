@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tools2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amasdouq <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 03:01:47 by amasdouq          #+#    #+#             */
-/*   Updated: 2024/10/13 03:02:53 by amasdouq         ###   ########.fr       */
+/*   Updated: 2024/10/13 23:43:48 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ size_t	envsize(void)
 	t_envlist	*tmp;
 
 	count = 0;
-	tmp = sh->envlst;
+	tmp = g_sh->envlst;
 	while (tmp != NULL)
 	{
 		count++;
@@ -86,7 +86,7 @@ char	**env_tostrarray(void)
 	size_t		i;
 
 	i = 0;
-	head = sh->envlst;
+	head = g_sh->envlst;
 	count = envsize();
 	if (!(count))
 		return (NULL);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amasdouq <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 03:03:09 by amasdouq          #+#    #+#             */
-/*   Updated: 2024/10/13 03:23:38 by amasdouq         ###   ########.fr       */
+/*   Updated: 2024/10/13 23:40:13 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int		get_commandpath(char **cmd_path, char *cmd);
 int		redirect_input(char *filename);
 int		redirect_output(char *filename);
 int		append_redirect_output(char *filename);
-int		here_doc(char **delimiter, int flag, t_token **toklst);
 int		check_error_type(char *cmd_path);
 int		specify_error(int status, char *cmd_path);
 int		tiny_check(void);

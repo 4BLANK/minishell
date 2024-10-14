@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handling.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amasdouq <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 03:02:35 by amasdouq          #+#    #+#             */
-/*   Updated: 2024/10/13 03:02:40 by amasdouq         ###   ########.fr       */
+/*   Updated: 2024/10/13 23:40:43 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		sh->ex_status = SIGINT + 128;
+		g_sh->ex_status = SIGINT + 128;
 		rl_on_new_line();
 		write(1, "\n", 1);
 		rl_replace_line("", 0);
@@ -32,8 +32,8 @@ void	here_doc_handler(int sig)
 	shd()->filename = NULL;
 	tokens_lstclear(shd()->tokens);
 	close(shd()->fd);
-	distroy_envlst(&sh->envlst);
-	free(sh);
+	distroy_envlst(&g_sh->envlst);
+	free(g_sh);
 	exit(DOOMSDAY);
 }
 

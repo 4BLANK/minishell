@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_exec_errors.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amasdouq <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 03:02:04 by amasdouq          #+#    #+#             */
-/*   Updated: 2024/10/13 03:02:53 by amasdouq         ###   ########.fr       */
+/*   Updated: 2024/10/13 23:46:17 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,27 +46,27 @@ static void	on_slash(char *cmd)
 		if (is_dir0(cmd))
 		{
 			printerr(cmd, 1);
-			sh->ex_status = 126;
+			g_sh->ex_status = 126;
 		}
 		else
 		{
 			if (access(cmd, X_OK))
 			{
 				printerr(cmd, 2);
-				sh->ex_status = 126;
+				g_sh->ex_status = 126;
 			}
 		}
 	}
 	else
 	{
 		printerr(cmd, 3);
-		sh->ex_status = 127;
+		g_sh->ex_status = 127;
 	}
 }
 
 int	pre_exec_errors(char *cmd, char *cmd_path)
 {
-	sh->ex_status = 0;
+	g_sh->ex_status = 0;
 	if (has_slash(cmd))
 		on_slash(cmd);
 	else
@@ -76,8 +76,8 @@ int	pre_exec_errors(char *cmd, char *cmd_path)
 		else if (!cmd_path || access(cmd_path, X_OK))
 		{
 			printerr(cmd, 4);
-			sh->ex_status = 127;
+			g_sh->ex_status = 127;
 		}
 	}
-	return (sh->ex_status);
+	return (g_sh->ex_status);
 }

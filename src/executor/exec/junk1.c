@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   junk1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amasdouq <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 03:02:00 by amasdouq          #+#    #+#             */
-/*   Updated: 2024/10/13 03:02:53 by amasdouq         ###   ########.fr       */
+/*   Updated: 2024/10/13 23:45:25 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,14 @@ int	line_rm(char *cmd)
 		if (is_dir0(cmd))
 		{
 			printerr(cmd, 1);
-			sh->ex_status = 126;
+			g_sh->ex_status = 126;
 		}
 		else
 		{
 			if (access(cmd, X_OK))
 			{
 				printerr(cmd, 2);
-				sh->ex_status = 126;
+				g_sh->ex_status = 126;
 			}
 			return (0);
 		}
@@ -71,9 +71,9 @@ int	line_rm(char *cmd)
 	else
 	{
 		printerr(cmd, 3);
-		sh->ex_status = 127;
+		g_sh->ex_status = 127;
 	}
-	return (sh->ex_status);
+	return (g_sh->ex_status);
 }
 
 int	redirect_fail2(char *cmd_path, int pipefd[3], char **e)
