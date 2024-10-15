@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 14:05:06 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/12 01:38:14 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/15 19:48:31 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	s_error(t_token *tok)
 	ft_putstr_fd(" `", 2);
 	ft_putstr_fd(tmp, 2);
 	ft_putstr_fd("'\n", 2);
-	return (EXIT_FAILURE);
+	return (PARSE_ERROR);
 }
 
 static int	process_heredoc(t_token *tok, t_token **toklst)

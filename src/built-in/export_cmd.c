@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:19:25 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/13 23:36:25 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/15 20:28:54 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ bool	env_exist(char *name)
 	lst = g_sh->envlst;
 	while (lst != NULL)
 	{
-		if (!ft_strncmp(lst->name, name, ft_strlen(name)))
+		if (ft_strcmp(lst->name, name))
 			return (true);
 		lst = lst->next;
 	}
