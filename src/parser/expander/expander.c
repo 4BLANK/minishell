@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:56:30 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/13 23:46:36 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/15 18:11:04 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,7 @@ char	*expand_pid_or_exit(char *str, char curchr, char nextchr)
 
 	tmp = NULL;
 	new_str = NULL;
-	if (curchr && nextchr == DOLLAR_SIGN)
-	{
-		tmp = ft_itoa((int)getpid());
-		new_str = concat(str, tmp, 0);
-	}
-	else if (curchr && nextchr == QUESTION_MARK)
+	if (curchr && nextchr == QUESTION_MARK)
 	{
 		tmp = ft_itoa(g_sh->ex_status);
 		new_str = concat(str, tmp, 0);
