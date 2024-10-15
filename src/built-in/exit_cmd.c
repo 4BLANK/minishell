@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 03:09:34 by amasdouq          #+#    #+#             */
-/*   Updated: 2024/10/13 23:36:05 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/15 20:00:07 by amasdouq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,25 +30,25 @@ static int	is_numeric(char *str)
 	return (1);
 }
 
-static void	reduce_line(char **args, char *tmp)
+static void	reduce_line(char **args, char **tmp)
 {
 	if (!args[1][0])
 	{
 		ft_putstr_fd("chnghl o mnghl: exit:", 2);
 		ft_putstr_fd(" numeric agrument required\n", 2);
 		free_mem(1);
-		free(tmp);
+		free(*tmp);
 		exit(2);
 	}
-	tmp = ft_strtrim(args[1], " \t\n\f\v\r");
-	if (is_numeric(tmp))
-		g_sh->ex_status = ft_atoi(tmp);
+	*tmp = ft_strtrim(args[1], " \t\n\f\v\r");
+	if (is_numeric(*tmp))
+		g_sh->ex_status = ft_atoi(*tmp);
 	else
 	{
 		ft_putstr_fd("chnghl o mnghl: exit:", 2);
 		ft_putstr_fd(" numeric agrument required\n", 2);
 		free_mem(1);
-		free(tmp);
+		free(*tmp);
 		exit(2);
 	}
 }
@@ -63,13 +63,12 @@ int	exit_cmd(char **args, t_ast_node **ast)
 	if (!args)
 		exit(free_mem(1));
 	if (args[1])
-		reduce_line(args, tmp);
+		reduce_line(args, &tmp);
 	if (tmp && args[2])
 	{
-		ft_putstr_fd("\n", 2);
 		ft_putstr_fd("chnghl o mnghl: exit:", 2);
 		ft_putstr_fd(" too many arguments\n", 2);
-		return (free(tmp), 2);
+		return (free(tmp), 1);
 	}
 	free(tmp);
 	exit(free_mem(1));
