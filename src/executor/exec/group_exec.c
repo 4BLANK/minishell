@@ -20,15 +20,13 @@ static void	child_routine(t_ast_node *node, t_pair *pl, int pipefd[2])
 	if (redirect(node, &(pl->left), &(pl->right)))
 		exit(EXIT_FAILURE);
 	if (pl->right)
-	{
 		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
-	}
 	if (pl->left)
-	{
 		dup2(pipefd[0], STDIN_FILENO);
+	if (pipefd && pipefd[0])
 		close(pipefd[0]);
-	}
+	if (pipefd && pipefd[1])
+		close(pipefd[1]);
 	if (pipefd && pipefd[2])
 		close(pipefd[2]);
 	s = kickoff(node->u_data.s_childs.left);
