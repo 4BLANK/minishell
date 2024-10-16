@@ -21,10 +21,10 @@ int	parent_routine(pid_t pid, int *status, t_pair *pl)
 		waitpid(pid, status, 0);
 		if (WIFEXITED(*status))
 			*status = WEXITSTATUS(*status);
-		else if (WIFSIGNALED(*status))
+		else if (WIFSIGNALED(*status) && WTERMSIG(*status) == 2 && WTERMSIG(*status) == 3)
 		{
 			*status = WTERMSIG(*status) + 128;
-			ft_printf("\n");
+		   printf("\n");
 		}
 	}
 	return (*status);
