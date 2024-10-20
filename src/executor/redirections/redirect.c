@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 03:02:19 by amasdouq          #+#    #+#             */
-/*   Updated: 2024/10/14 01:19:37 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/20 12:24:31 by amasdouq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ static void	red(t_file *tmp, int *status, int *left, int *right)
 {
 	if (tmp->type == AMBIGUOUS)
 	{
-		ft_putstr_fd("ambigyowos\n", 2);
+		ft_putstr_fd("chnghl o mnghl: ", 2);
+		ft_putstr_fd(tmp->name, 2);
+		ft_putstr_fd(": ambiguous redirect\n", 2);
 		*status = 1;
 	}
 	if (tmp->type == O_REDIRECTION)

@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 03:01:51 by amasdouq          #+#    #+#             */
-/*   Updated: 2024/10/14 01:20:49 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/20 12:20:32 by amasdouq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ int	parent_routine(pid_t pid, int *status, t_pair *pl)
 		waitpid(pid, status, 0);
 		if (WIFEXITED(*status))
 			*status = WEXITSTATUS(*status);
-		else if (WIFSIGNALED(*status) && WTERMSIG(*status) == 2 && WTERMSIG(*status) == 3)
+		else if (WIFSIGNALED(*status) && WTERMSIG(*status) != 13)
 		{
 			*status = WTERMSIG(*status) + 128;
-		   printf("\n");
+            ft_putstr_fd("\n", 2);
 		}
 	}
 	return (*status);
