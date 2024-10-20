@@ -6,7 +6,7 @@
 /*   By: mzelouan <mzelouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:20:28 by mzelouan          #+#    #+#             */
-/*   Updated: 2024/10/13 23:36:42 by mzelouan         ###   ########.fr       */
+/*   Updated: 2024/10/15 21:05:43 by mzelouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,26 @@ int	overwrite_env(char *name, char *value)
 {
 	t_envlist	*env;
 	char		*tmp;
+	int  flag;
 
 	tmp = NULL;
+	flag = 0;
 	env = g_sh->envlst;
 	if (!name || !value)
-		return (EXIT_FAILURE);
+		return (free(value), free(name), EXIT_FAILURE);
 	while (env != NULL)
 	{
-		if (ft_strncmp(env->name, name, sizeof(name)) == 0)
+		if (ft_strcmp(env->name, name))
 		{
 			tmp = env->value;
 			env->value = value;
+			flag = 1;
 			break ;
 		}
 		env = env->next;
 	}
+	if (flag == 0)
+		free(name);
 	free(tmp);
 	free(name);
 	return (EXIT_SUCCESS);
