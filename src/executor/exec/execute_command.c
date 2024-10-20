@@ -24,7 +24,7 @@ int	parent_routine(pid_t pid, int *status, t_pair *pl)
 		else if (WIFSIGNALED(*status) && WTERMSIG(*status) != 13)
 		{
 			*status = WTERMSIG(*status) + 128;
-            ft_putstr_fd("\n", 2);
+			ft_putstr_fd("\n", 2);
 		}
 	}
 	return (*status);
